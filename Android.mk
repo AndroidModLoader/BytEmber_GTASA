@@ -14,7 +14,7 @@ LOCAL_SRC_FILES += BytEmber/src/registry.cpp BytEmber/src/runtime.cpp BytEmber/s
                    BytEmber/src/std/memory.cpp BytEmber/src/std/strings.cpp BytEmber/src/std/format.cpp \
                    BytEmber/src/std/utility.cpp BytEmber/src/std/scan.cpp BytEmber/src/std/sort.cpp \
                    BytEmber/src/std/constants.cpp BytEmber/src/std/time.cpp
-LOCAL_CFLAGS += -O2 -mfloat-abi=softfp -DNDEBUG -std=c++17 -fexceptions
+LOCAL_CFLAGS += -O2 -mfloat-abi=softfp -DNDEBUG -std=c++17 -fexceptions -fvisibility=hidden -fno-rtti -fno-threadsafe-statics -fno-unwind-tables -fno-asynchronous-unwind-tables
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/BytEmber $(LOCAL_PATH)/BytEmber/include
 LOCAL_LDLIBS += -llog
 include $(BUILD_SHARED_LIBRARY)
