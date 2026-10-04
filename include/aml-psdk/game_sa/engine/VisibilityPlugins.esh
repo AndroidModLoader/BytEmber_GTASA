@@ -1,0 +1,98 @@
+#ifndef PSDK_game_sa_engine_VisibilityPlugins_h
+#define PSDK_game_sa_engine_VisibilityPlugins_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../game_sa/base/Lists.esh"
+#include "../../renderware/RpAtomic.esh"
+#include "../../renderware/RwCamera.esh"
+native class AlphaObjectInfo = size(bits(0xc, 0x18))
+{
+    void* pObj = offset(0x0);
+    nativeptr RenderFn = offset(bits(0x4, 0x8));
+    float dist = offset(bits(0x8, 0x10));
+};
+native class CVisibilityPlugins = size(0x1)
+{
+    static int32_t DefaultVisibilityCB(RpClump* pClump) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins19DefaultVisibilityCBEP7RpClump");
+    static int32_t PluginAttach() = symbol("libGTASA.so", "_ZN18CVisibilityPlugins12PluginAttachEv");
+    static void Initialise() = symbol("libGTASA.so", "_ZN18CVisibilityPlugins10InitialiseEv");
+    static void Shutdown() = symbol("libGTASA.so", "_ZN18CVisibilityPlugins8ShutdownEv");
+    static void RenderWeaponPedsForPC() = symbol("libGTASA.so", "_ZN18CVisibilityPlugins21RenderWeaponPedsForPCEv");
+    static void SetModelInfoIndex(RpAtomic* pAtomic, int index) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins17SetModelInfoIndexEP8RpAtomici");
+    static int32_t GetModelInfoIndex(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins17GetModelInfoIndexEP8RpAtomic");
+    static CBaseModelInfo* GetModelInfo(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins12GetModelInfoEP8RpAtomic");
+    static void SetAtomicId(RpAtomic* pAtomic, int id) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins11SetAtomicIdEP8RpAtomici");
+    static void SetAtomicFlag(RpAtomic* pAtomic, uint16_t flag) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins13SetAtomicFlagEP8RpAtomict");
+    static void SetClumpForAllAtomicsFlag(RpClump* pClump, int id) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins25SetClumpForAllAtomicsFlagEP7RpClumpi");
+    static void ClearAtomicFlag(RpAtomic* pAtomic, uint16_t flag) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins15ClearAtomicFlagEP8RpAtomict");
+    static void ClearClumpForAllAtomicsFlag(RpClump* pClump, int id) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins27ClearClumpForAllAtomicsFlagEP7RpClumpi");
+    static int32_t GetAtomicId(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins11GetAtomicIdEP8RpAtomic");
+    static void SetUserValue(RpAtomic* pAtomic, uint16_t value) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins12SetUserValueEP8RpAtomict");
+    static uint16_t GetUserValue(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins12GetUserValueEP8RpAtomic");
+    static void SetupVehicleVariables(RpClump* pClump) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins21SetupVehicleVariablesEP7RpClump");
+    static float GetDistanceSquaredFromCamera(RwFrame* pFrame) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins28GetDistanceSquaredFromCameraEP7RwFrame");
+    static RpAtomic* RenderWheelAtomicCB(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins19RenderWheelAtomicCBEP8RpAtomic");
+    static RpAtomic* RenderObjNormalAtomic(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins21RenderObjNormalAtomicEP8RpAtomic");
+    static void RenderAtomicWithAlpha(RpAtomic* pAtomic, int alpha) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins21RenderAtomicWithAlphaEP8RpAtomici");
+    static int32_t CalculateFadingAtomicAlpha(CBaseModelInfo* pModelInfo, CEntity* pEntity, float dist) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins26CalculateFadingAtomicAlphaEP14CBaseModelInfoP7CEntityf");
+    static void SetupRenderFadingAtomic(CBaseModelInfo* pModelInfo, int alpha) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins23SetupRenderFadingAtomicEP14CBaseModelInfoi");
+    static void ResetRenderFadingAtomic(CBaseModelInfo* pModelInfo) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins23ResetRenderFadingAtomicEP14CBaseModelInfo");
+    static void RenderFadingAtomic(CBaseModelInfo* pModelInfo, RpAtomic* pAtomic, int alpha) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins18RenderFadingAtomicEP14CBaseModelInfoP8RpAtomici");
+    static RpAtomic* RenderAtomicWithAlphaCB(RpAtomic* pAtomic, void* pAlpha) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins23RenderAtomicWithAlphaCBEP8RpAtomicPv");
+    static void RenderFadingClump(CBaseModelInfo* pModelInfo, RpClump* pClump, int alpha) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins17RenderFadingClumpEP14CBaseModelInfoP7RpClumpi");
+    static RpAtomic* RenderVehicleReallyLowDetailCB(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins30RenderVehicleReallyLowDetailCBEP8RpAtomic");
+    static int32_t GetClumpAlpha(RpClump* pClump) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins13GetClumpAlphaEP7RpClump");
+    static float GetDotProductWithCameraVector(RwMatrix* pMatrix, RwMatrix* pCarMatrix, uint32_t atomicId) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins29GetDotProductWithCameraVectorEP11RwMatrixTagS1_j");
+    static RpAtomic* RenderVehicleHiDetailCB(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins23RenderVehicleHiDetailCBEP8RpAtomic");
+    static RpAtomic* RenderVehicleHiDetailAlphaCB(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins28RenderVehicleHiDetailAlphaCBEP8RpAtomic");
+    static bool InsertAtomicIntoSortedList(RpAtomic* pAtomic, float dist) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins26InsertAtomicIntoSortedListEP8RpAtomicf");
+    static RpAtomic* RenderHeliRotorAlphaCB(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins22RenderHeliRotorAlphaCBEP8RpAtomic");
+    static RpAtomic* RenderHeliTailRotorAlphaCB(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins26RenderHeliTailRotorAlphaCBEP8RpAtomic");
+    static RpAtomic* RenderTrainHiDetailCB(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins21RenderTrainHiDetailCBEP8RpAtomic");
+    static RpAtomic* RenderTrainHiDetailAlphaCB(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins26RenderTrainHiDetailAlphaCBEP8RpAtomic");
+    static RpAtomic* RenderVehicleReallyLowDetailCB_BigVehicle(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins41RenderVehicleReallyLowDetailCB_BigVehicleEP8RpAtomic");
+    static RpAtomic* RenderVehicleHiDetailCB_BigVehicle(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins34RenderVehicleHiDetailCB_BigVehicleEP8RpAtomic");
+    static RpAtomic* RenderVehicleHiDetailAlphaCB_BigVehicle(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins39RenderVehicleHiDetailAlphaCB_BigVehicleEP8RpAtomic");
+    static RpAtomic* RenderVehicleLoDetailCB_Boat(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins28RenderVehicleLoDetailCB_BoatEP8RpAtomic");
+    static RpAtomic* RenderVehicleHiDetailCB_Boat(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins28RenderVehicleHiDetailCB_BoatEP8RpAtomic");
+    static RpAtomic* RenderVehicleHiDetailAlphaCB_Boat(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins33RenderVehicleHiDetailAlphaCB_BoatEP8RpAtomic");
+    static bool InsertAtomicIntoBoatSortedList(RpAtomic* pAtomic, float dist) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins30InsertAtomicIntoBoatSortedListEP8RpAtomicf");
+    static RpAtomic* RenderPlayerCB(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins14RenderPlayerCBEP8RpAtomic");
+    static RpAtomic* RenderPedCB(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins11RenderPedCBEP8RpAtomic");
+    static RpAtomic* RenderFadingClumpCB(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins19RenderFadingClumpCBEP8RpAtomic");
+    static RpAtomic* RenderWeaponCB(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins14RenderWeaponCBEP8RpAtomic");
+    static CClumpModelInfo* GetClumpModelInfo(RpClump* pClump) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins17GetClumpModelInfoEP7RpClump");
+    static void SetAtomicRenderCallback(RpAtomic* pAtomic, nativeptr renderCB) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins23SetAtomicRenderCallbackEP8RpAtomicPFS1_S1_E");
+    static void SetRenderWareCamera(RwCamera* pCamera) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins19SetRenderWareCameraEP8RwCamera");
+    static int32_t IsAtomicVisible(RpAtomic* pAtomic) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins15IsAtomicVisibleEP8RpAtomic");
+#if IS_64BIT
+    static void SetFrameHierarchyId(RwFrame* pFrame, uint64_t value) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins19SetFrameHierarchyIdEP7RwFramey");
+#else
+    static void SetFrameHierarchyId(RwFrame* pFrame, uint32_t value) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins19SetFrameHierarchyIdEP7RwFramej");
+#endif
+    static uintptr_t GetFrameHierarchyId(RwFrame* pFrame) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins19GetFrameHierarchyIdEP7RwFrame");
+    static int32_t FrustumSphereCB(RpClump* pClump) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins15FrustumSphereCBEP7RpClump");
+    static int32_t VehicleVisibilityCB(RpClump* pClump) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins19VehicleVisibilityCBEP7RpClump");
+    static int32_t VehicleVisibilityCB_BigVehicle(RpClump* pClump) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins30VehicleVisibilityCB_BigVehicleEP7RpClump");
+    static void SetClumpModelInfo(RpClump* pClump, CClumpModelInfo* pModelInfo) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins17SetClumpModelInfoEP7RpClumpP15CClumpModelInfo");
+    static int32_t IsClumpVisible(RpClump* pClump) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins14IsClumpVisibleEP7RpClump");
+    static void SetClumpAlpha(RpClump* pClump, int alpha) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins13SetClumpAlphaEP7RpClumpi");
+    static void InitAlphaAtomicList() = symbol("libGTASA.so", "_ZN18CVisibilityPlugins19InitAlphaAtomicListEv");
+    static void InitAlphaEntityList() = symbol("libGTASA.so", "_ZN18CVisibilityPlugins19InitAlphaEntityListEv");
+    static void RenderAtomic(RpAtomic* pObj, float dist) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins12RenderAtomicEPvf");
+    static bool InsertEntityIntoSortedList(CEntity* pEntity, float dist) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins26InsertEntityIntoSortedListEP7CEntityf");
+    static void RenderEntity(CEntity* pObj, float dist) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins12RenderEntityEPvf");
+    static bool InsertEntityIntoReallyDrawLastList(CEntity* pEntity, float dist) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins34InsertEntityIntoReallyDrawLastListEP7CEntityf");
+    static bool InsertEntityIntoUnderwaterList(CEntity* pEntity, float dist) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins30InsertEntityIntoUnderwaterListEP7CEntityf");
+    static bool InsertObjectIntoSortedList(void* pObj, float dist, nativeptr fn) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins26InsertObjectIntoSortedListEPvfPFvS0_fE");
+    static bool InsertAtomicIntoReallyDrawLastList(RpAtomic* pAtomic, float dist) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins34InsertAtomicIntoReallyDrawLastListEP8RpAtomicf");
+    static void RenderAlphaAtomics() = symbol("libGTASA.so", "_ZN18CVisibilityPlugins18RenderAlphaAtomicsEv");
+    static void RenderBoatAlphaAtomics() = symbol("libGTASA.so", "_ZN18CVisibilityPlugins22RenderBoatAlphaAtomicsEv");
+    static void RenderFadingEntities() = symbol("libGTASA.so", "_ZN18CVisibilityPlugins20RenderFadingEntitiesEv");
+    static void RenderFadingUnderwaterEntities() = symbol("libGTASA.so", "_ZN18CVisibilityPlugins30RenderFadingUnderwaterEntitiesEv");
+    static void RenderReallyDrawLastObjects() = symbol("libGTASA.so", "_ZN18CVisibilityPlugins27RenderReallyDrawLastObjectsEv");
+    static float GetDistanceSquaredFromCamera1(RwV3d* pVec) = symbol("libGTASA.so", "_ZN18CVisibilityPlugins28GetDistanceSquaredFromCameraEP5RwV3d");
+};
+#endif

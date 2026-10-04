@@ -1,0 +1,34 @@
+#ifndef PSDK_game_sa_engine_Sprite_h
+#define PSDK_game_sa_engine_Sprite_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../renderware/RwVector.esh"
+#include "../../renderware/RwRGBA.esh"
+native class CSprite = size(0x1)
+{
+    static void Initialise() = symbol("libGTASA.so", "_ZN7CSprite10InitialiseEv");
+    static void Draw3DSprite(float x, float y, float z, float sizeX, float sizeY, float r, float g, float b, float a) = symbol("libGTASA.so", "_ZN7CSprite12Draw3DSpriteEfffffffff");
+    static bool CalcScreenCoors(RwV3d* In, RwV3d* pResult, float* pScaleX, float* pScaleY, bool ClipFarPlane, bool ClipNearPlane) = symbol("libGTASA.so", "_ZN7CSprite15CalcScreenCoorsERK5RwV3dPS0_PfS4_bb");
+    static float CalcHorizonCoors() = symbol("libGTASA.so", "_ZN7CSprite16CalcHorizonCoorsEv");
+    static void FlushSpriteBuffer() = symbol("libGTASA.so", "_ZN7CSprite17FlushSpriteBufferEv");
+    static void InitSpriteBuffer() = symbol("libGTASA.so", "_ZN7CSprite16InitSpriteBufferEv");
+    static void InitSpriteBuffer2D() = symbol("libGTASA.so", "_ZN7CSprite18InitSpriteBuffer2DEv");
+    static void RenderBufferedOneXLUSprite(float ScreenX, float ScreenY, float ScreenZ, float SizeX, float SizeY, uint8_t R, uint8_t G, uint8_t B, int16_t Intensity16, float RecipZ, uint8_t Alpha) = symbol("libGTASA.so", "_ZN7CSprite26RenderBufferedOneXLUSpriteEfffffhhhsfh");
+    static void RenderOneXLUSprite(float ScreenX, float ScreenY, float ScreenZ, float SizeX, float SizeY, uint8_t R, uint8_t G, uint8_t B, int16_t Intensity16, float RecipZ, uint8_t Alpha, uint8_t FlipU, uint8_t FlipV, float uvPad1, float uvPad2) = symbol("libGTASA.so", "_ZN7CSprite18RenderOneXLUSpriteEfffffhhhsfhhhff");
+    static void RenderBufferedOneXLUSprite_Rotate_Aspect(float ScreenX, float ScreenY, float ScreenZ, float SizeX, float SizeY, uint8_t R, uint8_t G, uint8_t B, int16_t Intensity16, float RecipZ, float Rotation, uint8_t Alpha) = symbol("libGTASA.so", "_ZN7CSprite40RenderBufferedOneXLUSprite_Rotate_AspectEfffffhhhsffh");
+    static void RenderOneXLUSprite_Triangle(float ScreenX1, float ScreenY1, float ScreenX2, float ScreenY2, float ScreenX3, float ScreenY3, float ScreenZ, uint8_t R, uint8_t G, uint8_t B, int16_t Intensity16, float RecipZ, uint8_t Alpha) = symbol("libGTASA.so", "_ZN7CSprite27RenderOneXLUSprite_TriangleEfffffffhhhsfh");
+    static void RenderOneXLUSprite_Rotate_Aspect(float ScreenX, float ScreenY, float ScreenZ, float SizeX, float SizeY, uint8_t R, uint8_t G, uint8_t B, int16_t Intensity16, float RecipZ, float Rotation, uint8_t Alpha) = symbol("libGTASA.so", "_ZN7CSprite32RenderOneXLUSprite_Rotate_AspectEfffffhhhsffh");
+    static void RenderBufferedOneXLUSprite_Rotate_Dimension(float ScreenX, float ScreenY, float ScreenZ, float SizeX, float SizeY, uint8_t R, uint8_t G, uint8_t B, int16_t Intensity16, float RecipZ, float Rotation, uint8_t Alpha) = symbol("libGTASA.so", "_ZN7CSprite43RenderBufferedOneXLUSprite_Rotate_DimensionEfffffhhhsffh");
+    static void RenderOneXLUSprite_Rotate_Dimension(float ScreenX, float ScreenY, float ScreenZ, float SizeX, float SizeY, uint8_t R, uint8_t G, uint8_t B, int16_t Intensity16, float RecipZ, float Rotation, uint8_t Alpha) = symbol("libGTASA.so", "_ZN7CSprite35RenderOneXLUSprite_Rotate_DimensionEfffffhhhsffh");
+    static void RenderBufferedOneXLUSprite_Rotate_2Colours(float ScreenX, float ScreenY, float ScreenZ, float SizeX, float SizeY, uint8_t R1, uint8_t G1, uint8_t B1, uint8_t R2, uint8_t G2, uint8_t B2, float ToColour1X, float ToColour1Y, float RecipZ, float Alpha, uint8_t Rotation) = symbol("libGTASA.so", "_ZN7CSprite42RenderBufferedOneXLUSprite_Rotate_2ColoursEfffffhhhhhhffffh");
+    static void RenderOneXLUSprite_Rotate_2Colours(float ScreenX, float ScreenY, float ScreenZ, float SizeX, float SizeY, uint8_t R1, uint8_t G1, uint8_t B1, uint8_t R2, uint8_t G2, uint8_t B2, float ToColour1X, float ToColour1Y, float RecipZ, float Rotation, uint8_t Alpha) = symbol("libGTASA.so", "_ZN7CSprite34RenderOneXLUSprite_Rotate_2ColoursEfffffhhhhhhffffh");
+    static void RenderBufferedOneXLUSprite2D(float ScreenX, float ScreenY, float SizeX, float SizeY, RwRGBA* rgbaColor, int16_t Intensity16, uint8_t Alpha) = symbol("libGTASA.so", "_ZN7CSprite28RenderBufferedOneXLUSprite2DEffffRK6RwRGBAsh");
+    static void Set4Vertices2D1(RwIm2DVertex* maVertices, CRect* Rectangle, CRGBA* TopLeftrgba, CRGBA* TopRightrgba, CRGBA* BottomLeftrgba, CRGBA* BottomRightrgba) = symbol("libGTASA.so", "_ZN7CSprite14Set4Vertices2DEP14RwOpenGLVertexRK5CRectRK5CRGBAS7_S7_S7_");
+    static void RenderOneXLUSprite2D(float ScreenX, float ScreenY, float SizeX, float SizeY, RwRGBA* rgbaColor, int16_t Intensity16, uint8_t Alpha) = symbol("libGTASA.so", "_ZN7CSprite20RenderOneXLUSprite2DEffffRK6RwRGBAsh");
+    static void RenderBufferedOneXLUSprite2D_Rotate_Dimension(float ScreenX, float ScreenY, float SizeX, float SizeY, RwRGBA* rgbaColor, int16_t Intensity16, float Rotation, uint8_t Alpha) = symbol("libGTASA.so", "_ZN7CSprite45RenderBufferedOneXLUSprite2D_Rotate_DimensionEffffRK6RwRGBAsfh");
+    static void Set4Vertices2D2(RwIm2DVertex* maVertices, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, CRGBA* TopLeftrgba, CRGBA* TopRightrgba, CRGBA* BottomLeftrgba, CRGBA* BottomRightrgba) = symbol("libGTASA.so", "_ZN7CSprite14Set4Vertices2DEP14RwOpenGLVertexffffffffRK5CRGBAS4_S4_S4_");
+    static void RenderOneXLUSprite2D_Rotate_Dimension(float ScreenX, float ScreenY, float SizeX, float SizeY, RwRGBA* rgbaColor, int16_t Intensity16, float Rotation, uint8_t Alpha) = symbol("libGTASA.so", "_ZN7CSprite37RenderOneXLUSprite2D_Rotate_DimensionEffffRK6RwRGBAsfh");
+};
+#endif

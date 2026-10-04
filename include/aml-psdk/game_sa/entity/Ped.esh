@@ -1,0 +1,386 @@
+#ifndef PSDK_game_sa_entity_Ped_h
+#define PSDK_game_sa_entity_Ped_h
+#pragma once
+#define COP_TYPE_CITYCOP 0
+#define COP_TYPE_LAPDM1 1
+#define COP_TYPE_SWAT1 2
+#define COP_TYPE_SWAT2 3
+#define COP_TYPE_FBI 4
+#define COP_TYPE_ARMY 5
+#define COP_TYPE_MIAMIVICE 6
+#define COP_TYPE_CSHER 7
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/entity/Physical.esh"
+#include "../../game_sa/entity/Weapon.esh"
+#include "../../game_sa/enum/PedEnums.esh"
+#include "../../game_sa/audio/AEAudioEntity.esh"
+native class CPedAcquaintance = size(0x14)
+{
+    uint32_t m_nRespect = offset(0x0);
+    uint32_t m_nLike = offset(0x4);
+    uint32_t m_nIgnore = offset(0x8);
+    uint32_t m_nDislike = offset(0xc);
+    uint32_t m_nHate = offset(0x10);
+};
+native class LimbOrientation = size(0x8)
+{
+    float m_fYaw = offset(0x0);
+    float m_fPitch = offset(0x4);
+};
+native class LimbMovementInfo = size(0x18)
+{
+    float maxYaw = offset(0x0);
+    float minYaw = offset(0x4);
+    float yawD = offset(0x8);
+    float maxPitch = offset(0xc);
+    float minPitch = offset(0x10);
+    float pitchD = offset(0x14);
+};
+native class CPedIK = size(bits(0x20, 0x28))
+{
+    CPed* m_pPed = offset(0x0);
+    LimbOrientation m_TorsoOrien = offset(bits(0x4, 0x8));
+    float m_fSlopePitch = offset(bits(0xc, 0x10));
+    float m_fSlopePitchLimitMult = offset(bits(0x10, 0x14));
+    float m_fSlopeRoll = offset(bits(0x14, 0x18));
+    float m_fBodyRoll = offset(bits(0x18, 0x1c));
+    uint32_t m_nFlags = offset(bits(0x1c, 0x20));
+    uint32_t bGunReachedTarget = offset(bits(0x1c, 0x20)) bits(0, 1, 1);
+    uint32_t bTorsoUsed = offset(bits(0x1c, 0x20)) bits(1, 1, 1);
+    uint32_t bUseArm = offset(bits(0x1c, 0x20)) bits(2, 1, 1);
+    uint32_t bSlopePitch = offset(bits(0x1c, 0x20)) bits(3, 1, 1);
+    static RwMatrix* GetWorldMatrix(RwFrame* pFrame, RwMatrix* pMatrix) = symbol("libGTASA.so", "_ZN6CPedIK14GetWorldMatrixEP7RwFrameP11RwMatrixTag");
+    void PitchForSlope() = symbol("libGTASA.so", "_ZN6CPedIK13PitchForSlopeEv");
+    void ExtractYawAndPitchWorld(RwMatrix* pMatrix, float* yaw, float* pitch) = symbol("libGTASA.so", "_ZN6CPedIK23ExtractYawAndPitchWorldEP11RwMatrixTagRfS2_");
+    int32_t MoveLimb1(LimbOrientation* limb, float yaw, float pitch, LimbMovementInfo* limbInfo) = symbol("libGTASA.so", "_ZN6CPedIK8MoveLimbER15LimbOrientationffR16LimbMovementInfo");
+    int32_t MoveLimb2(LimbOrientation* limb, float yaw, float pitch, LimbMovementInfo* limbInfo, float fBlendAmount) = symbol("libGTASA.so", "_ZN6CPedIK8MoveLimbER15LimbOrientationffR16LimbMovementInfof");
+    bool PointGunAtPosition(CVector* pos, float fBlendAmount) = symbol("libGTASA.so", "_ZN6CPedIK18PointGunAtPositionERK7CVectorf");
+    bool PointGunInDirection(float yaw, float pitch, bool bRollPitch, float fBlendAmount) = symbol("libGTASA.so", "_ZN6CPedIK19PointGunInDirectionEffbf");
+    void RotateTorso(AnimBlendFrameData* pFrameData, LimbOrientation* torso, bool bCancelRoll) = symbol("libGTASA.so", "_ZN6CPedIK11RotateTorsoEP18AnimBlendFrameDataR15LimbOrientationb");
+    void RotateTorsoForArm(CVector* vecTarget) = symbol("libGTASA.so", "_ZN6CPedIK17RotateTorsoForArmERK7CVector");
+};
+native class CPed : public CPhysical = size(bits(0x7a4, 0x988))
+{
+    CAEPedAudioEntity m_pedAudio = offset(bits(0x13c, 0x198));
+    CAEPedSpeechAudioEntity m_pedSpeech = offset(bits(0x298, 0x340));
+    CAEPedWeaponAudioEntity m_weaponAudio = offset(bits(0x398, 0x470));
+    CPedIntelligence* m_pIntelligence = offset(bits(0x440, 0x538));
+    CPlayerData* m_pPlayerData = offset(bits(0x444, 0x540));
+    uint8_t m_nCreatedBy = offset(bits(0x448, 0x548));
+    uint32_t m_ePedState = offset(bits(0x44c, 0x54c));
+    int m_nMoveState = offset(bits(0x450, 0x550));
+    CStoredCollPoly m_storedCollPoly = offset(bits(0x454, 0x554));
+    float m_fDistTravelledSinceLastHeightCheck = offset(bits(0x480, 0x580));
+    uint32_t bIsStanding = offset(bits(0x484, 0x584)) bits(0, 1, 1);
+    uint32_t bWasStanding = offset(bits(0x484, 0x584)) bits(1, 1, 1);
+    uint32_t bIsLooking = offset(bits(0x484, 0x584)) bits(2, 1, 1);
+    uint32_t bIsRestoringLook = offset(bits(0x484, 0x584)) bits(3, 1, 1);
+    uint32_t bIsAimingGun = offset(bits(0x484, 0x584)) bits(4, 1, 1);
+    uint32_t bIsRestoringGun = offset(bits(0x484, 0x584)) bits(5, 1, 1);
+    uint32_t bCanPointGunAtTarget = offset(bits(0x484, 0x584)) bits(6, 1, 1);
+    uint32_t bIsTalking = offset(bits(0x484, 0x584)) bits(7, 1, 1);
+    uint32_t bInVehicle = offset(bits(0x485, 0x585)) bits(0, 1, 1);
+    uint32_t bIsInTheAir = offset(bits(0x485, 0x585)) bits(1, 1, 1);
+    uint32_t bIsLanding = offset(bits(0x485, 0x585)) bits(2, 1, 1);
+    uint32_t bHitSomethingLastFrame = offset(bits(0x485, 0x585)) bits(3, 1, 1);
+    uint32_t bIsNearCar = offset(bits(0x485, 0x585)) bits(4, 1, 1);
+    uint32_t bRenderPedInCar = offset(bits(0x485, 0x585)) bits(5, 1, 1);
+    uint32_t bUpdateAnimHeading = offset(bits(0x485, 0x585)) bits(6, 1, 1);
+    uint32_t bRemoveHead = offset(bits(0x485, 0x585)) bits(7, 1, 1);
+    uint32_t bFiringWeapon = offset(bits(0x486, 0x586)) bits(0, 1, 1);
+    uint32_t bHasACamera = offset(bits(0x486, 0x586)) bits(1, 1, 1);
+    uint32_t bPedIsBleeding = offset(bits(0x486, 0x586)) bits(2, 1, 1);
+    uint32_t bStopAndShoot = offset(bits(0x486, 0x586)) bits(3, 1, 1);
+    uint32_t bIsPedDieAnimPlaying = offset(bits(0x486, 0x586)) bits(4, 1, 1);
+    uint32_t bStayInSamePlace = offset(bits(0x486, 0x586)) bits(5, 1, 1);
+    uint32_t bKindaStayInSamePlace = offset(bits(0x486, 0x586)) bits(6, 1, 1);
+    uint32_t bBeingChasedByPolice = offset(bits(0x486, 0x586)) bits(7, 1, 1);
+    uint32_t bNotAllowedToDuck = offset(bits(0x487, 0x587)) bits(0, 1, 1);
+    uint32_t bCrouchWhenShooting = offset(bits(0x487, 0x587)) bits(1, 1, 1);
+    uint32_t bIsDucking = offset(bits(0x487, 0x587)) bits(2, 1, 1);
+    uint32_t bGetUpAnimStarted = offset(bits(0x487, 0x587)) bits(3, 1, 1);
+    uint32_t bDoBloodyFootprints = offset(bits(0x487, 0x587)) bits(4, 1, 1);
+    uint32_t bDontDragMeOutCar = offset(bits(0x487, 0x587)) bits(5, 1, 1);
+    uint32_t bStillOnValidPoly = offset(bits(0x487, 0x587)) bits(6, 1, 1);
+    uint32_t bAllowMedicsToReviveMe = offset(bits(0x487, 0x587)) bits(7, 1, 1);
+    uint32_t bResetWalkAnims = offset(bits(0x488, 0x588)) bits(0, 1, 1);
+    uint32_t bOnBoat = offset(bits(0x488, 0x588)) bits(1, 1, 1);
+    uint32_t bBusJacked = offset(bits(0x488, 0x588)) bits(2, 1, 1);
+    uint32_t bFadeOut = offset(bits(0x488, 0x588)) bits(3, 1, 1);
+    uint32_t bKnockedUpIntoAir = offset(bits(0x488, 0x588)) bits(4, 1, 1);
+    uint32_t bHitSteepSlope = offset(bits(0x488, 0x588)) bits(5, 1, 1);
+    uint32_t bCullExtraFarAway = offset(bits(0x488, 0x588)) bits(6, 1, 1);
+    uint32_t bTryingToReachDryLand = offset(bits(0x488, 0x588)) bits(7, 1, 1);
+    uint32_t bCollidedWithMyVehicle = offset(bits(0x489, 0x589)) bits(0, 1, 1);
+    uint32_t bRichFromMugging = offset(bits(0x489, 0x589)) bits(1, 1, 1);
+    uint32_t bChrisCriminal = offset(bits(0x489, 0x589)) bits(2, 1, 1);
+    uint32_t bShakeFist = offset(bits(0x489, 0x589)) bits(3, 1, 1);
+    uint32_t bNoCriticalHits = offset(bits(0x489, 0x589)) bits(4, 1, 1);
+    uint32_t bHasAlreadyBeenRecorded = offset(bits(0x489, 0x589)) bits(5, 1, 1);
+    uint32_t bUpdateMatricesRequired = offset(bits(0x489, 0x589)) bits(6, 1, 1);
+    uint32_t bFleeWhenStanding = offset(bits(0x489, 0x589)) bits(7, 1, 1);
+    uint32_t bMiamiViceCop = offset(bits(0x48a, 0x58a)) bits(0, 1, 1);
+    uint32_t bMoneyHasBeenGivenByScript = offset(bits(0x48a, 0x58a)) bits(1, 1, 1);
+    uint32_t bHasBeenPhotographed = offset(bits(0x48a, 0x58a)) bits(2, 1, 1);
+    uint32_t bIsDrowning = offset(bits(0x48a, 0x58a)) bits(3, 1, 1);
+    uint32_t bDrownsInWater = offset(bits(0x48a, 0x58a)) bits(4, 1, 1);
+    uint32_t bHeadStuckInCollision = offset(bits(0x48a, 0x58a)) bits(5, 1, 1);
+    uint32_t bDeadPedInFrontOfCar = offset(bits(0x48a, 0x58a)) bits(6, 1, 1);
+    uint32_t bStayInCarOnJack = offset(bits(0x48a, 0x58a)) bits(7, 1, 1);
+    uint32_t bDontFight = offset(bits(0x48b, 0x58b)) bits(0, 1, 1);
+    uint32_t bDoomAim = offset(bits(0x48b, 0x58b)) bits(1, 1, 1);
+    uint32_t bCanBeShotInVehicle = offset(bits(0x48b, 0x58b)) bits(2, 1, 1);
+    uint32_t bPushedAlongByCar = offset(bits(0x48b, 0x58b)) bits(3, 1, 1);
+    uint32_t bNeverEverTargetThisPed = offset(bits(0x48b, 0x58b)) bits(4, 1, 1);
+    uint32_t bThisPedIsATargetPriority = offset(bits(0x48b, 0x58b)) bits(5, 1, 1);
+    uint32_t bCrouchWhenScared = offset(bits(0x48b, 0x58b)) bits(6, 1, 1);
+    uint32_t bKnockedOffBike = offset(bits(0x48b, 0x58b)) bits(7, 1, 1);
+    uint32_t bDonePositionOutOfCollision = offset(bits(0x48c, 0x58c)) bits(0, 1, 1);
+    uint32_t bDontRender = offset(bits(0x48c, 0x58c)) bits(1, 1, 1);
+    uint32_t bHasBeenAddedToPopulation = offset(bits(0x48c, 0x58c)) bits(2, 1, 1);
+    uint32_t bHasJustLeftCar = offset(bits(0x48c, 0x58c)) bits(3, 1, 1);
+    uint32_t bIsInDisguise = offset(bits(0x48c, 0x58c)) bits(4, 1, 1);
+    uint32_t bDoesntListenToPlayerGroupCommands = offset(bits(0x48c, 0x58c)) bits(5, 1, 1);
+    uint32_t bIsBeingArrested = offset(bits(0x48c, 0x58c)) bits(6, 1, 1);
+    uint32_t bHasJustSoughtCover = offset(bits(0x48c, 0x58c)) bits(7, 1, 1);
+    uint32_t bKilledByStealth = offset(bits(0x48d, 0x58d)) bits(0, 1, 1);
+    uint32_t bDoesntDropWeaponsWhenDead = offset(bits(0x48d, 0x58d)) bits(1, 1, 1);
+    uint32_t bCalledPreRender = offset(bits(0x48d, 0x58d)) bits(2, 1, 1);
+    uint32_t bBloodPuddleCreated = offset(bits(0x48d, 0x58d)) bits(3, 1, 1);
+    uint32_t bPartOfAttackWave = offset(bits(0x48d, 0x58d)) bits(4, 1, 1);
+    uint32_t bClearRadarBlipOnDeath = offset(bits(0x48d, 0x58d)) bits(5, 1, 1);
+    uint32_t bNeverLeavesGroup = offset(bits(0x48d, 0x58d)) bits(6, 1, 1);
+    uint32_t bTestForBlockedPositions = offset(bits(0x48d, 0x58d)) bits(7, 1, 1);
+    uint32_t bRightArmBlocked = offset(bits(0x48e, 0x58e)) bits(0, 1, 1);
+    uint32_t bLeftArmBlocked = offset(bits(0x48e, 0x58e)) bits(1, 1, 1);
+    uint32_t bDuckRightArmBlocked = offset(bits(0x48e, 0x58e)) bits(2, 1, 1);
+    uint32_t bMidriffBlockedForJump = offset(bits(0x48e, 0x58e)) bits(3, 1, 1);
+    uint32_t bFallenDown = offset(bits(0x48e, 0x58e)) bits(4, 1, 1);
+    uint32_t bUseAttractorInstantly = offset(bits(0x48e, 0x58e)) bits(5, 1, 1);
+    uint32_t bDontAcceptIKLookAts = offset(bits(0x48e, 0x58e)) bits(6, 1, 1);
+    uint32_t bHasAScriptBrain = offset(bits(0x48e, 0x58e)) bits(7, 1, 1);
+    uint32_t bWaitingForScriptBrainToLoad = offset(bits(0x48f, 0x58f)) bits(0, 1, 1);
+    uint32_t bHasGroupDriveTask = offset(bits(0x48f, 0x58f)) bits(1, 1, 1);
+    uint32_t bCanExitCar = offset(bits(0x48f, 0x58f)) bits(2, 1, 1);
+    uint32_t CantBeKnockedOffBike = offset(bits(0x48f, 0x58f)) bits(3, 2, 1);
+    uint32_t bHasBeenRendered = offset(bits(0x48f, 0x58f)) bits(5, 1, 1);
+    uint32_t bIsCached = offset(bits(0x48f, 0x58f)) bits(6, 1, 1);
+    uint32_t bPushOtherPeds = offset(bits(0x48f, 0x58f)) bits(7, 1, 1);
+    uint32_t bHasBulletProofVest = offset(bits(0x490, 0x590)) bits(0, 1, 1);
+    uint32_t bUsingMobilePhone = offset(bits(0x490, 0x590)) bits(1, 1, 1);
+    uint32_t bUpperBodyDamageAnimsOnly = offset(bits(0x490, 0x590)) bits(2, 1, 1);
+    uint32_t bStuckUnderCar = offset(bits(0x490, 0x590)) bits(3, 1, 1);
+    uint32_t bKeepTasksAfterCleanUp = offset(bits(0x490, 0x590)) bits(4, 1, 1);
+    uint32_t bIsDyingStuck = offset(bits(0x490, 0x590)) bits(5, 1, 1);
+    uint32_t bIgnoreHeightCheckOnGotoPointTask = offset(bits(0x490, 0x590)) bits(6, 1, 1);
+    uint32_t bForceDieInCar = offset(bits(0x490, 0x590)) bits(7, 1, 1);
+    uint32_t bCheckColAboveHead = offset(bits(0x491, 0x591)) bits(0, 1, 1);
+    uint32_t bIgnoreWeaponRange = offset(bits(0x491, 0x591)) bits(1, 1, 1);
+    uint32_t bDruggedUp = offset(bits(0x491, 0x591)) bits(2, 1, 1);
+    uint32_t bWantedByPolice = offset(bits(0x491, 0x591)) bits(3, 1, 1);
+    uint32_t bSignalAfterKill = offset(bits(0x491, 0x591)) bits(4, 1, 1);
+    uint32_t bCanClimbOntoBoat = offset(bits(0x491, 0x591)) bits(5, 1, 1);
+    uint32_t bPedHitWallLastFrame = offset(bits(0x491, 0x591)) bits(6, 1, 1);
+    uint32_t bIgnoreHeightDifferenceFollowingNodes = offset(bits(0x491, 0x591)) bits(7, 1, 1);
+    uint32_t bMoveAnimSpeedHasBeenSetByTask = offset(bits(0x492, 0x592)) bits(0, 1, 1);
+    uint32_t bGetOutUpsideDownCar = offset(bits(0x492, 0x592)) bits(1, 1, 1);
+    uint32_t bJustGotOffTrain = offset(bits(0x492, 0x592)) bits(2, 1, 1);
+    uint32_t bDeathPickupsPersist = offset(bits(0x492, 0x592)) bits(3, 1, 1);
+    uint32_t bTestForShotInVehicle = offset(bits(0x492, 0x592)) bits(4, 1, 1);
+    AnimBlendFrameData* m_apBones[19] = offset(bits(0x494, 0x598));
+    uint32_t m_nAnimGroup = offset(bits(0x4e0, 0x630));
+    CVector2D m_vecAnimMovingShiftLocal = offset(bits(0x4e4, 0x634));
+    CPedAcquaintance m_acquaintance = offset(bits(0x4ec, 0x63c));
+    RwObject* m_pWeaponObject = offset(bits(0x500, 0x650));
+    RwFrame* m_pGunflashObject = offset(bits(0x504, 0x658));
+    RwObject* m_pGogglesObject = offset(bits(0x508, 0x660));
+    uint8_t* m_pGogglesState = offset(bits(0x50c, 0x668));
+    int16_t m_nWeaponGunflashAlphaMP1 = offset(bits(0x510, 0x670));
+    int16_t m_nGunFlashBlendOutRate = offset(bits(0x512, 0x672));
+    int16_t m_nWeaponGunflashAlphaMP2 = offset(bits(0x514, 0x674));
+    int16_t m_nGunFlashBlendOutRate2 = offset(bits(0x516, 0x676));
+    CPedIK m_pedIK = offset(bits(0x518, 0x678));
+    uint32_t m_nAntiSpazTimer = offset(bits(0x538, 0x6a0));
+    uint32_t m_eMoveStateAnim = offset(bits(0x53c, 0x6a4));
+    uint32_t m_eStoredMoveState = offset(bits(0x540, 0x6a8));
+    float m_fHealth = offset(bits(0x544, 0x6ac));
+    float m_fMaxHealth = offset(bits(0x548, 0x6b0));
+    float m_fArmour = offset(bits(0x54c, 0x6b4));
+    int m_nTimeTillWeNeedThisPed = offset(bits(0x550, 0x6b8));
+    CVector2D m_vecAnimMovingShift = offset(bits(0x554, 0x6bc));
+    float m_fCurrentRotation = offset(bits(0x55c, 0x6c4));
+    float m_fAimingRotation = offset(bits(0x560, 0x6c8));
+    float m_fHeadingChangeRate = offset(bits(0x564, 0x6cc));
+    float m_fHeadingChangeRateAccel = offset(bits(0x568, 0x6d0));
+    CPhysical* m_pGroundPhysical = offset(bits(0x56c, 0x6d8));
+    CVector m_vecGroundOffset = offset(bits(0x570, 0x6e0));
+    CVector m_vecGroundNormal = offset(bits(0x57c, 0x6ec));
+    CEntity* m_pContactEntity = offset(bits(0x588, 0x6f8));
+    float m_fHitHeadHeight = offset(bits(0x58c, 0x700));
+    CVehicle* m_pVehicle = offset(bits(0x590, 0x708));
+    CVehicle* m_pAccidentVehicle = offset(bits(0x594, 0x710));
+    CAccident* m_pAccident = offset(bits(0x598, 0x718));
+    int m_nPedType = offset(bits(0x59c, 0x720));
+    CPedStat* m_pStats = offset(bits(0x5a0, 0x728));
+    CWeapon m_aWeapons[13] = offset(bits(0x5a4, 0x730));
+    uint32_t m_nSavedWeapon = offset(bits(0x710, 0x8d0));
+    uint32_t m_nDelayedWeapon = offset(bits(0x714, 0x8d4));
+    uint32_t m_nDelayedWeaponAmmo = offset(bits(0x718, 0x8d8));
+    uint8_t m_nSelectedWepSlot = offset(bits(0x71c, 0x8dc));
+    uint8_t m_nWeaponShootingRate = offset(bits(0x71d, 0x8dd));
+    uint8_t m_nWeaponAccuracy = offset(bits(0x71e, 0x8de));
+    CObject* m_pTargetedObject = offset(bits(0x720, 0x8e0));
+    CEntity* m_pEntMagnetizeTarget = offset(bits(0x724, 0x8e8));
+    CVector m_vecWeaponPrevPos = offset(bits(0x728, 0x8f0));
+    uint8_t m_nWeaponSkill = offset(bits(0x734, 0x8fc));
+    uint8_t m_nFightingStyle = offset(bits(0x735, 0x8fd));
+    uint8_t m_nAllowedAttackMoves = offset(bits(0x736, 0x8fe));
+    CFire* m_pFire = offset(bits(0x738, 0x900));
+    float m_fFireDamageMultiplier = offset(bits(0x73c, 0x908));
+    CEntity* m_pLookingAtEntity = offset(bits(0x740, 0x910));
+    float m_fLookingDirection = offset(bits(0x744, 0x918));
+    int m_nWeaponModelId = offset(bits(0x748, 0x91c));
+    uint32_t m_nUnconsciousTimer = offset(bits(0x74c, 0x920));
+    int m_nLookingTime = offset(bits(0x750, 0x924));
+    uint32_t m_nAttackTimer = offset(bits(0x754, 0x928));
+    int m_nDeathTime = offset(bits(0x758, 0x92c));
+    uint8_t m_nBodypartToRemove = offset(bits(0x75c, 0x930));
+    int16_t m_nMoneyCount = offset(bits(0x75e, 0x932));
+    float m_wobble = offset(bits(0x760, 0x934));
+    float m_wobbleSpeed = offset(bits(0x764, 0x938));
+    uint8_t m_nLastWeaponDamage = offset(bits(0x768, 0x93c));
+    CEntity* m_pLastEntityDamage = offset(bits(0x76c, 0x940));
+    uint32_t m_nLastDamagedTime = offset(bits(0x770, 0x948));
+    CVector m_vecTurretOffset = offset(bits(0x774, 0x94c));
+    int16_t m_nTurretPosnMode = offset(bits(0x780, 0x958));
+    float m_fTurretAngleA = offset(bits(0x784, 0x95c));
+    float m_fTurretAngleB = offset(bits(0x788, 0x960));
+    int m_nTurretAmmo = offset(bits(0x78c, 0x964));
+    CCoverPoint* m_pCoverPoint = offset(bits(0x790, 0x968));
+    CEntryExit* m_pEnex = offset(bits(0x794, 0x970));
+    float m_fRemovalDistMultiplier = offset(bits(0x798, 0x978));
+    int16_t m_nSpecialModelIndex = offset(bits(0x79c, 0x97c));
+    uint32_t m_nLastTalkSfx = offset(bits(0x7a0, 0x980));
+    bool PedIsInvolvedInConversation() = symbol("libGTASA.so", "_ZN4CPed27PedIsInvolvedInConversationEv");
+    bool PedCanPickUpPickUp() = symbol("libGTASA.so", "_ZN4CPed18PedCanPickUpPickUpEv");
+    void CreateDeadPedMoney() = symbol("libGTASA.so", "_ZN4CPed18CreateDeadPedMoneyEv");
+    void CreateDeadPedWeaponPickups() = symbol("libGTASA.so", "_ZN4CPed26CreateDeadPedWeaponPickupsEv");
+    bool IsPlayer() = symbol("libGTASA.so", "_ZNK4CPed8IsPlayerEv");
+    void ReleaseCoverPoint() = symbol("libGTASA.so", "_ZN4CPed17ReleaseCoverPointEv");
+    void ClearWeapons() = symbol("libGTASA.so", "_ZN4CPed12ClearWeaponsEv");
+    void UpdateStatLeavingVehicle() = symbol("libGTASA.so", "_ZN4CPed24UpdateStatLeavingVehicleEv");
+    void Initialise() = symbol("libGTASA.so", "_ZN4CPed10InitialiseEv");
+    void SetPedDefaultDecisionMaker() = symbol("libGTASA.so", "_ZN4CPed26SetPedDefaultDecisionMakerEv");
+    bool CanUseTorsoWhenLooking() = symbol("libGTASA.so", "_ZN4CPed22CanUseTorsoWhenLookingEv");
+    void Update() = symbol("libGTASA.so", "_ZN4CPed6UpdateEv");
+    bool PositionAnyPedOutOfCollision() = symbol("libGTASA.so", "_ZN4CPed28PositionAnyPedOutOfCollisionEv");
+    void ClearAimFlag() = symbol("libGTASA.so", "_ZN4CPed12ClearAimFlagEv");
+    void ClearLookFlag() = symbol("libGTASA.so", "_ZN4CPed13ClearLookFlagEv");
+    void StopNonPartialAnims() = symbol("libGTASA.so", "_ZN4CPed19StopNonPartialAnimsEv");
+    void RestartNonPartialAnims() = symbol("libGTASA.so", "_ZN4CPed22RestartNonPartialAnimsEv");
+    void ClearLook() = symbol("libGTASA.so", "_ZN4CPed9ClearLookEv");
+    int8_t GetWeaponSkill() = symbol("libGTASA.so", "_ZN4CPed14GetWeaponSkillEv");
+    bool CanWeRunAndFireWithWeapon() = symbol("libGTASA.so", "_ZN4CPed25CanWeRunAndFireWithWeaponEv");
+    void CalculateNewVelocity() = symbol("libGTASA.so", "_ZN4CPed20CalculateNewVelocityEv");
+    bool IsPedInControl() = symbol("libGTASA.so", "_ZN4CPed14IsPedInControlEv");
+    void UpdatePosition() = symbol("libGTASA.so", "_ZN4CPed14UpdatePositionEv");
+    void CalculateNewOrientation() = symbol("libGTASA.so", "_ZN4CPed23CalculateNewOrientationEv");
+    void ClearAll() = symbol("libGTASA.so", "_ZN4CPed8ClearAllEv");
+    void ProcessBuoyancy() = symbol("libGTASA.so", "_ZN4CPed15ProcessBuoyancyEv");
+    void RequestDelayedWeapon() = symbol("libGTASA.so", "_ZN4CPed20RequestDelayedWeaponEv");
+    void PlayFootSteps() = symbol("libGTASA.so", "_ZN4CPed13PlayFootStepsEv");
+    bool IsAlive() = symbol("libGTASA.so", "_ZNK4CPed7IsAliveEv");
+    bool IsPedShootable() = symbol("libGTASA.so", "_ZN4CPed14IsPedShootableEv");
+    bool UseGroundColModel() = symbol("libGTASA.so", "_ZN4CPed17UseGroundColModelEv");
+    bool CanSetPedState() = symbol("libGTASA.so", "_ZN4CPed14CanSetPedStateEv");
+    bool CanBeArrested() = symbol("libGTASA.so", "_ZN4CPed13CanBeArrestedEv");
+    bool CanStrafeOrMouseControl() = symbol("libGTASA.so", "_ZN4CPed23CanStrafeOrMouseControlEv");
+    uint8_t CanBeDeleted() = symbol("libGTASA.so", "_ZN4CPed12CanBeDeletedEv");
+    uint8_t CanBeDeletedEvenInVehicle() = symbol("libGTASA.so", "_ZN4CPed25CanBeDeletedEvenInVehicleEv");
+    void RemoveGogglesModel() = symbol("libGTASA.so", "_ZN4CPed18RemoveGogglesModelEv");
+    void PutOnGoggles() = symbol("libGTASA.so", "_ZN4CPed12PutOnGogglesEv");
+    void TakeOffGoggles() = symbol("libGTASA.so", "_ZN4CPed14TakeOffGogglesEv");
+    void ReplaceWeaponWhenExitingVehicle() = symbol("libGTASA.so", "_ZN4CPed31ReplaceWeaponWhenExitingVehicleEv");
+    void RemoveWeaponForScriptedCutscene() = symbol("libGTASA.so", "_ZN4CPed31RemoveWeaponForScriptedCutsceneEv");
+    void ReplaceWeaponForScriptedCutscene() = symbol("libGTASA.so", "_ZN4CPed32ReplaceWeaponForScriptedCutsceneEv");
+    void ResetGunFlashAlpha() = symbol("libGTASA.so", "_ZN4CPed18ResetGunFlashAlphaEv");
+    float GetBikeRidingSkill() = symbol("libGTASA.so", "_ZN4CPed18GetBikeRidingSkillEv");
+    void PreRenderAfterTest() = symbol("libGTASA.so", "_ZN4CPed18PreRenderAfterTestEv");
+    void SetIdle() = symbol("libGTASA.so", "_ZN4CPed7SetIdleEv");
+    void Look() = symbol("libGTASA.so", "_ZN4CPed4LookEv");
+    bool TurnBody() = symbol("libGTASA.so", "_ZN4CPed8TurnBodyEv");
+    bool IsPointerValid() = symbol("libGTASA.so", "_ZN4CPed14IsPointerValidEv");
+    void SetPedPositionInCar() = symbol("libGTASA.so", "_ZN4CPed19SetPedPositionInCarEv");
+    void RestoreHeadingRate() = symbol("libGTASA.so", "_ZN4CPed18RestoreHeadingRateEv");
+    void SetRadioStation() = symbol("libGTASA.so", "_ZN4CPed15SetRadioStationEv");
+    void PositionAttachedPed() = symbol("libGTASA.so", "_ZN4CPed19PositionAttachedPedEv");
+    void DettachPedFromEntity() = symbol("libGTASA.so", "_ZN4CPed20DettachPedFromEntityEv");
+    void Dress() = symbol("libGTASA.so", "_ZN4CPed5DressEv");
+    void UpdateStatEnteringVehicle() = symbol("libGTASA.so", "_ZN4CPed25UpdateStatEnteringVehicleEv");
+    CTaskSimpleHoldEntity* GetHoldingTask() = symbol("libGTASA.so", "_ZN4CPed14GetHoldingTaskEv");
+    CEntity* GetEntityThatThisPedIsHolding() = symbol("libGTASA.so", "_ZN4CPed29GetEntityThatThisPedIsHoldingEv");
+    uint8_t CanThrowEntityThatThisPedIsHolding() = symbol("libGTASA.so", "_ZN4CPed34CanThrowEntityThatThisPedIsHoldingEv");
+    void GiveWeaponAtStartOfFight() = symbol("libGTASA.so", "_ZN4CPed24GiveWeaponAtStartOfFightEv");
+    void GiveWeaponWhenJoiningGang() = symbol("libGTASA.so", "_ZN4CPed25GiveWeaponWhenJoiningGangEv");
+    uint8_t IsPlayingHandSignal() = symbol("libGTASA.so", "_ZN4CPed19IsPlayingHandSignalEv");
+    void StopPlayingHandSignal() = symbol("libGTASA.so", "_ZN4CPed21StopPlayingHandSignalEv");
+    float GetWalkAnimSpeed() = symbol("libGTASA.so", "_ZN4CPed16GetWalkAnimSpeedEv");
+    bool UseFreeAimMagnetize() = symbol("libGTASA.so", "_ZN4CPed19UseFreeAimMagnetizeEv");
+    uint8_t* GetPedStateString() = symbol("libGTASA.so", "_ZN4CPed17GetPedStateStringEv");
+    uint8_t GetPedTalking() = symbol("libGTASA.so", "_ZN4CPed13GetPedTalkingEv");
+    void EnablePedSpeech() = symbol("libGTASA.so", "_ZN4CPed15EnablePedSpeechEv");
+    void EnablePedSpeechForScriptSpeech() = symbol("libGTASA.so", "_ZN4CPed30EnablePedSpeechForScriptSpeechEv");
+    uint8_t CanPedHoldConversation() = symbol("libGTASA.so", "_ZN4CPed22CanPedHoldConversationEv");
+    void DeadPedMakesTyresBloody() = symbol("libGTASA.so", "_ZN4CPed23DeadPedMakesTyresBloodyEv");
+    float GetHealth()
+    {
+        return m_fHealth;
+    }
+    float GetMaxHealth()
+    {
+        return m_fMaxHealth;
+    }
+    bool IsMaxHealth()
+    {
+        return GetHealth() >= GetMaxHealth();
+    }
+    void SetHealth(float hp)
+    {
+        m_fHealth = hp;
+    }
+    void AddHealth(float hp)
+    {
+        SetHealth(GetHealth() + hp);
+    }
+    void SetHealthSafe(float hp)
+    {
+        if(hp < 0.0f) m_fHealth = 0.0f;
+        else if(hp > GetMaxHealth()) m_fHealth = GetMaxHealth();
+        else m_fHealth = hp;
+    }
+    void AddHealthSafe(float hp)
+    {
+        SetHealthSafe(GetHealth() + hp);
+    }
+};
+native class CCopPed : public CPed = size(bits(0x7cc, 0x9c8))
+{
+    bool m_bRoadBlockCop = offset(bits(0x7a4, 0x984));
+    bool m_bRemoveIfNonVisible = offset(bits(0x7a5, 0x985));
+    uint32_t m_copType = offset(bits(0x7a8, 0x988));
+    int m_nStuckCounter = offset(bits(0x7ac, 0x98c));
+    CCopPed* m_pCopPartner = offset(bits(0x7b0, 0x990));
+    CPed* m_apCriminalsToKill[5] = offset(bits(0x7b4, 0x998));
+    bool m_bIAmDriver = offset(bits(0x7c8, 0x9c0));
+    void ClearCriminalsToKill() = symbol("libGTASA.so", "_ZN7CCopPed20ClearCriminalsToKillEv");
+    void SetPartner(CCopPed* pPed) = symbol("libGTASA.so", "_ZN7CCopPed10SetPartnerEPS_");
+    int32_t AddCriminalToKill(CPed* pCriminal) = symbol("libGTASA.so", "_ZN7CCopPed17AddCriminalToKillEP4CPed");
+    void RemoveCriminalToKill(CPed* pCriminal, int i) = symbol("libGTASA.so", "_ZN7CCopPed20RemoveCriminalToKillEP4CPedi");
+};
+native bool IsPedPointerValid(CPed* pPed) = symbol("libGTASA.so", "_Z17IsPedPointerValidP4CPed");
+native bool IsPedPointerValid_NotInWorld(CPed* pPed) = symbol("libGTASA.so", "_Z28IsPedPointerValid_NotInWorldP4CPed");
+native bool LOSBlockedBetweenPeds(CEntity* pPed1, CEntity* pPed2) = symbol("libGTASA.so", "_Z21LOSBlockedBetweenPedsP7CEntityS0_");
+native RwObject* SetPedAtomicVisibilityCB(RwObject* pObject, void* pData) = symbol("libGTASA.so", "_Z24SetPedAtomicVisibilityCBP8RwObjectPv");
+native RwFrame* RecurseFrameChildrenVisibilityCB(RwFrame* pFrame, void* pData) = symbol("libGTASA.so", "_Z32RecurseFrameChildrenVisibilityCBP7RwFramePv");
+#endif

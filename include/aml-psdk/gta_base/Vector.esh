@@ -1,0 +1,31 @@
+#ifndef PSDK_gta_base_Vector_h
+#define PSDK_gta_base_Vector_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../sdk_forward.esh"
+#include "../sdk_basetypes.esh"
+native class CVector2D = size(0x8)
+{
+    float x = offset(0x0);
+    float y = offset(0x4);
+};
+native class CVector = size(0xc)
+{
+    CVector2D m_vec2D = offset(0x0);
+    float x = offset(0x0);
+    float y = offset(0x4);
+    float z = offset(0x8);
+};
+native class CompressedVector2D = size(0x4)
+{
+    int16_t x = offset(0x0);
+    int16_t y = offset(0x2);
+};
+native class CompressedVector = size(0x6)
+{
+    CompressedVector2D m_vec2D = offset(0x0);
+    int16_t x = offset(0x0);
+    int16_t y = offset(0x2);
+    int16_t z = offset(0x4);
+};
+#endif

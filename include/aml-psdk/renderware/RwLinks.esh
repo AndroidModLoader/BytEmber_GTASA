@@ -1,0 +1,15 @@
+#ifndef PSDK_renderware_RwLinks_h
+#define PSDK_renderware_RwLinks_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../sdk_forward.esh"
+native class RwLLLink = size(bits(0x8, 0x10))
+{
+    RwLLLink* next = offset(0x0);
+    RwLLLink* prev = offset(bits(0x4, 0x8));
+};
+native class RwLinkList = size(bits(0x8, 0x10))
+{
+    RwLLLink link = offset(0x0);
+};
+#endif

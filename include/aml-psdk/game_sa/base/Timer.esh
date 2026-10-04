@@ -1,0 +1,135 @@
+#ifndef PSDK_game_sa_base_Timer_h
+#define PSDK_game_sa_base_Timer_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+native class CTimer = size(0x1)
+{
+    static void Initialise() = symbol("libGTASA.so", "_ZN6CTimer10InitialiseEv");
+    static void Shutdown() = symbol("libGTASA.so", "_ZN6CTimer8ShutdownEv");
+    static void Update() = symbol("libGTASA.so", "_ZN6CTimer6UpdateEv");
+    static void UpdateVariables(float arg0) = symbol("libGTASA.so", "_ZN6CTimer15UpdateVariablesEf");
+    static void Suspend() = symbol("libGTASA.so", "_ZN6CTimer7SuspendEv");
+    static void Resume() = symbol("libGTASA.so", "_ZN6CTimer6ResumeEv");
+    static uint32_t GetCyclesPerMillisecond() = symbol("libGTASA.so", "_ZN6CTimer23GetCyclesPerMillisecondEv");
+    static uint32_t GetCyclesPerFrame() = symbol("libGTASA.so", "_ZN6CTimer17GetCyclesPerFrameEv");
+    static uint32_t GetCurrentTimeInCycles() = symbol("libGTASA.so", "_ZN6CTimer22GetCurrentTimeInCyclesEv");
+    static void Stop() = symbol("libGTASA.so", "_ZN6CTimer4StopEv");
+    static bool GetIsSlowMotionActive() = symbol("libGTASA.so", "_ZN6CTimer21GetIsSlowMotionActiveEv");
+    static void StartUserPause() = symbol("libGTASA.so", "_ZN6CTimer14StartUserPauseEv");
+    static void EndUserPause() = symbol("libGTASA.so", "_ZN6CTimer12EndUserPauseEv");
+    static uint32_t m_snTimeInMilliseconds()
+    {
+        return *((uint32_t*) *((uintptr_t*)(GetMainLibraryAddress() + (IS_64BIT ? 0x84C030 : 0x676FFC))));
+    }
+    static uint32_t m_snTimeInMillisecondsNonClipped()
+    {
+        return *((uint32_t*) *((uintptr_t*)(GetMainLibraryAddress() + (IS_64BIT ? 0x851B90 : 0x679DBC))));
+    }
+    static uint32_t m_snTimeInMillisecondsPauseMode()
+    {
+        return *((uint32_t*) *((uintptr_t*)(GetMainLibraryAddress() + (IS_64BIT ? 0x84D480 : 0x677A2C))));
+    }
+    static uint32_t m_snPreviousTimeInMilliseconds()
+    {
+        return *((uint32_t*) *((uintptr_t*)(GetMainLibraryAddress() + (IS_64BIT ? 0x84D388 : 0x6779AC))));
+    }
+    static uint32_t m_snPPreviousTimeInMilliseconds()
+    {
+        return *((uint32_t*) *((uintptr_t*)(GetMainLibraryAddress() + (IS_64BIT ? 0x851A90 : 0x679D3C))));
+    }
+    static uint32_t m_snPPPreviousTimeInMilliseconds()
+    {
+        return *((uint32_t*) *((uintptr_t*)(GetMainLibraryAddress() + (IS_64BIT ? 0x84DC10 : 0x677DF8))));
+    }
+    static uint32_t m_snPPPPreviousTimeInMilliseconds()
+    {
+        return *((uint32_t*) *((uintptr_t*)(GetMainLibraryAddress() + (IS_64BIT ? 0x850960 : 0x6794A4))));
+    }
+    static uint32_t m_snPreviousTimeInMillisecondsNonClipped()
+    {
+        return *((uint32_t*) *((uintptr_t*)(GetMainLibraryAddress() + (IS_64BIT ? 0x84CC30 : 0x677600))));
+    }
+    static float ms_fTimeScale()
+    {
+        return *((float*) *((uintptr_t*)(GetMainLibraryAddress() + (IS_64BIT ? 0x84B1A8 : 0x6768A8))));
+    }
+    static float ms_fSlowMotionScale()
+    {
+        return *((float*) *((uintptr_t*)(GetMainLibraryAddress() + (IS_64BIT ? 0x84B690 : 0x676B24))));
+    }
+    static float ms_fTimeStep()
+    {
+        return *((float*) *((uintptr_t*)(GetMainLibraryAddress() + (IS_64BIT ? 0x84CE50 : 0x677714))));
+    }
+    static float ms_fTimeStepNonClipped()
+    {
+        return *((float*) *((uintptr_t*)(GetMainLibraryAddress() + (IS_64BIT ? 0x851380 : 0x6799B4))));
+    }
+    static float ms_fOldTimeStep()
+    {
+        return *((float*) *((uintptr_t*)(GetMainLibraryAddress() + (IS_64BIT ? 0x84B858 : 0x676C08))));
+    }
+    static float game_FPS()
+    {
+        return *((float*) *((uintptr_t*)(GetMainLibraryAddress() + (IS_64BIT ? 0x84CD28 : 0x67767C))));
+    }
+    static uint32_t m_FrameCounter()
+    {
+        return *((uint32_t*) *((uintptr_t*)(GetMainLibraryAddress() + (IS_64BIT ? 0x84F280 : 0x678930))));
+    }
+    static bool m_UserPause()
+    {
+        return *((bool*) *((uintptr_t*)(GetMainLibraryAddress() + (IS_64BIT ? 0x84CD90 : 0x6776B0))));
+    }
+    static bool m_CodePause()
+    {
+        return *((bool*) *((uintptr_t*)(GetMainLibraryAddress() + (IS_64BIT ? 0x8509A0 : 0x6794C4))));
+    }
+    static bool bSlowMotionActive()
+    {
+        return *((bool*) *((uintptr_t*)(GetMainLibraryAddress() + (IS_64BIT ? 0x84ED68 : 0x6786A0))));
+    }
+    static bool bSkipProcessThisFrame()
+    {
+        return *((bool*) *((uintptr_t*)(GetMainLibraryAddress() + (IS_64BIT ? 0x8504B8 : 0x679250))));
+    }
+    static uint32_t GetTimeMS()
+    {
+        return CTimer::m_snTimeInMilliseconds();
+    }
+    static uint32_t GetTimeInMS()
+    {
+        return CTimer::m_snTimeInMilliseconds();
+    }
+    static bool IsTimePassed(uint32_t time)
+    {
+        return time < CTimer::GetTimeInMS();
+    }
+    static float GetTimeScale()
+    {
+        return CTimer::ms_fTimeScale();
+    }
+    static float GetTimeStep()
+    {
+        return CTimer::ms_fTimeStep();
+    }
+    static float GetTimeStepFix()
+    {
+        return CTimer::GetTimeStep() / (50.0f / 30.0f);
+    }
+    static float GetTimeStepInvFix()
+    {
+        return (50.0f / 30.0f) / CTimer::GetTimeStep();
+    }
+    static float GetTimeStepInSeconds()
+    {
+        return CTimer::GetTimeStep() / 50.0f;
+    }
+    static bool IsPaused()
+    {
+        return CTimer::m_UserPause() || CTimer::m_CodePause();
+    }
+};
+#endif

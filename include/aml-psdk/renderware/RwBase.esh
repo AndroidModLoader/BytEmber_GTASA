@@ -1,0 +1,48 @@
+#ifndef PSDK_renderware_RwBase_h
+#define PSDK_renderware_RwBase_h
+#pragma once
+#define rwCOMBINEREPLACE 0
+#define rwCOMBINEPRECONCAT 1
+#define rwCOMBINEPOSTCONCAT 2
+#define rwID_PCD3D7 1
+#define rwID_PCOGL 2
+#define rwID_MAC 3
+#define rwID_PS2 4
+#define rwID_XBOX 5
+#define rwID_GAMECUBE 6
+#define rwID_SOFTRAS 7
+#define rwID_PCD3D8 8
+#define rwID_PCD3D9 9
+#define rwID_ES2_DXT 10
+#define rwID_ES2_PVR 11
+#define rwID_ES2_ATC 12
+#define rwID_ES2_UNC 13
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../sdk_forward.esh"
+#include "../sdk_base.esh"
+native class RwRect = size(0x10)
+{
+    int x = offset(0x0);
+    int y = offset(0x4);
+    int w = offset(0x8);
+    int h = offset(0xc);
+};
+native class RwPluginRegEntry = size(bits(0x3c, 0x70))
+{
+    int offset = offset(0x0);
+    int size = offset(0x4);
+    uint32_t pluginID = offset(0x8);
+    nativeptr readCB = offset(bits(0xc, 0x10));
+    nativeptr writeCB = offset(bits(0x10, 0x18));
+    nativeptr getSizeCB = offset(bits(0x14, 0x20));
+    nativeptr alwaysCB = offset(bits(0x18, 0x28));
+    nativeptr rightsCB = offset(bits(0x1c, 0x30));
+    nativeptr constructCB = offset(bits(0x20, 0x38));
+    nativeptr destructCB = offset(bits(0x24, 0x40));
+    nativeptr copyCB = offset(bits(0x28, 0x48));
+    nativeptr errStrCB = offset(bits(0x2c, 0x50));
+    RwPluginRegEntry* nextRegEntry = offset(bits(0x30, 0x58));
+    RwPluginRegEntry* prevRegEntry = offset(bits(0x34, 0x60));
+    RwPluginRegistry* parentRegistry = offset(bits(0x38, 0x68));
+};
+#endif

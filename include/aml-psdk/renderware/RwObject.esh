@@ -1,0 +1,26 @@
+#ifndef PSDK_renderware_RwObject_h
+#define PSDK_renderware_RwObject_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../sdk_forward.esh"
+#include "../sdk_base.esh"
+#include "../renderware/RwLinks.esh"
+#include "../renderware/RwBase.esh"
+native class RwObject = size(bits(0x8, 0x10))
+{
+    uint8_t type = offset(0x0);
+    uint8_t subType = offset(0x1);
+    uint8_t flags = offset(0x2);
+    uint8_t privateFlags = offset(0x3);
+    void* parent = offset(bits(0x4, 0x8));
+    RwFrame* frame = offset(bits(0x4, 0x8));
+};
+native class RwObjectHasFrame = size(bits(0x14, 0x28))
+{
+    RwObject object = offset(0x0);
+    RwLLLink lFrame = offset(bits(0x8, 0x10));
+    nativeptr sync = offset(bits(0x10, 0x20));
+};
+native void _rwObjectHasFrameSetFrame(void* object, RwFrame* frame) = symbol("libGTASA.so", "_Z25_rwObjectHasFrameSetFramePvP7RwFrame");
+native void _rwObjectHasFrameReleaseFrame(RwFrame* object) = symbol("libGTASA.so", "_Z29_rwObjectHasFrameReleaseFramePv");
+#endif

@@ -1,0 +1,64 @@
+#ifndef PSDK_game_sa_engine_Text_h
+#define PSDK_game_sa_engine_Text_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../gta_base/GxtChar.esh"
+native class ChunkHeader = size(0x8)
+{
+    uint8_t Type[4] = offset(0x0);
+    uint32_t Size = offset(0x4);
+};
+native class CText__TDat = size(bits(0x8, 0x10))
+{
+    uint8_t* data = offset(0x0);
+    int size = offset(bits(0x4, 0x8));
+};
+native class CText__TablEntry = size(0xc)
+{
+    uint8_t name[8] = offset(0x0);
+    int offset = offset(0x8);
+};
+native class CText__Tabl = size(0x964)
+{
+    CText__TablEntry data[200] = offset(0x0);
+    int16_t size = offset(0x960);
+    int16_t __pad = offset(0x962);
+};
+native class tGXT_VERSION_2_TKEY_item = size(bits(0x8, 0x10))
+{
+    uintptr_t Position = offset(0x0);
+    uintptr_t KeyHash = offset(bits(0x4, 0x8));
+};
+native class CText__TKey = size(bits(0x8, 0x10))
+{
+    tGXT_VERSION_2_TKEY_item* data = offset(0x0);
+    int16_t size = offset(bits(0x4, 0x8));
+};
+native class CText = size(bits(0xa90, 0xab0))
+{
+    CText__TKey tkeyMain = offset(0x0);
+    CText__TDat tdatMain = offset(bits(0x8, 0x10));
+    CText__TKey tkeyMission = offset(bits(0x10, 0x20));
+    CText__TDat tdatMission = offset(bits(0x18, 0x30));
+    uint8_t encoding = offset(bits(0x20, 0x40));
+    uint8_t haveTabl = offset(bits(0x21, 0x41));
+    uint8_t cderrorInitialized = offset(bits(0x22, 0x42));
+    uint8_t missionTableLoaded = offset(bits(0x23, 0x43));
+    uint8_t missionTableName[8] = offset(bits(0x24, 0x44));
+    uint8_t cderrorText[256] = offset(bits(0x2c, 0x4c));
+    CText__Tabl tabl = offset(bits(0x12c, 0x14c));
+    void LoadMissionPackText() = symbol("libGTASA.so", "_ZN5CText19LoadMissionPackTextEv");
+#if IS_64BIT
+    uint8_t ReadChunkHeader(ChunkHeader* pHead, uint64_t FileId, uint32_t* pNumCharsRead, uint8_t LoadFromMemoryCard) = symbol("libGTASA.so", "_ZN5CText15ReadChunkHeaderEP11ChunkHeaderyPjh");
+#else
+    uint8_t ReadChunkHeader(ChunkHeader* pHead, uint32_t FileId, uint32_t* pNumCharsRead, uint8_t LoadFromMemoryCard) = symbol("libGTASA.so", "_ZN5CText15ReadChunkHeaderEP11ChunkHeaderjPjh");
+#endif
+    void Load(uint8_t bKeepMissionText) = symbol("libGTASA.so", "_ZN5CText4LoadEh");
+    void Unload(uint8_t bKeepMissionText) = symbol("libGTASA.so", "_ZN5CText6UnloadEh");
+    GxtChar* Get(uint8_t* Ident) = symbol("libGTASA.so", "_ZN5CText3GetEPKc");
+    void GetNameOfLoadedMissionText(uint8_t* pStringToFill) = symbol("libGTASA.so", "_ZN5CText26GetNameOfLoadedMissionTextEPc");
+    void LoadMissionText(uint8_t* pMissionTextStem) = symbol("libGTASA.so", "_ZN5CText15LoadMissionTextEPc");
+};
+#endif

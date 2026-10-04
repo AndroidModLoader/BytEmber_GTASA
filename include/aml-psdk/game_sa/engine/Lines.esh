@@ -1,0 +1,13 @@
+#ifndef PSDK_game_sa_engine_Lines_h
+#define PSDK_game_sa_engine_Lines_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+native class CLines = size(0x1)
+{
+    static void ImmediateLine2D(int startX, int startY, int endX, int endY, uint8_t sr, uint8_t sg, uint8_t sb, uint8_t sa, uint8_t er, uint8_t eg, uint8_t eb, uint8_t ea) = symbol("libGTASA.so", "_ZN6CLines15ImmediateLine2DEiiiihhhhhhhh");
+    static void RenderLineNoClipping(float startX, float startY, float startZ, float endX, float endY, float endZ, uint32_t color1, uint32_t color2) = symbol("libGTASA.so", "_ZN6CLines20RenderLineNoClippingEffffffjj");
+    static void RenderLineWithClipping(float startX, float startY, float startZ, float endX, float endY, float endZ, uint32_t color1, uint32_t color2) = symbol("libGTASA.so", "_ZN6CLines22RenderLineWithClippingEffffffjj");
+};
+#endif

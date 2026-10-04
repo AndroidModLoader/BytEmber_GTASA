@@ -1,0 +1,56 @@
+#ifndef PSDK_renderware_RpAtomic_h
+#define PSDK_renderware_RpAtomic_h
+#pragma once
+#define rpATOMICCOLLISIONTEST 1
+#define rpATOMICRENDER 4
+#define rpATOMICSAMEBOUNDINGSPHERE 1
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../sdk_forward.esh"
+#include "../sdk_base.esh"
+#include "../renderware/RwObject.esh"
+#include "../renderware/RpGeometry.esh"
+#include "../renderware/RpMaterial.esh"
+#include "../renderware/RpClump.esh"
+#include "../renderware/RwMatrix.esh"
+#include "../renderware/RwVector.esh"
+#include "../renderware/RwResource.esh"
+#include "../renderware/RxPipeline.esh"
+#include "../renderware/RpWorld.esh"
+native class RpInterpolator = size(0x14)
+{
+    int flags = offset(0x0);
+    int16_t startMorphTarget = offset(0x4);
+    int16_t endMorphTarget = offset(0x6);
+    float time = offset(0x8);
+    float recipTime = offset(0xc);
+    float position = offset(0x10);
+};
+native class RpAtomic = size(bits(0x70, 0xa8))
+{
+    RwObjectHasFrame object = offset(0x0);
+    RwResEntry* repEntry = offset(bits(0x14, 0x28));
+    RpGeometry* geometry = offset(bits(0x18, 0x30));
+    RwSphere boundingSphere = offset(bits(0x1c, 0x38));
+    RwSphere worldBoundingSphere = offset(bits(0x2c, 0x48));
+    RpClump* clump = offset(bits(0x3c, 0x58));
+    RwLLLink inClumpLink = offset(bits(0x40, 0x60));
+    nativeptr renderCallBack = offset(bits(0x48, 0x70));
+    RpInterpolator interpolator = offset(bits(0x4c, 0x78));
+    uint16_t renderFrame = offset(bits(0x60, 0x8c));
+    uint16_t pad = offset(bits(0x62, 0x8e));
+    RwLinkList llWorldSectorsInAtomic = offset(bits(0x64, 0x90));
+    RxPipeline* pipeline = offset(bits(0x6c, 0xa0));
+};
+native RpAtomic* AtomicDefaultRenderCallBack(RpAtomic* atomic) = symbol("libGTASA.so", "_Z27AtomicDefaultRenderCallBackP8RpAtomic");
+native void _rpAtomicResyncInterpolatedSphere(RpAtomic* atomic) = symbol("libGTASA.so", "_Z33_rpAtomicResyncInterpolatedSphereP8RpAtomic");
+native RwSphere* RpAtomicGetWorldBoundingSphere(RpAtomic* atomic) = symbol("libGTASA.so", "_Z30RpAtomicGetWorldBoundingSphereP8RpAtomic");
+native RpAtomic* RpAtomicSetFrame(RpAtomic* atomic, RwFrame* frame) = symbol("libGTASA.so", "_Z16RpAtomicSetFrameP8RpAtomicP7RwFrame");
+native RpAtomic* RpAtomicClone(RpAtomic* atomic) = symbol("libGTASA.so", "_Z13RpAtomicCloneP8RpAtomic");
+native RpAtomic* RpAtomicStreamWrite(RpAtomic* atomic, RwStream* stream) = symbol("libGTASA.so", "_Z19RpAtomicStreamWriteP8RpAtomicP8RwStream");
+native RpAtomic* RpAtomicStreamRead(RwStream* stream) = symbol("libGTASA.so", "_Z18RpAtomicStreamReadP8RwStream");
+native RpWorld* RpAtomicGetWorld(RpAtomic* atomic) = symbol("libGTASA.so", "_Z16RpAtomicGetWorldPK8RpAtomic");
+native RpAtomic* RpAtomicForAllWorldSectors(RpAtomic* atomic, nativeptr callback, void* data) = symbol("libGTASA.so", "_Z26RpAtomicForAllWorldSectorsP8RpAtomicPFP13RpWorldSectorS2_PvES3_");
+native RxPipeline* RpAtomicSetDefaultPipeline(RxPipeline* pipeline) = symbol("libGTASA.so", "_Z26RpAtomicSetDefaultPipelineP10RxPipeline");
+native uint8_t RpAtomicConvertGeometryToTL(RpAtomic* pAtomic) = symbol("libGTASA.so", "_Z27RpAtomicConvertGeometryToTLP8RpAtomic");
+native uint8_t RpAtomicConvertGeometryToTS(RpAtomic* pAtomic) = symbol("libGTASA.so", "_Z27RpAtomicConvertGeometryToTSP8RpAtomic");
+#endif

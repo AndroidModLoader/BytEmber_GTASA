@@ -1,0 +1,56 @@
+#ifndef PSDK_game_sa_engine_HID_h
+#define PSDK_game_sa_engine_HID_h
+#pragma once
+#define HID_INPUT_TYPE_TOUCH 0
+#define HID_INPUT_TYPE_JOYPAD 1
+#define HID_INPUT_TYPE_KEYBOARD 2
+#define NUM_HID_INPUT_TYPES 3
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../game_sa/enum/HID.esh"
+#include "../../game_sa/base/Lists.esh"
+#include "../../game_sa/engine/OS.esh"
+native class MappingPair = size(0x84)
+{
+    int m_Mapping = offset(0x0);
+    uint8_t m_szMapping[128] = offset(0x4);
+};
+native class CHID = size(bits(0x4, 0x8))
+{
+    void* __vftable = offset(0x0);
+    static int32_t GetMappingByName(uint8_t* pszMapping) = symbol("libGTASA.so", "_ZN4CHID16GetMappingByNameEPKc");
+    static bool Implements(int32_t Mapping) = symbol("libGTASA.so", "_ZN4CHID10ImplementsE10HIDMapping");
+    static bool Replaces(int32_t Mapping) = symbol("libGTASA.so", "_ZN4CHID8ReplacesE10HIDMapping");
+    static bool IsDoubleTapped(int32_t Mapping) = symbol("libGTASA.so", "_ZN4CHID14IsDoubleTappedE10HIDMapping");
+    static bool Use360ClassicVitalStatsHack() = symbol("libGTASA.so", "_ZN4CHID27Use360ClassicVitalStatsHackEv");
+    static void Update() = symbol("libGTASA.so", "_ZN4CHID6UpdateEv");
+    static bool IsJustPressed(int32_t Mapping) = symbol("libGTASA.so", "_ZN4CHID13IsJustPressedE10HIDMapping");
+    static bool IsPressed(int32_t Mapping, float* pfValueOut) = symbol("libGTASA.so", "_ZN4CHID9IsPressedE10HIDMappingPf");
+    static bool IsReleased(int32_t Mapping) = symbol("libGTASA.so", "_ZN4CHID10IsReleasedE10HIDMapping");
+    static float GetMappingWeight(int32_t Mapping) = symbol("libGTASA.so", "_ZN4CHID16GetMappingWeightE10HIDMapping");
+    static bool IsReleasedPositive(int32_t Mapping) = symbol("libGTASA.so", "_ZN4CHID18IsReleasedPositiveE10HIDMapping");
+    static bool IsReleasedNegative(int32_t Mapping) = symbol("libGTASA.so", "_ZN4CHID18IsReleasedNegativeE10HIDMapping");
+    static bool IsPressedPositive(int32_t Mapping) = symbol("libGTASA.so", "_ZN4CHID17IsPressedPositiveE10HIDMapping");
+    static bool IsPressedNegative(int32_t Mapping) = symbol("libGTASA.so", "_ZN4CHID17IsPressedNegativeE10HIDMapping");
+    static bool MappingIsAnalog(int32_t Mapping) = symbol("libGTASA.so", "_ZN4CHID15MappingIsAnalogE10HIDMapping");
+    static void DrawHelpIcon(uint8_t* pszCharacters, int32_t Mapping, float fX, float fY, float fHeight, int nAlpha, bool bNegated) = symbol("libGTASA.so", "_ZN4CHID12DrawHelpIconEPKc10HIDMappingfffib");
+    static CSprite2d* GetHelpSprite(uint8_t* pszCharacters, int32_t Mapping, CVector2D* pvecUVLeftTop, CVector2D* pvecUVRightBottom) = symbol("libGTASA.so", "_ZN4CHID13GetHelpSpriteEPKc10HIDMappingP9CVector2DS4_");
+    static void FlushQueuedText() = symbol("libGTASA.so", "_ZN4CHID15FlushQueuedTextEv");
+    static void RemoveQueuedText() = symbol("libGTASA.so", "_ZN4CHID16RemoveQueuedTextEv");
+    static void CheckForInputChange() = symbol("libGTASA.so", "_ZN4CHID19CheckForInputChangeEv");
+    static int32_t GetInputType() = symbol("libGTASA.so", "_ZN4CHID12GetInputTypeEv");
+    void InternalCacheAnalogValues(uint32_t gamepadIndex) = symbol("libGTASA.so", "_ZN4CHID25InternalCacheAnalogValuesEj");
+    void InternalDrawHelpIcon(uint8_t* pszCharacters, int32_t Mapping, float fX, float fY, float fHeight, int nAlpha, bool bNegated) = symbol("libGTASA.so", "_ZN4CHID20InternalDrawHelpIconEPKc10HIDMappingfffib");
+    CSprite2d* InternalGetHelpSprite(uint8_t* pszCharacters, int32_t Mapping, CVector2D* pvecUVLeftTop, CVector2D* pvecUVRightBottom) = symbol("libGTASA.so", "_ZN4CHID21InternalGetHelpSpriteEPKc10HIDMappingP9CVector2DS4_");
+    bool InternalIsReleasedPositive(int32_t Mapping) = symbol("libGTASA.so", "_ZN4CHID26InternalIsReleasedPositiveE10HIDMapping");
+    bool InternalIsReleasedNegative(int32_t Mapping) = symbol("libGTASA.so", "_ZN4CHID26InternalIsReleasedNegativeE10HIDMapping");
+    bool InternalIsPressedPositive(int32_t Mapping) = symbol("libGTASA.so", "_ZN4CHID25InternalIsPressedPositiveE10HIDMapping");
+    bool InternalIsPressedNegative(int32_t Mapping) = symbol("libGTASA.so", "_ZN4CHID25InternalIsPressedNegativeE10HIDMapping");
+    bool InternalMappingIsAnalog(int32_t Mapping) = symbol("libGTASA.so", "_ZN4CHID23InternalMappingIsAnalogE10HIDMapping");
+    float InternalGetMappingWeight(int32_t Mapping) = symbol("libGTASA.so", "_ZN4CHID24InternalGetMappingWeightE10HIDMapping");
+    void InternalFlushQueuedText() = symbol("libGTASA.so", "_ZN4CHID23InternalFlushQueuedTextEv");
+    void InternalRemoveQueuedText() = symbol("libGTASA.so", "_ZN4CHID24InternalRemoveQueuedTextEv");
+    void InternalUpdate() = symbol("libGTASA.so", "_ZN4CHID14InternalUpdateEv");
+};
+#endif

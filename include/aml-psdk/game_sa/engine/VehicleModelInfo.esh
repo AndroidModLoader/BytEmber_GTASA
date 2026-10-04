@@ -1,0 +1,75 @@
+#ifndef PSDK_game_sa_engine_VehicleModelInfo_h
+#define PSDK_game_sa_engine_VehicleModelInfo_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/engine/ModelInfo.esh"
+#include "../../game_sa/enum/Vehicles.esh"
+#include "../../game_sa/base/Quaternion.esh"
+native class UpgradePosnDesc = size(0x20)
+{
+    CVector m_vPosition = offset(0x0);
+    CQuaternion m_qRotation = offset(0xc);
+    int m_nParentComponentId = offset(0x1c);
+};
+native class CVehicleModelInfo : public CClumpModelInfo = size(bits(0x3a8, 0x6b0))
+{
+    RpMaterial* m_pPlateMaterial = offset(bits(0x3c, 0x50));
+    uint8_t m_szPlateText[9] = offset(bits(0x40, 0x58));
+    uint8_t m_nPlateType = offset(bits(0x49, 0x61));
+    uint8_t m_szGameName[10] = offset(bits(0x4a, 0x62));
+    uint32_t m_nVehicleType = offset(bits(0x54, 0x6c));
+    float m_fWheelSizeFront = offset(bits(0x58, 0x70));
+    float m_fWheelSizeRear = offset(bits(0x5c, 0x74));
+    int16_t m_nWheelModelIndex = offset(bits(0x60, 0x78));
+    uint16_t m_nHandlingId = offset(bits(0x62, 0x7a));
+    uint8_t m_nNumDoors = offset(bits(0x64, 0x7c));
+    uint8_t m_nVehicleClass = offset(bits(0x65, 0x7d));
+    uint8_t m_nFlags = offset(bits(0x66, 0x7e));
+    uint8_t m_nWheelUpgradeClass = offset(bits(0x67, 0x7f));
+    uint8_t m_nTimesUsed = offset(bits(0x68, 0x80));
+    uint16_t m_nFrq = offset(bits(0x6a, 0x82));
+    uint32_t m_nCompRules = offset(bits(0x6c, 0x84));
+    CVehicleModelInfo_m_nCompRulesBits m_nCompRulesBits = offset(bits(0x6c, 0x84));
+    float m_fBikeSteerAngle = offset(bits(0x70, 0x88));
+    nativeptr m_pVehicleStruct = offset(bits(0x74, 0x90));
+    RpMaterial* m_firstColour[49] = offset(bits(0x78, 0x98));
+    RpMaterial* m_secondColour[33] = offset(bits(0x13c, 0x220));
+    RpMaterial* m_thirdColour[17] = offset(bits(0x1c0, 0x328));
+    RpMaterial* m_fourthColour[17] = offset(bits(0x204, 0x3b0));
+    RpMaterial* m_apDirtMaterials[64] = offset(bits(0x248, 0x438));
+    uint8_t m_anPrimaryColors[8] = offset(bits(0x348, 0x638));
+    uint8_t m_anSecondaryColors[8] = offset(bits(0x350, 0x640));
+    uint8_t m_anTertiaryColors[8] = offset(bits(0x358, 0x648));
+    uint8_t m_anQuaternaryColors[8] = offset(bits(0x360, 0x650));
+    uint8_t m_nNumColorVariations = offset(bits(0x368, 0x658));
+    uint8_t m_nLastColorVariation = offset(bits(0x369, 0x659));
+    uint8_t m_nCurrentPrimaryColor = offset(bits(0x36a, 0x65a));
+    uint8_t m_nCurrentSecondaryColor = offset(bits(0x36b, 0x65b));
+    uint8_t m_nCurrentTertiaryColor = offset(bits(0x36c, 0x65c));
+    uint8_t m_nCurrentQuaternaryColor = offset(bits(0x36d, 0x65d));
+    int16_t m_anUpgrades[18] = offset(bits(0x36e, 0x65e));
+    uint8_t* m_anRemaps[4] = offset(bits(0x394, 0x688));
+    CAnimBlock* m_pAnimBlock = offset(bits(0x3a4, 0x6a8));
+};
+native class CVehicleModelInfo_m_nCompRulesBits = size(0x4)
+{
+    uint32_t nExtraA_comp1 = offset(0x0) bits(0, 4, 1);
+    uint32_t nExtraA_comp2 = offset(0x0) bits(4, 4, 1);
+    uint32_t nExtraA_comp3 = offset(0x1) bits(0, 4, 1);
+    uint32_t nExtraA_rule = offset(0x1) bits(4, 4, 1);
+    uint32_t nExtraB_comp1 = offset(0x2) bits(0, 4, 1);
+    uint32_t nExtraB_comp2 = offset(0x2) bits(4, 4, 1);
+    uint32_t nExtraB_comp3 = offset(0x3) bits(0, 4, 1);
+    uint32_t nExtraB_rule = offset(0x3) bits(4, 4, 1);
+};
+native class CVehicleModelInfo_CVehicleStructure = size(bits(0x32c, 0x360))
+{
+    CVector m_avDummyPos[15] = offset(0x0);
+    UpgradePosnDesc m_aUpgrades[18] = offset(0xb4);
+    RpAtomic* m_apExtras[6] = offset(bits(0x2f4, 0x2f8));
+    RpAtomic* m_apExtrasLOD[6] = offset(bits(0x30c, 0x328));
+    uint8_t m_nNumExtras = offset(bits(0x324, 0x358));
+    uint32_t m_nMaskComponentsDamagable = offset(bits(0x328, 0x35c));
+};
+#endif

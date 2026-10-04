@@ -1,0 +1,201 @@
+#ifndef PSDK_game_sa_other_HandlingData_h
+#define PSDK_game_sa_other_HandlingData_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../gta_base/Vector.esh"
+#include "../../game_sa/enum/Handling.esh"
+native class tTransmissionGear = size(0xc)
+{
+    float m_fMaxVelocity = offset(0x0);
+    float m_fChangeUpVelocity = offset(0x4);
+    float m_fChangeDownVelocity = offset(0x8);
+};
+native class cTransmission = size(0x68)
+{
+    tTransmissionGear m_aGears[6] = offset(0x0);
+    uint8_t m_nDriveType = offset(0x48);
+    uint8_t m_nEngineType = offset(0x49);
+    uint8_t m_nNumberOfGears = offset(0x4a);
+    uint32_t m_nHandlingFlags = offset(0x4c);
+    float m_fEngineAcceleration = offset(0x50);
+    float m_fEngineInertia = offset(0x54);
+    float m_fMaxGearVelocity = offset(0x58);
+    float m_fMaxFlatVelocity = offset(0x5c);
+    float m_fMinGearVelocity = offset(0x60);
+    float m_fCurrentSpeed = offset(0x64);
+    void InitGearRatios() = symbol("libGTASA.so", "_ZN13cTransmission14InitGearRatiosEv");
+    float CalculateDriveAcceleration(float* fThrottleSetting, uint8_t* nCurrentGear, float* fGearChangeCount, float* v, float* pEngineRevs, float* pEngineForce, uint8_t nDriveWheelsOnGround, uint8_t cheat) = symbol("libGTASA.so", "_ZN13cTransmission26CalculateDriveAccelerationERKfRhRfS1_PfS4_hh");
+    void CalculateGearForSimpleCar(float CurrentVel, uint8_t* nCurrentGear) = symbol("libGTASA.so", "_ZN13cTransmission25CalculateGearForSimpleCarEfRh");
+};
+native class tHandlingData = size(0xe0)
+{
+    int m_nVehicleId = offset(0x0);
+    float m_fMass = offset(0x4);
+    float m_fOneOverMass = offset(0x8);
+    float m_fTurnMass = offset(0xc);
+    float m_fDragMult = offset(0x10);
+    CVector m_vecCentreOfMass = offset(0x14);
+    uint8_t m_nPercentSubmerged = offset(0x20);
+    float m_fBuoyancyConstant = offset(0x24);
+    float m_fTractionMultiplier = offset(0x28);
+    cTransmission m_transmissionData = offset(0x2c);
+    float m_fBrakeDeceleration = offset(0x94);
+    float m_fBrakeBias = offset(0x98);
+    uint8_t m_bABS = offset(0x9c);
+    float m_fSteeringLock = offset(0xa0);
+    float m_fTractionLoss = offset(0xa4);
+    float m_fTractionBias = offset(0xa8);
+    float m_fSuspensionForceLevel = offset(0xac);
+    float m_fSuspensionDampingLevel = offset(0xb0);
+    float m_fSuspensionHighSpdComDamp = offset(0xb4);
+    float m_fSuspensionUpperLimit = offset(0xb8);
+    float m_fSuspensionLowerLimit = offset(0xbc);
+    float m_fSuspensionBiasBetweenFrontAndRear = offset(0xc0);
+    float m_fSuspensionAntiDiveMultiplier = offset(0xc4);
+    float m_fCollisionDamageMultiplier = offset(0xc8);
+    uint32_t m_nModelFlags = offset(0xcc);
+    uint32_t m_bIsVan = offset(0xcc) bits(0, 1, 1);
+    uint32_t m_bIsBus = offset(0xcc) bits(1, 1, 1);
+    uint32_t m_bIsLow = offset(0xcc) bits(2, 1, 1);
+    uint32_t m_bIsBig = offset(0xcc) bits(3, 1, 1);
+    uint32_t m_bReverseBonnet = offset(0xcc) bits(4, 1, 1);
+    uint32_t m_bHangingBoot = offset(0xcc) bits(5, 1, 1);
+    uint32_t m_bTailgateBoot = offset(0xcc) bits(6, 1, 1);
+    uint32_t m_bNoswingBoot = offset(0xcc) bits(7, 1, 1);
+    uint32_t m_bNoDoors = offset(0xcd) bits(0, 1, 1);
+    uint32_t m_bTandemSeats = offset(0xcd) bits(1, 1, 1);
+    uint32_t m_bSitInBoat = offset(0xcd) bits(2, 1, 1);
+    uint32_t m_bConvertible = offset(0xcd) bits(3, 1, 1);
+    uint32_t m_bNoExhaust = offset(0xcd) bits(4, 1, 1);
+    uint32_t m_bDoubleExhaust = offset(0xcd) bits(5, 1, 1);
+    uint32_t m_bNo1fpsLookBehind = offset(0xcd) bits(6, 1, 1);
+    uint32_t m_bForceDoorCheck = offset(0xcd) bits(7, 1, 1);
+    uint32_t m_bAxleFNotlit = offset(0xce) bits(0, 1, 1);
+    uint32_t m_bAxleFSolid = offset(0xce) bits(1, 1, 1);
+    uint32_t m_bAxleFMcpherson = offset(0xce) bits(2, 1, 1);
+    uint32_t m_bAxleFReverse = offset(0xce) bits(3, 1, 1);
+    uint32_t m_bAxleRNotlit = offset(0xce) bits(4, 1, 1);
+    uint32_t m_bAxleRSolid = offset(0xce) bits(5, 1, 1);
+    uint32_t m_bAxleRMcpherson = offset(0xce) bits(6, 1, 1);
+    uint32_t m_bAxleRReverse = offset(0xce) bits(7, 1, 1);
+    uint32_t m_bIsBike = offset(0xcf) bits(0, 1, 1);
+    uint32_t m_bIsHeli = offset(0xcf) bits(1, 1, 1);
+    uint32_t m_bIsPlane = offset(0xcf) bits(2, 1, 1);
+    uint32_t m_bIsBoat = offset(0xcf) bits(3, 1, 1);
+    uint32_t m_bBouncePanels = offset(0xcf) bits(4, 1, 1);
+    uint32_t m_bDoubleRwheels = offset(0xcf) bits(5, 1, 1);
+    uint32_t m_bForceGroundClearance = offset(0xcf) bits(6, 1, 1);
+    uint32_t m_bIsHatchback = offset(0xcf) bits(7, 1, 1);
+    uint32_t m_nHandlingFlags = offset(0xd0);
+    uint32_t m_b1gBoost = offset(0xd0) bits(0, 1, 1);
+    uint32_t m_b2gBoost = offset(0xd0) bits(1, 1, 1);
+    uint32_t m_bNpcAntiRoll = offset(0xd0) bits(2, 1, 1);
+    uint32_t m_bNpcNeutralHandl = offset(0xd0) bits(3, 1, 1);
+    uint32_t m_bNoHandbrake = offset(0xd0) bits(4, 1, 1);
+    uint32_t m_bSteerRearwheels = offset(0xd0) bits(5, 1, 1);
+    uint32_t m_bHbRearwheelSteer = offset(0xd0) bits(6, 1, 1);
+    uint32_t m_bAltSteerOpt = offset(0xd0) bits(7, 1, 1);
+    uint32_t m_bWheelFNarrow2 = offset(0xd1) bits(0, 1, 1);
+    uint32_t m_bWheelFNarrow = offset(0xd1) bits(1, 1, 1);
+    uint32_t m_bWheelFWide = offset(0xd1) bits(2, 1, 1);
+    uint32_t m_bWheelFWide2 = offset(0xd1) bits(3, 1, 1);
+    uint32_t m_bWheelRNarrow2 = offset(0xd1) bits(4, 1, 1);
+    uint32_t m_bWheelRNarrow = offset(0xd1) bits(5, 1, 1);
+    uint32_t m_bWheelRWide = offset(0xd1) bits(6, 1, 1);
+    uint32_t m_bWheelRWide2 = offset(0xd1) bits(7, 1, 1);
+    uint32_t m_bHydraulicGeom = offset(0xd2) bits(0, 1, 1);
+    uint32_t m_bHydraulicInst = offset(0xd2) bits(1, 1, 1);
+    uint32_t m_bHydraulicNone = offset(0xd2) bits(2, 1, 1);
+    uint32_t m_bNosInst = offset(0xd2) bits(3, 1, 1);
+    uint32_t m_bOffroadAbility = offset(0xd2) bits(4, 1, 1);
+    uint32_t m_bOffroadAbility2 = offset(0xd2) bits(5, 1, 1);
+    uint32_t m_bHalogenLights = offset(0xd2) bits(6, 1, 1);
+    uint32_t m_bProcRearwheelFirst = offset(0xd2) bits(7, 1, 1);
+    uint32_t m_bUseMaxspLimit = offset(0xd3) bits(0, 1, 1);
+    uint32_t m_bLowRider = offset(0xd3) bits(1, 1, 1);
+    uint32_t m_bStreetRacer = offset(0xd3) bits(2, 1, 1);
+    uint32_t m_bUnused1 = offset(0xd3) bits(3, 1, 1);
+    uint32_t m_bSwingingChassis = offset(0xd3) bits(4, 1, 1);
+    float m_fSeatOffsetDistance = offset(0xd4);
+    uint32_t m_nMonetaryValue = offset(0xd8);
+    uint8_t m_nFrontLights = offset(0xdc);
+    uint8_t m_nRearLights = offset(0xdd);
+    uint8_t m_nAnimGroup = offset(0xde);
+};
+native class tBikeHandlingData = size(0x40)
+{
+    int m_nVehicleId = offset(0x0);
+    float m_fLeanFwdCOM = offset(0x4);
+    float m_fLeanFwdForce = offset(0x8);
+    float m_fLeanBakCOM = offset(0xc);
+    float m_fLeanBakForce = offset(0x10);
+    float m_fMaxLean = offset(0x14);
+    float m_fFullAnimLean = offset(0x18);
+    float m_fDesLean = offset(0x1c);
+    float m_fSpeedSteer = offset(0x20);
+    float m_fSlipSteer = offset(0x24);
+    float m_fNoPlayerCOMz = offset(0x28);
+    float m_fWheelieAng = offset(0x2c);
+    float m_fStoppieAng = offset(0x30);
+    float m_fWheelieSteer = offset(0x34);
+    float m_fWheelieStabMult = offset(0x38);
+    float m_fStoppieStabMult = offset(0x3c);
+};
+native class tFlyingHandlingData = size(0x58)
+{
+    int m_nVehicleId = offset(0x0);
+    float m_fThrust = offset(0x4);
+    float m_fThrustFallOff = offset(0x8);
+    float m_fYaw = offset(0xc);
+    float m_fYawStab = offset(0x10);
+    float m_fSideSlip = offset(0x14);
+    float m_fRoll = offset(0x18);
+    float m_fRollStab = offset(0x1c);
+    float m_fPitch = offset(0x20);
+    float m_fPitchStab = offset(0x24);
+    float m_fFormLift = offset(0x28);
+    float m_fAttackLift = offset(0x2c);
+    float m_fGearUpR = offset(0x30);
+    float m_fGearDownL = offset(0x34);
+    float m_fWindMult = offset(0x38);
+    float m_fMoveRes = offset(0x3c);
+    CVector m_vecTurnRes = offset(0x40);
+    CVector m_vecSpeedRes = offset(0x4c);
+};
+native class tBoatHandlingData = size(0x3c)
+{
+    int m_nVehicleId = offset(0x0);
+    float m_fThrustY = offset(0x4);
+    float m_fThrustZ = offset(0x8);
+    float m_fThrustAppZ = offset(0xc);
+    float m_fAqPlaneForce = offset(0x10);
+    float m_fAqPlaneLimit = offset(0x14);
+    float m_fAqPlaneOffset = offset(0x18);
+    float m_fWaveAudioMult = offset(0x1c);
+    float m_fLookLRBehindCamHeight = offset(0x20);
+    CVector m_vecMoveRes = offset(0x24);
+    CVector m_vecTurnRes = offset(0x30);
+};
+native class cHandlingDataMgr = size(0xc624)
+{
+    float m_fCoefficientOfRestitution = offset(0x0);
+    float m_fWheelFriction = offset(0x4);
+    float m_aResistanceTable[3] = offset(0x8);
+    tHandlingData m_aVehicleHandling[210] = offset(0x14);
+    tBikeHandlingData m_aBikeHandling[13] = offset(0xb7d4);
+    tFlyingHandlingData m_aFlyingHandling[24] = offset(0xbb14);
+    tBoatHandlingData m_aBoatHandling[12] = offset(0xc354);
+    void Initialise() = symbol("libGTASA.so", "_ZN16cHandlingDataMgr10InitialiseEv");
+    void LoadHandlingData() = symbol("libGTASA.so", "_ZN16cHandlingDataMgr16LoadHandlingDataEv");
+    int FindExactWord(uint8_t* szLine, uint8_t* szArray, int nWidth, int nMaxCount) = symbol("libGTASA.so", "_ZN16cHandlingDataMgr13FindExactWordEPcS0_ii");
+    int GetHandlingId(uint8_t* pName) = symbol("libGTASA.so", "_ZN16cHandlingDataMgr13GetHandlingIdEPKc");
+    void ConvertDataToWorldUnits(tHandlingData* pHand) = symbol("libGTASA.so", "_ZN16cHandlingDataMgr23ConvertDataToWorldUnitsEP13tHandlingData");
+    void ConvertDataToGameUnits(tHandlingData* pHand) = symbol("libGTASA.so", "_ZN16cHandlingDataMgr22ConvertDataToGameUnitsEP13tHandlingData");
+    void ConvertBikeDataToWorldUnits(tBikeHandlingData* pBikeHand) = symbol("libGTASA.so", "_ZN16cHandlingDataMgr27ConvertBikeDataToWorldUnitsEP17tBikeHandlingData");
+    void ConvertBikeDataToGameUnits(tBikeHandlingData* pBikeHand) = symbol("libGTASA.so", "_ZN16cHandlingDataMgr26ConvertBikeDataToGameUnitsEP17tBikeHandlingData");
+    tFlyingHandlingData* GetFlyingPointer(uint8_t plane) = symbol("libGTASA.so", "_ZN16cHandlingDataMgr16GetFlyingPointerEh");
+    tBoatHandlingData* GetBoatPointer(uint8_t boat) = symbol("libGTASA.so", "_ZN16cHandlingDataMgr14GetBoatPointerEh");
+};
+#endif

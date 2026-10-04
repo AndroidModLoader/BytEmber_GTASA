@@ -1,0 +1,67 @@
+#ifndef PSDK_renderware_RwMatrix_h
+#define PSDK_renderware_RwMatrix_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../sdk_forward.esh"
+#include "../sdk_base.esh"
+#include "../renderware/RwBase.esh"
+#include "../renderware/RwVector.esh"
+#include "../renderware/RwStream.esh"
+native class rwStreamMatrix = size(0x34)
+{
+    CVector right = offset(0x0);
+    CVector up = offset(0xc);
+    CVector at = offset(0x18);
+    CVector pos = offset(0x24);
+    int type = offset(0x30);
+};
+native class RwMatrix = size(0x40)
+{
+    CVector right = offset(0x0);
+    uint32_t flags = offset(0xc);
+    CVector up = offset(0x10);
+    uint32_t pad1 = offset(0x1c);
+    CVector at = offset(0x20);
+    uint32_t pad2 = offset(0x2c);
+    CVector pos = offset(0x30);
+    uint32_t pad3 = offset(0x3c);
+};
+native class RwMatrixTolerance = size(0xc)
+{
+    float Normal = offset(0x0);
+    float Orthogonal = offset(0x4);
+    float Identity = offset(0x8);
+};
+native class RQMatrix = size(0x44)
+{
+    float v[16] = offset(0x0);
+    float f11 = offset(0x0);
+    float f21 = offset(0x4);
+    float f31 = offset(0x8);
+    float f41 = offset(0xc);
+    float f12 = offset(0x10);
+    float f22 = offset(0x14);
+    float f32 = offset(0x18);
+    float f42 = offset(0x1c);
+    float f13 = offset(0x20);
+    float f23 = offset(0x24);
+    float f33 = offset(0x28);
+    float f43 = offset(0x2c);
+    float f14 = offset(0x30);
+    float f24 = offset(0x34);
+    float f34 = offset(0x38);
+    float f44 = offset(0x3c);
+    bool dirty = offset(0x40);
+};
+native rwStreamMatrix* RwMatrixChunkInfoRead(RwStream* stream, rwStreamMatrix* matrixChunkInfo, RwInt32* bytesRead) = symbol("libGTASA.so", "_Z21RwMatrixChunkInfoReadP8RwStreamP14rwStreamMatrixPi");
+native RwMatrix* RwMatrixCreate() = symbol("libGTASA.so", "_Z14RwMatrixCreatev");
+native RwMatrix* RwMatrixInvert(RwMatrix* dst, RwMatrix* src) = symbol("libGTASA.so", "_Z14RwMatrixInvertP11RwMatrixTagPKS_");
+native RwMatrix* RwMatrixMultiply(RwMatrix* dst, RwMatrix* src1, RwMatrix* src2) = symbol("libGTASA.so", "_Z16RwMatrixMultiplyP11RwMatrixTagPKS_S2_");
+native RwMatrix* RwMatrixOptimize(RwMatrix* matrix, RwMatrixTolerance* tolerance) = symbol("libGTASA.so", "_Z16RwMatrixOptimizeP11RwMatrixTagPK17RwMatrixTolerance");
+native RwMatrix* RwMatrixOrthoNormalize(RwMatrix* dst, RwMatrix* src) = symbol("libGTASA.so", "_Z22RwMatrixOrthoNormalizeP11RwMatrixTagPKS_");
+native RwMatrix* RwMatrixQueryRotate(RwMatrix* matrix, RwV3d* unitAxis, RwReal* angle, RwV3d* center) = symbol("libGTASA.so", "_Z19RwMatrixQueryRotatePK11RwMatrixTagP5RwV3dPfS3_");
+native RwMatrix* RwMatrixStreamRead(RwStream* stream, RwMatrix* matrix) = symbol("libGTASA.so", "_Z18RwMatrixStreamReadP8RwStreamP11RwMatrixTag");
+native RwMatrix* RwMatrixStreamWrite(RwMatrix* matrix, RwStream* stream) = symbol("libGTASA.so", "_Z19RwMatrixStreamWritePK11RwMatrixTagP8RwStream");
+native RwMatrix* RwMatrixUpdate(RwMatrix* matrix) = symbol("libGTASA.so", "_Z14RwMatrixUpdateP11RwMatrixTag");
+native void TestMatrix(RwMatrix* pTempMatrix) = symbol("libGTASA.so", "_Z10TestMatrixP11RwMatrixTag");
+#endif

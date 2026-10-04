@@ -1,0 +1,76 @@
+#ifndef PSDK_game_sa_other_PlayerData_h
+#define PSDK_game_sa_other_PlayerData_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../gta_base/Vector.esh"
+native class CPlayerData = size(bits(0xac, 0xd8))
+{
+    CWanted* m_pWanted = offset(0x0);
+    CPedClothesDesc* m_pPedClothesDesc = offset(bits(0x4, 0x8));
+    CCopPed* m_pArrestingCop = offset(bits(0x8, 0x10));
+    CVector2D m_vecFightMovement = offset(bits(0xc, 0x18));
+    float m_fMoveBlendRatio = offset(bits(0x14, 0x20));
+    float m_fTimeCanRun = offset(bits(0x18, 0x24));
+    float m_fMoveSpeed = offset(bits(0x1c, 0x28));
+    uint8_t m_nChosenWeapon = offset(bits(0x20, 0x2c));
+    uint8_t m_nCarDangerCounter = offset(bits(0x21, 0x2d));
+    uint32_t m_nStandStillTimer = offset(bits(0x24, 0x30));
+    uint32_t m_nHitAnimDelayTimer = offset(bits(0x28, 0x34));
+    float m_fAttackButtonCounter = offset(bits(0x2c, 0x38));
+    CVehicle* m_pDangerCar = offset(bits(0x30, 0x40));
+    uint32_t m_bStoppedMoving = offset(bits(0x34, 0x48)) bits(0, 1, 1);
+    uint32_t m_bAdrenaline = offset(bits(0x34, 0x48)) bits(1, 1, 1);
+    uint32_t m_bHaveTargetSelected = offset(bits(0x34, 0x48)) bits(2, 1, 1);
+    uint32_t m_bFreeAiming = offset(bits(0x34, 0x48)) bits(3, 1, 1);
+    uint32_t m_bCanBeDamaged = offset(bits(0x34, 0x48)) bits(4, 1, 1);
+    uint32_t m_bAllMeleeAttackPtsBlocked = offset(bits(0x34, 0x48)) bits(5, 1, 1);
+    uint32_t m_bJustBeenSnacking = offset(bits(0x34, 0x48)) bits(6, 1, 1);
+    uint32_t m_bRequireHandleBreath = offset(bits(0x34, 0x48)) bits(7, 1, 1);
+    uint32_t m_bGroupStuffDisabled = offset(bits(0x35, 0x49)) bits(0, 1, 1);
+    uint32_t m_bGroupAlwaysFollow = offset(bits(0x35, 0x49)) bits(1, 1, 1);
+    uint32_t m_bGroupNeverFollow = offset(bits(0x35, 0x49)) bits(2, 1, 1);
+    uint32_t m_bInVehicleDontAllowWeaponChange = offset(bits(0x35, 0x49)) bits(3, 1, 1);
+    uint32_t m_bRenderWeapon = offset(bits(0x35, 0x49)) bits(4, 1, 1);
+    uint32_t m_nPlayerGroup = offset(bits(0x38, 0x4c));
+    uint32_t m_nAdrenalineEndTime = offset(bits(0x3c, 0x50));
+    uint8_t m_nDrunkenness = offset(bits(0x40, 0x54));
+    uint8_t m_nFadeDrunkenness = offset(bits(0x41, 0x55));
+    uint8_t m_nDrugLevel = offset(bits(0x42, 0x56));
+    uint8_t m_nScriptLimitToGangSize = offset(bits(0x43, 0x57));
+    float m_fBreath = offset(bits(0x44, 0x58));
+    uint32_t m_nMeleeWeaponAnimReferenced = offset(bits(0x48, 0x5c));
+    uint32_t m_nMeleeWeaponAnimReferencedExtra = offset(bits(0x4c, 0x60));
+    float m_fFPSMoveHeading = offset(bits(0x50, 0x64));
+    float m_fLookPitch = offset(bits(0x54, 0x68));
+    float m_fSkateBoardSpeed = offset(bits(0x58, 0x6c));
+    float m_fSkateBoardLean = offset(bits(0x5c, 0x70));
+    RpAtomic* m_pSpecialAtomic = offset(bits(0x60, 0x78));
+    float m_fGunSpinSpeed = offset(bits(0x64, 0x80));
+    float m_fGunSpinAngle = offset(bits(0x68, 0x84));
+    uint32_t m_nLastTimeFiring = offset(bits(0x6c, 0x88));
+    uint32_t m_nTargetBone = offset(bits(0x70, 0x8c));
+    CVector m_vecTargetBoneOffset = offset(bits(0x74, 0x90));
+    uint32_t m_nBusFaresCollected = offset(bits(0x80, 0x9c));
+    bool m_bPlayerSprintDisabled = offset(bits(0x84, 0xa0));
+    bool m_bDontAllowWeaponChange = offset(bits(0x85, 0xa1));
+    bool m_bForceInteriorLighting = offset(bits(0x86, 0xa2));
+    uint16_t m_nPadDownPressedInMilliseconds = offset(bits(0x88, 0xa4));
+    uint16_t m_nPadUpPressedInMilliseconds = offset(bits(0x8a, 0xa6));
+    uint8_t m_nWetness = offset(bits(0x8c, 0xa8));
+    bool m_bPlayersGangActive = offset(bits(0x8d, 0xa9));
+    uint8_t m_nWaterCoverPerc = offset(bits(0x8e, 0xaa));
+    float m_fWaterHeight = offset(bits(0x90, 0xac));
+    uint32_t m_nFireHSMissilePressedTime = offset(bits(0x94, 0xb0));
+    CEntity* m_LastHSMissileTarget = offset(bits(0x98, 0xb8));
+    uint32_t m_nModelIndexOfLastBuildingShot = offset(bits(0x9c, 0xc0));
+    uint32_t m_nLastHSMissileLOSTime = offset(bits(0xa0, 0xc4)) bits(0, 31, 4);
+    uint32_t m_bLastHSMissileLOS = offset(bits(0xa3, 0xc7)) bits(7, 1, 1);
+    CPed* m_pCurrentProstitutePed = offset(bits(0xa4, 0xc8));
+    CPed* m_pLastProstituteShagged = offset(bits(0xa8, 0xd0));
+    void SetInitialState() = symbol("libGTASA.so", "_ZN14CPlayerPedData15SetInitialStateEv");
+    void AllocateData() = symbol("libGTASA.so", "_ZN14CPlayerPedData12AllocateDataEv");
+    void DeAllocateData() = symbol("libGTASA.so", "_ZN14CPlayerPedData14DeAllocateDataEv");
+};
+#endif

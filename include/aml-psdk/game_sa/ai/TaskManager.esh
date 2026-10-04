@@ -1,0 +1,44 @@
+#ifndef PSDK_game_sa_ai_TaskManager_h
+#define PSDK_game_sa_ai_TaskManager_h
+#pragma once
+#define TASK_PRIMARY_PHYSICAL_RESPONSE 0
+#define TASK_PRIMARY_EVENT_RESPONSE_TEMP 1
+#define TASK_PRIMARY_EVENT_RESPONSE_NONTEMP 2
+#define TASK_PRIMARY_PRIMARY 3
+#define TASK_PRIMARY_DEFAULT 4
+#define TASK_PRIMARY_MAX 5
+#define TASK_SECONDARY_ATTACK 0
+#define TASK_SECONDARY_DUCK 1
+#define TASK_SECONDARY_SAY 2
+#define TASK_SECONDARY_FACIAL_COMPLEX 3
+#define TASK_SECONDARY_PARTIAL_ANIM 4
+#define TASK_SECONDARY_IK 5
+#define TASK_SECONDARY_MAX 6
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+native class CTaskManager = size(bits(0x30, 0x60))
+{
+    CTask* m_aPrimaryTasks[5] = offset(0x0);
+    CTask* m_aSecondaryTasks[6] = offset(bits(0x14, 0x28));
+    CPed* m_pPed = offset(bits(0x2c, 0x58));
+    CTask* GetActiveTask() = symbol("libGTASA.so", "_ZNK12CTaskManager13GetActiveTaskEv");
+    CTask* GetSimplestActiveTask() = symbol("libGTASA.so", "_ZNK12CTaskManager21GetSimplestActiveTaskEv");
+    void ClearTaskEventResponse() = symbol("libGTASA.so", "_ZN12CTaskManager22ClearTaskEventResponseEv");
+    void ManageTasks() = symbol("libGTASA.so", "_ZN12CTaskManager11ManageTasksEv");
+    void Flush() = symbol("libGTASA.so", "_ZN12CTaskManager5FlushEv");
+    void FlushImmediately() = symbol("libGTASA.so", "_ZN12CTaskManager16FlushImmediatelyEv");
+    void SetTask(CTask* pTask, int iPriority, bool bForceNewTask) = symbol("libGTASA.so", "_ZN12CTaskManager7SetTaskEP5CTaskib");
+    void AddSubTasks(CTask* pTask) = symbol("libGTASA.so", "_ZN12CTaskManager11AddSubTasksEP5CTask");
+    CTask* GetSimplestTask(CTask* pTask) = symbol("libGTASA.so", "_ZN12CTaskManager15GetSimplestTaskEP5CTask");
+    CTask* GetSimplestTask1(int iPriority) = symbol("libGTASA.so", "_ZNK12CTaskManager15GetSimplestTaskEi");
+    CTask* FindActiveTaskByType(int iTaskType) = symbol("libGTASA.so", "_ZNK12CTaskManager20FindActiveTaskByTypeEi");
+    CTask* FindTaskByType(int iPriority, int iTaskType) = symbol("libGTASA.so", "_ZNK12CTaskManager14FindTaskByTypeEii");
+    void SetTaskSecondary(CTask* pTaskSecondary, int iType) = symbol("libGTASA.so", "_ZN12CTaskManager16SetTaskSecondaryEP5CTaski");
+    CTask* GetTaskSecondary(int iType) = symbol("libGTASA.so", "_ZNK12CTaskManager16GetTaskSecondaryEi");
+    bool HasTaskSecondary(CTask* pTaskSecondary) = symbol("libGTASA.so", "_ZNK12CTaskManager16HasTaskSecondaryEPK5CTask");
+    void SetNextSubTask(CTask* pTask) = symbol("libGTASA.so", "_ZN12CTaskManager14SetNextSubTaskEP5CTask");
+    void ParentsControlChildren(CTask* pTask) = symbol("libGTASA.so", "_ZN12CTaskManager22ParentsControlChildrenEP5CTask");
+    void StopTimers(CEvent* pEvent) = symbol("libGTASA.so", "_ZN12CTaskManager10StopTimersEPK6CEvent");
+};
+#endif

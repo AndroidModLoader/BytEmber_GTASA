@@ -1,0 +1,41 @@
+#ifndef PSDK_renderware_RpMaterial_h
+#define PSDK_renderware_RpMaterial_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../sdk_forward.esh"
+#include "../sdk_base.esh"
+#include "../renderware/RwBase.esh"
+#include "../renderware/RwObject.esh"
+#include "../renderware/RwTexture.esh"
+#include "../renderware/RwRGBA.esh"
+#include "../renderware/RxPipeline.esh"
+native class RwSurfaceProperties = size(0xc)
+{
+    float ambient = offset(0x0);
+    float specular = offset(0x4);
+    float diffuse = offset(0x8);
+};
+native class RpMaterial = size(bits(0x1c, 0x28))
+{
+    RwTexture* texture = offset(0x0);
+    CRGBA color = offset(bits(0x4, 0x8));
+    RxPipeline* pipeline = offset(bits(0x8, 0x10));
+    RwSurfaceProperties surfaceProps = offset(bits(0xc, 0x18));
+    int16_t refCount = offset(bits(0x18, 0x24));
+};
+native class RpMaterialList = size(bits(0xc, 0x10))
+{
+    RpMaterial** materials = offset(0x0);
+    int numMaterials = offset(bits(0x4, 0x8));
+    int space = offset(bits(0x8, 0xc));
+};
+native class RpMultiTexture = size(bits(0x38, 0x68))
+{
+    rpMultiTextureRegEntry* regEntry = offset(0x0);
+    uint32_t numTextures = offset(bits(0x4, 0x8));
+    RwTexture* textures[8] = offset(bits(0x8, 0x10));
+    uint8_t coordMap[8] = offset(bits(0x28, 0x50));
+    RpMTEffect* effect = offset(bits(0x30, 0x58));
+    void* extension = offset(bits(0x34, 0x60));
+};
+#endif

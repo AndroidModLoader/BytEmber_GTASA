@@ -1,0 +1,24 @@
+#ifndef PSDK_game_sa_audio_AEFrontendAudioEntity_h
+#define PSDK_game_sa_audio_AEFrontendAudioEntity_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/audio/AEAudioEntity.esh"
+native class CAEFrontendAudioEntity = size(bits(0x1ec, 0x248))
+{
+    CAEAudioEntity audio = offset(0x0);
+    uint8_t m_bWakeupAmplifierEventTriggered = offset(bits(0x7c, 0x90));
+    uint8_t m_nLoadingTrackIndex = offset(bits(0x7d, 0x91));
+    uint16_t m_nLastRetuneSoundID = offset(bits(0x7e, 0x92));
+    uint16_t m_nNumBulletSounds = offset(bits(0x80, 0x94));
+    uint16_t bankId = offset(bits(0x82, 0x96));
+    uint32_t m_LastPickupEventFrame = offset(bits(0x84, 0x98));
+    uint32_t m_LastPartMissionCompleteEventFrame = offset(bits(0x88, 0x9c));
+    uint32_t m_LastBulletPassEventFrame = offset(bits(0x8c, 0xa0));
+    uint32_t m_nResprayStartTimeMs = offset(bits(0x90, 0xa4));
+    uint32_t m_nLastFrontendTimerCountTimeMs = offset(bits(0x94, 0xa8));
+    CAESound* m_pWakeupAmplifierSound = offset(bits(0x98, 0xb0));
+    CAETwinLoopSoundEntity m_RadioTuneSound = offset(bits(0x9c, 0xb8));
+    CAETwinLoopSoundEntity m_RadioTuneSoundInPause = offset(bits(0x144, 0x180));
+};
+#endif

@@ -1,0 +1,51 @@
+#ifndef PSDK_game_sa_base_Matrix_h
+#define PSDK_game_sa_base_Matrix_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../gta_base/Vector.esh"
+#include "../../renderware/RwMatrix.esh"
+native class CMatrix = size(bits(0x48, 0x50))
+{
+    CVector right = offset(0x0);
+    uint32_t flags = offset(0xc);
+    CVector up = offset(0x10);
+    uint32_t pad1 = offset(0x1c);
+    CVector at = offset(0x20);
+    uint32_t pad2 = offset(0x2c);
+    CVector pos = offset(0x30);
+    uint32_t pad3 = offset(0x3c);
+    RwMatrix* m_pAttachMatrix = offset(0x40);
+    bool m_bOwnsAttachedMatrix = offset(bits(0x44, 0x48));
+    void Update() = symbol("libGTASA.so", "_ZN7CMatrix6UpdateEv");
+    void UpdateRW() = symbol("libGTASA.so", "_ZNK7CMatrix8UpdateRWEv");
+    void Detach() = symbol("libGTASA.so", "_ZN7CMatrix6DetachEv");
+    void SetUnity() = symbol("libGTASA.so", "_ZN7CMatrix8SetUnityEv");
+    void ResetOrientation() = symbol("libGTASA.so", "_ZN7CMatrix16ResetOrientationEv");
+    void Reorthogonalise() = symbol("libGTASA.so", "_ZN7CMatrix15ReorthogonaliseEv");
+    void CheckIntegrity() = symbol("libGTASA.so", "_ZN7CMatrix14CheckIntegrityEv");
+    void ConvertToEulerAngles(float* x, float* y, float* z, int order) = symbol("libGTASA.so", "_ZN7CMatrix20ConvertToEulerAnglesERfS0_S0_i");
+    void ConvertFromEulerAngles(float x, float y, float z, int order) = symbol("libGTASA.so", "_ZN7CMatrix22ConvertFromEulerAnglesEfffi");
+    void Attach(RwMatrix* pRwMat, bool owner) = symbol("libGTASA.so", "_ZN7CMatrix6AttachEP11RwMatrixTagb");
+    void AttachRW(RwMatrix* pRwMat, bool owner) = symbol("libGTASA.so", "_ZN7CMatrix8AttachRWEP11RwMatrixTagb");
+    void UpdateMatrix(RwMatrix* pMatrix) = symbol("libGTASA.so", "_ZN7CMatrix12UpdateMatrixEP11RwMatrixTag");
+    void UpdateRwMatrix(RwMatrix* pRwMatrix) = symbol("libGTASA.so", "_ZNK7CMatrix14UpdateRwMatrixEP11RwMatrixTag");
+    void CopyOnlyMatrix(CMatrix* m) = symbol("libGTASA.so", "_ZN7CMatrix14CopyOnlyMatrixERKS_");
+    void SetScale(float sx, float sy, float sz) = symbol("libGTASA.so", "_ZN7CMatrix8SetScaleEfff");
+    void SetScale2(float s) = symbol("libGTASA.so", "_ZN7CMatrix8SetScaleEf");
+    void SetTranslate(float tx, float ty, float tz) = symbol("libGTASA.so", "_ZN7CMatrix12SetTranslateEfff");
+    void SetTranslateOnly(float tx, float ty, float tz) = symbol("libGTASA.so", "_ZN7CMatrix16SetTranslateOnlyEfff");
+    void SetRotateXOnly(float a) = symbol("libGTASA.so", "_ZN7CMatrix14SetRotateXOnlyEf");
+    void SetRotateYOnly(float a) = symbol("libGTASA.so", "_ZN7CMatrix14SetRotateYOnlyEf");
+    void SetRotateZOnly(float a) = symbol("libGTASA.so", "_ZN7CMatrix14SetRotateZOnlyEf");
+    void SetRotateX(float a) = symbol("libGTASA.so", "_ZN7CMatrix10SetRotateXEf");
+    void SetRotateY(float a) = symbol("libGTASA.so", "_ZN7CMatrix10SetRotateYEf");
+    void SetRotateZ(float a) = symbol("libGTASA.so", "_ZN7CMatrix10SetRotateZEf");
+    void SetRotate(float ax, float ay, float az) = symbol("libGTASA.so", "_ZN7CMatrix9SetRotateEfff");
+    void RotateX(float a) = symbol("libGTASA.so", "_ZN7CMatrix7RotateXEf");
+    void RotateY(float a) = symbol("libGTASA.so", "_ZN7CMatrix7RotateYEf");
+    void RotateZ(float a) = symbol("libGTASA.so", "_ZN7CMatrix7RotateZEf");
+    void Rotate(float ax, float ay, float az) = symbol("libGTASA.so", "_ZN7CMatrix6RotateEfff");
+    RwMatrix* CopyToRwMatrix(RwMatrix* pMatrix) = symbol("libGTASA.so", "_ZNK7CMatrix14CopyToRwMatrixEP11RwMatrixTag");
+};
+#endif

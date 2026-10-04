@@ -1,0 +1,26 @@
+#ifndef PSDK_game_sa_anim_AnimBlendAssocGroup_h
+#define PSDK_game_sa_anim_AnimBlendAssocGroup_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+native class CAnimBlendAssocGroup = size(bits(0x14, 0x20))
+{
+    CAnimBlock* m_pAnimBlock = offset(0x0);
+    CAnimBlendStaticAssociation* m_pAssociations = offset(bits(0x4, 0x8));
+    uint32_t m_nNumAnimations = offset(bits(0x8, 0x10));
+    int m_nIdOffset = offset(bits(0xc, 0x14));
+    int m_nGroupID = offset(bits(0x10, 0x18));
+    void DestroyAssociations() = symbol("libGTASA.so", "_ZN20CAnimBlendAssocGroup19DestroyAssociationsEv");
+    void CreateAssociations1(uint8_t* pAnimBlockName) = symbol("libGTASA.so", "_ZN20CAnimBlendAssocGroup18CreateAssociationsEPKc");
+    void CreateAssociations2(uint8_t* pAnimBlockName, uint8_t* pAnimNames, uint8_t* pModelNames, int iElementSize) = symbol("libGTASA.so", "_ZN20CAnimBlendAssocGroup18CreateAssociationsEPKcS1_S1_i");
+    void CreateAssociations3(uint8_t* pAnimBlockName, RpClump* pClump) = symbol("libGTASA.so", "_ZN20CAnimBlendAssocGroup18CreateAssociationsEPKcP7RpClump");
+    void CreateAssociations4(uint8_t* pAnimBlockName, RpClump* pClump, uint8_t** ppRequiredAnims, int num) = symbol("libGTASA.so", "_ZN20CAnimBlendAssocGroup18CreateAssociationsEPKcP7RpClumpPS1_i");
+    void InitEmptyAssociations(RpClump* pClump) = symbol("libGTASA.so", "_ZN20CAnimBlendAssocGroup21InitEmptyAssociationsEP7RpClump");
+    CAnimBlendStaticAssociation* GetAnimation1(uint8_t* pName) = symbol("libGTASA.so", "_ZN20CAnimBlendAssocGroup12GetAnimationEPKc");
+    CAnimBlendStaticAssociation* GetAnimation2(uint32_t id) = symbol("libGTASA.so", "_ZN20CAnimBlendAssocGroup12GetAnimationEj");
+    CAnimBlendAssocGroup* CopyAnimation1(uint8_t* pName) = symbol("libGTASA.so", "_ZN20CAnimBlendAssocGroup13CopyAnimationEPKc");
+    CAnimBlendAssocGroup* CopyAnimation2(uint16_t id) = symbol("libGTASA.so", "_ZN5CText12GetUpperCaseEt");
+    uint32_t GetAnimationId(uint8_t* pName) = symbol("libGTASA.so", "_ZN20CAnimBlendAssocGroup14GetAnimationIdEPKc");
+};
+#endif

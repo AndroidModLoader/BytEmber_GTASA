@@ -1,0 +1,78 @@
+#ifndef PSDK_game_sa_engine_FxSystem_h
+#define PSDK_game_sa_engine_FxSystem_h
+#pragma once
+#define FX_NOT_KILLED 0
+#define FX_PLAY_AND_KILL 1
+#define FX_KILLED 2
+#define FX_PLAYING 0
+#define FX_STOPPED 1
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/base/Lists.esh"
+#include "../../game_sa/audio/AEAudioEntity.esh"
+#include "../../gta_base/Vector.esh"
+#include "../../renderware/RwMatrix.esh"
+native class FxSystem_c : public ListItem_c = size(bits(0x108, 0x148))
+{
+    void* m_pBlueprint = offset(bits(0x8, 0x10));
+    RwMatrix* m_pParentMatrix = offset(bits(0xc, 0x18));
+    CEntity* m_pEntity = offset(bits(0x10, 0x20));
+    RwMatrix m_localMatrix = offset(bits(0x14, 0x28));
+    uint8_t m_nPlayStatus = offset(bits(0x54, 0x68));
+    uint8_t m_nKillStatus = offset(bits(0x55, 0x69));
+    uint8_t m_bConstTimeSet = offset(bits(0x56, 0x6a));
+    float m_fCurrentProgress = offset(bits(0x58, 0x6c));
+    float m_fCameraDistance = offset(bits(0x5c, 0x70));
+    uint16_t m_nConstTime = offset(bits(0x60, 0x74));
+    uint16_t m_nRateMult = offset(bits(0x62, 0x76));
+    uint16_t m_nTimeMult = offset(bits(0x64, 0x78));
+    FxSystem_c_m_nFlags m_nFlags = offset(bits(0x66, 0x7a));
+    float m_fLoopInterval = offset(bits(0x68, 0x7c));
+    CVector m_vecVelAdd = offset(bits(0x6c, 0x80));
+    FxSphere_c* m_pBounding = offset(bits(0x78, 0x90));
+    FxPrim_c** m_pPrimsPtrList = offset(bits(0x7c, 0x98));
+    CAEFireAudioEntity m_fireAudio = offset(bits(0x80, 0xa0));
+    static void UpdateBoundingBoxCB(Particle_c* prtPtr, int type, void** userPtr) = symbol("libGTASA.so", "_ZN10FxSystem_c19UpdateBoundingBoxCBEP10Particle_ciPPv");
+    void Play() = symbol("libGTASA.so", "_ZN10FxSystem_c4PlayEv");
+    void Pause() = symbol("libGTASA.so", "_ZN10FxSystem_c5PauseEv");
+    void Stop() = symbol("libGTASA.so", "_ZN10FxSystem_c4StopEv");
+    void PlayAndKill() = symbol("libGTASA.so", "_ZN10FxSystem_c11PlayAndKillEv");
+    void Kill() = symbol("libGTASA.so", "_ZN10FxSystem_c4KillEv");
+    void Exit() = symbol("libGTASA.so", "_ZN10FxSystem_c4ExitEv");
+    uint8_t IsVisible() = symbol("libGTASA.so", "_ZN10FxSystem_c9IsVisibleEv");
+    void CopyParentMatrix() = symbol("libGTASA.so", "_ZN10FxSystem_c16CopyParentMatrixEv");
+    int GetPlayStatus() = symbol("libGTASA.so", "_ZN10FxSystem_c13GetPlayStatusEv");
+    void ResetBoundingSphere() = symbol("libGTASA.so", "_ZN10FxSystem_c19ResetBoundingSphereEv");
+    void AttachToBone(CEntity* pEntity, int boneTag) = symbol("libGTASA.so", "_ZN10FxSystem_c12AttachToBoneEP7CEntityi");
+    void AddParticle1(RwV3d* pos, RwV3d* vel, float timeSince, FxPrtMult_c* fxMults, float zRot, float lightMult, float lightMultLimit, uint8_t createLocal) = symbol("libGTASA.so", "_ZN10FxSystem_c11AddParticleEP5RwV3dS1_fP11FxPrtMult_cfffh");
+    void AddParticle2(RwMatrix* mat, RwV3d* vel, float timeSince, FxPrtMult_c* fxMults, float zRot, float lightMult, float lightMultLimit, uint8_t createLocal) = symbol("libGTASA.so", "_ZN10FxSystem_c11AddParticleEP11RwMatrixTagP5RwV3dfP11FxPrtMult_cfffh");
+    void EnablePrim(int primId, uint8_t on) = symbol("libGTASA.so", "_ZN10FxSystem_c10EnablePrimEih");
+    void SetMatrix(RwMatrix* mat) = symbol("libGTASA.so", "_ZN10FxSystem_c9SetMatrixEP11RwMatrixTag");
+    void SetOffsetPos(RwV3d* pos) = symbol("libGTASA.so", "_ZN10FxSystem_c12SetOffsetPosEP5RwV3d");
+    void AddOffsetPos(RwV3d* pos) = symbol("libGTASA.so", "_ZN10FxSystem_c12AddOffsetPosEP5RwV3d");
+    void SetConstTime(uint8_t on, float time) = symbol("libGTASA.so", "_ZN10FxSystem_c12SetConstTimeEhf");
+    void SetRateMult(float rateMult) = symbol("libGTASA.so", "_ZN10FxSystem_c11SetRateMultEf");
+    void SetTimeMult(float timeMult) = symbol("libGTASA.so", "_ZN10FxSystem_c11SetTimeMultEf");
+    void SetVelAdd(RwV3d* vel) = symbol("libGTASA.so", "_ZN10FxSystem_c9SetVelAddEP5RwV3d");
+    uint8_t Init(FxSystemBP_c* fxSysBPPtr, RwMatrix* offsetMat, RwMatrix* parentMat) = symbol("libGTASA.so", "_ZN10FxSystem_c4InitEP12FxSystemBP_cP11RwMatrixTagS3_");
+    uint8_t GetBoundingSphereWld(FxSphere_c* bSphere) = symbol("libGTASA.so", "_ZN10FxSystem_c20GetBoundingSphereWldEP10FxSphere_c");
+    uint8_t Update(RwCamera* camPtr, float deltaTime) = symbol("libGTASA.so", "_ZN10FxSystem_c6UpdateEP8RwCameraf");
+    void GetCompositeMatrix(RwMatrix* compMat) = symbol("libGTASA.so", "_ZN10FxSystem_c18GetCompositeMatrixEP11RwMatrixTag");
+    void SetLocalParticles(uint8_t on) = symbol("libGTASA.so", "_ZN10FxSystem_c17SetLocalParticlesEh");
+    void ForAllParticles(nativeptr cback, void* userPtr) = symbol("libGTASA.so", "_ZN10FxSystem_c15ForAllParticlesEPFvP10Particle_ciPPvES2_");
+    void GetBoundingBox(FxBox_c* bBox) = symbol("libGTASA.so", "_ZN10FxSystem_c14GetBoundingBoxEP7FxBox_c");
+    uint8_t GetBoundingSphereLcl(FxSphere_c* bSphere) = symbol("libGTASA.so", "_ZN10FxSystem_c20GetBoundingSphereLclEP10FxSphere_c");
+    void SetBoundingSphere(FxSphere_c* bSphere) = symbol("libGTASA.so", "_ZN10FxSystem_c17SetBoundingSphereEP10FxSphere_c");
+    uint8_t SetZTestEnable(uint8_t on) = symbol("libGTASA.so", "_ZN10FxSystem_c14SetZTestEnableEh");
+    void SetMustCreatePrts(uint8_t on) = symbol("libGTASA.so", "_ZN10FxSystem_c17SetMustCreatePrtsEh");
+};
+native class FxSystem_c_m_nFlags = size(0x1)
+{
+    uint8_t bOwnedParentMatrix = offset(0x0) bits(0, 1, 1);
+    uint8_t bLocalParticles = offset(0x0) bits(1, 1, 1);
+    uint8_t bZTestEnabled = offset(0x0) bits(2, 1, 1);
+    uint8_t bDontCreateParticles = offset(0x0) bits(3, 1, 1);
+    uint8_t bPreviouslyCulled = offset(0x0) bits(4, 1, 1);
+    uint8_t bMustCreatePtrs = offset(0x0) bits(5, 1, 1);
+};
+#endif

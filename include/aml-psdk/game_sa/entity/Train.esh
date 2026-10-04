@@ -1,0 +1,66 @@
+#ifndef PSDK_game_sa_entity_Train_h
+#define PSDK_game_sa_entity_Train_h
+#pragma once
+#define TRAIN_NODE_NONE 0
+#define TRAIN_DOOR_LF 1
+#define TRAIN_DOOR_RF 2
+#define TRAIN_WHEEL_RF1 3
+#define TRAIN_WHEEL_RF2 4
+#define TRAIN_WHEEL_RF3 5
+#define TRAIN_WHEEL_RB1 6
+#define TRAIN_WHEEL_RB2 7
+#define TRAIN_WHEEL_RB3 8
+#define TRAIN_WHEEL_LF1 9
+#define TRAIN_WHEEL_LF2 10
+#define TRAIN_WHEEL_LF3 11
+#define TRAIN_WHEEL_LB1 12
+#define TRAIN_WHEEL_LB2 13
+#define TRAIN_WHEEL_LB3 14
+#define TRAIN_BOGIE_FRONT 15
+#define TRAIN_BOGIE_REAR 16
+#define TRAIN_NUM_NODES 17
+#define TRAIN_PASSENGERS_QUERY_NUM_PASSENGERS_TO_LEAVE 0
+#define TRAIN_PASSENGERS_TELL_PASSENGERS_TO_LEAVE 1
+#define TRAIN_PASSENGERS_QUERY_NUM_PASSENGERS_TO_ENTER 2
+#define TRAIN_PASSENGERS_TELL_PASSENGERS_TO_ENTER 3
+#define TRAIN_PASSENGERS_GENERATION_FINISHED 4
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/entity/Vehicle.esh"
+native class CTrain : public CVehicle = size(bits(0x6c0, 0x8b8))
+{
+    int16_t m_nNodeIndex = offset(bits(0x5b4, 0x758));
+    float m_fTrainSpeed = offset(bits(0x5b8, 0x75c));
+    float m_fCurrentRailDistance = offset(bits(0x5bc, 0x760));
+    float m_fLength = offset(bits(0x5c0, 0x764));
+    float m_fTrainGas = offset(bits(0x5c4, 0x768));
+    float m_fTrainBrake = offset(bits(0x5c8, 0x76c));
+    CTrain_m_nTrainFlags m_nTrainFlags = offset(bits(0x5cc, 0x770));
+    int m_nTimeWhenStoppedAtStation = offset(bits(0x5d0, 0x774));
+    uint8_t m_nTrackId = offset(bits(0x5d4, 0x778));
+    int m_nTimeWhenCreated = offset(bits(0x5d8, 0x77c));
+    int16_t m_nDoorsState = offset(bits(0x5dc, 0x780));
+    uint8_t m_nPassengersGenerationState = offset(bits(0x5de, 0x782));
+    uint8_t m_nNumPassengersToLeave = offset(bits(0x5df, 0x783)) bits(0, 4, 1);
+    uint8_t m_nNumPassengersToEnter = offset(bits(0x5df, 0x783)) bits(4, 4, 1);
+    CPed* m_pTemporaryPassenger = offset(bits(0x5e0, 0x788));
+    CTrain* m_pPrevCarriage = offset(bits(0x5e4, 0x790));
+    CTrain* m_pNextCarriage = offset(bits(0x5e8, 0x798));
+    CDoor m_aDoors[6] = offset(bits(0x5ec, 0x7a0));
+    RwFrame* m_aTrainNodes[17] = offset(bits(0x67c, 0x830));
+};
+native class CTrain_m_nTrainFlags = size(0x2)
+{
+    uint8_t bDoorsReady = offset(0x0) bits(0, 1, 1);
+    uint8_t bStoppedAtStation = offset(0x0) bits(1, 1, 1);
+    uint8_t bPassengersCanEnterAndLeave = offset(0x0) bits(2, 1, 1);
+    uint8_t bIsFrontCarriage = offset(0x0) bits(3, 1, 1);
+    uint8_t bIsLastCarriage = offset(0x0) bits(4, 1, 1);
+    uint8_t bMissionTrain = offset(0x0) bits(5, 1, 1);
+    uint8_t bClockwiseDirection = offset(0x0) bits(6, 1, 1);
+    uint8_t bStopsAtStations = offset(0x0) bits(7, 1, 1);
+    uint8_t bNotOnARailRoad = offset(0x1) bits(0, 1, 1);
+    uint8_t bForceSlowDown = offset(0x1) bits(1, 1, 1);
+    uint8_t bIsStreakModel = offset(0x1) bits(2, 1, 1);
+};
+#endif

@@ -1,0 +1,78 @@
+#ifndef PSDK_renderware_RwCamera_h
+#define PSDK_renderware_RwCamera_h
+#pragma once
+#define rwSPHEREOUTSIDE 0
+#define rwSPHEREBOUNDARY 1
+#define rwSPHEREINSIDE 2
+#define rwNACAMERAPROJECTION 0
+#define rwPERSPECTIVE 1
+#define rwPARALLEL 2
+#define rwCAMERACLEARIMAGE 1
+#define rwCAMERACLEARZ 2
+#define rwCAMERACLEARSTENCIL 4
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../sdk_forward.esh"
+#include "../sdk_base.esh"
+#include "../renderware/RwBase.esh"
+#include "../renderware/RwLinks.esh"
+#include "../renderware/RwObject.esh"
+#include "../renderware/RwMatrix.esh"
+#include "../renderware/RwVector.esh"
+#include "../renderware/RwRGBA.esh"
+native class RwFrustumPlane = size(0x14)
+{
+    RwPlane plane = offset(0x0);
+    uint8_t closestX = offset(0x10);
+    uint8_t closestY = offset(0x11);
+    uint8_t closestZ = offset(0x12);
+    uint8_t pad = offset(0x13);
+};
+native class RwCamera = size(bits(0x188, 0x1b0))
+{
+    RwObjectHasFrame object = offset(0x0);
+    int projectionType = offset(bits(0x14, 0x28));
+    nativeptr beginUpdate = offset(bits(0x18, 0x30));
+    nativeptr endUpdate = offset(bits(0x1c, 0x38));
+    RwMatrix viewMatrix = offset(bits(0x20, 0x40));
+    RwRaster* frameBuffer = offset(bits(0x60, 0x80));
+    RwRaster* zBuffer = offset(bits(0x64, 0x88));
+    CVector2D viewWindow = offset(bits(0x68, 0x90));
+    CVector2D recipViewWindow = offset(bits(0x70, 0x98));
+    CVector2D viewOffset = offset(bits(0x78, 0xa0));
+    float nearPlane = offset(bits(0x80, 0xa8));
+    float farPlane = offset(bits(0x84, 0xac));
+    float fogPlane = offset(bits(0x88, 0xb0));
+    float zScale = offset(bits(0x8c, 0xb4));
+    float zShift = offset(bits(0x90, 0xb8));
+    uint16_t renderFrame = offset(bits(0x94, 0xbc));
+    uint16_t pad = offset(bits(0x96, 0xbe));
+    RwFrustumPlane frustumPlanes[6] = offset(bits(0x98, 0xc0));
+    RwBBox frustumBoundBox = offset(bits(0x110, 0x138));
+    CVector frustumCorners[8] = offset(bits(0x128, 0x150));
+};
+native class rwStreamCamera = size(0x20)
+{
+    CVector2D viewWindow = offset(0x0);
+    CVector2D viewOffset = offset(0x8);
+    float nearPlane = offset(0x10);
+    float farPlane = offset(0x14);
+    float fogPlane = offset(0x18);
+    uint32_t projection = offset(0x1c);
+};
+native void _rwCameraValClose() = symbol("libGTASA.so", "_Z17_rwCameraValClosev");
+native void _rwCameraValOpen() = symbol("libGTASA.so", "_Z16_rwCameraValOpenv");
+native void _rwCameraValRender(RwCamera* camera) = symbol("libGTASA.so", "_Z18_rwCameraValRenderP8RwCamera");
+native RwCamera* RwCameraBeginUpdate(RwCamera* camera) = symbol("libGTASA.so", "_Z19RwCameraBeginUpdateP8RwCamera");
+native rwStreamCamera* RwCameraChunkInfoRead(RwStream* stream, rwStreamCamera* cameraChunkInfo, RwInt32* bytesRead) = symbol("libGTASA.so", "_Z21RwCameraChunkInfoReadP8RwStreamP14rwStreamCameraPi");
+native RwCamera* RwCameraClone(RwCamera* camera) = symbol("libGTASA.so", "_Z13RwCameraCloneP8RwCamera");
+native RwCamera* RwCameraCreate() = symbol("libGTASA.so", "_Z14RwCameraCreatev");
+native RwCamera* RwCameraEndUpdate(RwCamera* camera) = symbol("libGTASA.so", "_Z17RwCameraEndUpdateP8RwCamera");
+native RwCamera* RwCameraForAllClumpsInFrustum(RwCamera* camera, void* data) = symbol("libGTASA.so", "_Z29RwCameraForAllClumpsInFrustumP8RwCameraPv");
+native RwCamera* RwCameraForAllSectorsInFrustum(RwCamera* camera, nativeptr callback, void* data) = symbol("libGTASA.so", "_Z30RwCameraForAllSectorsInFrustumP8RwCameraPFP13RpWorldSectorS2_PvES3_");
+native RpClump* RwCameraGetClump(RwCamera* camera) = symbol("libGTASA.so", "_Z16RwCameraGetClumpPK8RwCamera");
+native RpWorld* RwCameraGetWorld(RwCamera* camera) = symbol("libGTASA.so", "_Z16RwCameraGetWorldPK8RwCamera");
+native RwCamera* RwCameraSetViewOffset(RwCamera* camera, RwV2d* offset) = symbol("libGTASA.so", "_Z21RwCameraSetViewOffsetP8RwCameraPK5RwV2d");
+native RwCamera* RwCameraSetViewWindow(RwCamera* camera, RwV2d* viewWindow) = symbol("libGTASA.so", "_Z21RwCameraSetViewWindowP8RwCameraPK5RwV2d");
+native RwCamera* RwCameraStreamRead(RwStream* stream) = symbol("libGTASA.so", "_Z18RwCameraStreamReadP8RwStream");
+native RwCamera* RwCameraStreamWrite(RwCamera* camera, RwStream* stream) = symbol("libGTASA.so", "_Z19RwCameraStreamWritePK8RwCameraP8RwStream");
+#endif

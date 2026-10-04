@@ -1,0 +1,87 @@
+#ifndef PSDK_game_sa_engine_World_h
+#define PSDK_game_sa_engine_World_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../gta_base/Vector.esh"
+#include "../../game_sa/base/Lists.esh"
+#include "../../game_sa/base/ColModel.esh"
+#include "../../game_sa/other/PlayerInfo.esh"
+native class CWorld = size(0x1)
+{
+    static void ResetLineTestOptions() = symbol("libGTASA.so", "_ZN6CWorld20ResetLineTestOptionsEv");
+    static void Initialise() = symbol("libGTASA.so", "_ZN6CWorld10InitialiseEv");
+    static void ShutDown() = symbol("libGTASA.so", "_ZN6CWorld8ShutDownEv");
+    static void Remove(CEntity* entity) = symbol("libGTASA.so", "_ZN6CWorld6RemoveEP7CEntity");
+    static void ClearForRestart() = symbol("libGTASA.so", "_ZN6CWorld15ClearForRestartEv");
+    static void Add(CEntity* arg0) = symbol("libGTASA.so", "_ZN6CWorld3AddEP7CEntity");
+    static bool GetIsLineOfSightClear(CVector* vecStart, CVector* vecEnd, bool bCheckBuildings, bool bCheckVehicles, bool bCheckPeds, bool bCheckObjects, bool bCheckDummies, bool bSeeThroughStuff, bool bIgnoreSomeObjectsForCamera) = symbol("libGTASA.so", "_ZN6CWorld21GetIsLineOfSightClearERK7CVectorS2_bbbbbbb");
+    static bool GetIsLineOfSightSectorClear(CSector* sector, CRepeatSector* rsector, CColLine* line, bool bCheckBuildings, bool bCheckVehicles, bool bCheckPeds, bool bCheckObjects, bool bCheckDummies, bool bSeeThroughStuff, bool bIgnoreSomeObjectsForCamera) = symbol("libGTASA.so", "_ZN6CWorld27GetIsLineOfSightSectorClearER7CSectorR13CRepeatSectorRK8CColLinebbbbbbb");
+    static bool ProcessLineOfSight(CVector* vecStart, CVector* vecEnd, CColPoint* colPoint, nativeptr refEntityPtr, bool bCheckBuildings, bool bCheckVehicles, bool bCheckPeds, bool bCheckObjects, bool bCheckDummies, bool bSeeThroughStuff, bool bIgnoreSomeObjectsForCamera, bool bShootThroughStuff) = symbol("libGTASA.so", "_ZN6CWorld18ProcessLineOfSightERK7CVectorS2_R9CColPointRP7CEntitybbbbbbbb");
+    static bool ProcessLineOfSightSector(CSector* sector, CRepeatSector* rsector, CColLine* line, CColPoint* colPoint, float* fCollisionRatio, nativeptr refEntityPtr, bool bCheckBuildings, bool bCheckVehicles, bool bCheckPeds, bool bCheckObjects, bool bCheckDummies, bool bSeeThroughStuff, bool bIgnoreSomeObjectsForCamera, bool bShootThroughStuff) = symbol("libGTASA.so", "_ZN6CWorld24ProcessLineOfSightSectorER7CSectorR13CRepeatSectorRK8CColLineR9CColPointRfRP7CEntitybbbbbbbb");
+    static bool ProcessLineOfSightSectorList(CPtrList* list, CColLine* line, CColPoint* colPoint, float* fCollisionRatio, nativeptr refEntityPtr, bool bSeeThroughStuff, bool bIgnoreSomeObjectsForCamera, bool bShootThroughStuff) = symbol("libGTASA.so", "_ZN6CWorld28ProcessLineOfSightSectorListER8CPtrListRK8CColLineR9CColPointRfRP7CEntitybbb");
+    static bool CameraToIgnoreThisObject(CEntity* pObject) = symbol("libGTASA.so", "_ZN6CWorld24CameraToIgnoreThisObjectEP7CEntity");
+    static bool ProcessVerticalLine(CVector* vecStart, float zEnd, CColPoint* colPoint, nativeptr refEntityPtr, bool bCheckBuildings, bool bCheckVehicles, bool bCheckPeds, bool bCheckObjects, bool bCheckDummies, bool bSeeThroughStuff, CStoredCollPoly* pStoredPoly) = symbol("libGTASA.so", "_ZN6CWorld19ProcessVerticalLineERK7CVectorfR9CColPointRP7CEntitybbbbbbP15CStoredCollPoly");
+    static bool ProcessVerticalLineSector(CSector* sector, CRepeatSector* rsector, CColLine* Line, CColPoint* colPoint, nativeptr refEntityPtr, bool bCheckBuildings, bool bCheckVehicles, bool bCheckPeds, bool bCheckObjects, bool bCheckDummies, bool bSeeThroughStuff, CStoredCollPoly* pStoredPoly) = symbol("libGTASA.so", "_ZN6CWorld25ProcessVerticalLineSectorER7CSectorR13CRepeatSectorRK8CColLineR9CColPointRP7CEntitybbbbbbP15CStoredCollPoly");
+    static bool ProcessVerticalLine_FillGlobeColPoints(CVector* vecStart, float zEnd, nativeptr refEntityPtr, bool bCheckBuildings, bool bCheckVehicles, bool bCheckPeds, bool bCheckObjects, bool bCheckDummies, bool bSeeThroughStuff, CStoredCollPoly* pStoredPoly) = symbol("libGTASA.so", "_ZN6CWorld38ProcessVerticalLine_FillGlobeColPointsERK7CVectorfRP7CEntitybbbbbbP15CStoredCollPoly");
+    static bool ProcessVerticalLineSector_FillGlobeColPoints(CSector* sector, CRepeatSector* rsector, CColLine* Line, nativeptr refEntityPtr, bool bCheckBuildings, bool bCheckVehicles, bool bCheckPeds, bool bCheckObjects, bool bCheckDummies, bool bSeeThroughStuff, CStoredCollPoly* pStoredPoly) = symbol("libGTASA.so", "_ZN6CWorld44ProcessVerticalLineSector_FillGlobeColPointsER7CSectorR13CRepeatSectorRK8CColLineRP7CEntitybbbbbbP15CStoredCollPoly");
+    static bool ProcessVerticalLineSectorList_FillGlobeColPoints(CPtrList* list, CColLine* Line, nativeptr refEntityPtr, bool bSeeThroughStuff, CStoredCollPoly* pStoredPoly) = symbol("libGTASA.so", "_ZN6CWorld48ProcessVerticalLineSectorList_FillGlobeColPointsER8CPtrListRK8CColLineRP7CEntitybP15CStoredCollPoly");
+    static bool ProcessVerticalLineSectorList(CPtrList* list, CColLine* Line, CColPoint* colPoint, float* fCollisionRatio, nativeptr refEntityPtr, bool bSeeThroughStuff, CStoredCollPoly* pStoredPoly) = symbol("libGTASA.so", "_ZN6CWorld29ProcessVerticalLineSectorListER8CPtrListRK8CColLineR9CColPointRfRP7CEntitybP15CStoredCollPoly");
+    static void TriggerExplosion(CVector* vecPosition, float fEffectRadius, float fImpulseMagnitude, CEntity* pExplodingEntity, CEntity* pExplosionOwner, bool BlowUpQuick, float DamagePercentage) = symbol("libGTASA.so", "_ZN6CWorld16TriggerExplosionERK7CVectorffP7CEntityS4_bf");
+    static void TriggerExplosionSectorList(CPtrList* list, CVector* vecPosition, float fEffectRadius, float fImpulseMagnitude, CEntity* pExplodingEntity, CEntity* pExplosionOwner, bool BlowUpQuick, float DamagePercentage) = symbol("libGTASA.so", "_ZN6CWorld26TriggerExplosionSectorListER8CPtrListRK7CVectorffP7CEntityS6_bf");
+    static void CastShadow(float xmin, float ymin, float xmax, float ymax) = symbol("libGTASA.so", "_ZN6CWorld10CastShadowEffff");
+    static void CastShadowSectorList(CPtrList* list, float xmin, float ymin, float xmax, float ymax) = symbol("libGTASA.so", "_ZN6CWorld20CastShadowSectorListER8CPtrListffff");
+    static void ProcessForAnimViewer() = symbol("libGTASA.so", "_ZN6CWorld20ProcessForAnimViewerEv");
+    static void Process() = symbol("libGTASA.so", "_ZN6CWorld7ProcessEv");
+    static void RemoveEntityInsteadOfProcessingIt(CEntity* pEntityToRemove) = symbol("libGTASA.so", "_ZN6CWorld33RemoveEntityInsteadOfProcessingItEP7CEntity");
+    static void ProcessAttachedEntities() = symbol("libGTASA.so", "_ZN6CWorld23ProcessAttachedEntitiesEv");
+    static void RemoveFallenPeds() = symbol("libGTASA.so", "_ZN6CWorld16RemoveFallenPedsEv");
+    static void RemoveFallenCars() = symbol("libGTASA.so", "_ZN6CWorld16RemoveFallenCarsEv");
+    static void ProcessPedsAfterPreRender() = symbol("libGTASA.so", "_ZN6CWorld25ProcessPedsAfterPreRenderEv");
+    static void ClearScanCodes() = symbol("libGTASA.so", "_ZN6CWorld14ClearScanCodesEv");
+    static bool GetIsLineOfSightSectorListClear(CPtrList* list, CColLine* line, bool bSeeThroughStuff, bool bIgnoreSomeObjectsForCamera) = symbol("libGTASA.so", "_ZN6CWorld31GetIsLineOfSightSectorListClearER8CPtrListRK8CColLinebb");
+    static void FindObjectsInRange(CVector* Coors, float Range, bool Dist2D, int16_t* pNum, int16_t MaxNum, nativeptr ppResults, bool bCheckBuildings, bool bCheckVehicles, bool bCheckPeds, bool bCheckObjects, bool bCheckDummies) = symbol("libGTASA.so", "_ZN6CWorld18FindObjectsInRangeERK7CVectorfbPssPP7CEntitybbbbb");
+    static void FindObjectsInRangeSectorList(CPtrList* list, CVector* Coors, float Range, bool Dist2D, int16_t* pNum, int16_t MaxNum, nativeptr ppResults) = symbol("libGTASA.so", "_ZN6CWorld28FindObjectsInRangeSectorListER8CPtrListRK7CVectorfbPssPP7CEntity");
+    static void FindObjectsOfTypeInRange(uint32_t ModelIndx, CVector* Coors, float Range, bool Dist2D, int16_t* pNum, int16_t MaxNum, nativeptr ppResults, bool bCheckBuildings, bool bCheckVehicles, bool bCheckPeds, bool bCheckObjects, bool bCheckDummies) = symbol("libGTASA.so", "_ZN6CWorld24FindObjectsOfTypeInRangeEjRK7CVectorfbPssPP7CEntitybbbbb");
+    static void FindObjectsOfTypeInRangeSectorList(uint32_t ModelIndx, CPtrList* list, CVector* Coors, float Range, bool Dist2D, int16_t* pNum, int16_t MaxNum, nativeptr ppResults) = symbol("libGTASA.so", "_ZN6CWorld34FindObjectsOfTypeInRangeSectorListEjR8CPtrListRK7CVectorfbPssPP7CEntity");
+    static void FindLodOfTypeInRange(uint32_t ModelIndx, CVector* Coors, float Range, bool Dist2D, int16_t* pNum, int16_t MaxNum, nativeptr ppResults) = symbol("libGTASA.so", "_ZN6CWorld20FindLodOfTypeInRangeEjRK7CVectorfbPssPP7CEntity");
+    static void FindObjectsKindaColliding(CVector* Coors, float Range, bool Dist2D, int16_t* pNum, int16_t MaxNum, nativeptr ppResults, bool bCheckBuildings, bool bCheckVehicles, bool bCheckPeds, bool bCheckObjects, bool bCheckDummies) = symbol("libGTASA.so", "_ZN6CWorld25FindObjectsKindaCollidingERK7CVectorfbPssPP7CEntitybbbbb");
+    static void FindObjectsKindaCollidingSectorList(CPtrList* list, CVector* Coors, float Range, bool Dist2D, int16_t* pNum, int16_t MaxNum, nativeptr ppResults) = symbol("libGTASA.so", "_ZN6CWorld35FindObjectsKindaCollidingSectorListER8CPtrListRK7CVectorfbPssPP7CEntity");
+    static void FindObjectsIntersectingCube(CVector* Coors, CVector* CoorsMax, int16_t* pNum, int16_t MaxNum, nativeptr ppResults, bool bCheckBuildings, bool bCheckVehicles, bool bCheckPeds, bool bCheckObjects, bool bCheckDummies) = symbol("libGTASA.so", "_ZN6CWorld27FindObjectsIntersectingCubeERK7CVectorS2_PssPP7CEntitybbbbb");
+    static void FindObjectsIntersectingCubeSectorList(CPtrList* list, CVector* CoorsMin, CVector* CoorsMax, int16_t* pNum, int16_t MaxNum, nativeptr ppResults) = symbol("libGTASA.so", "_ZN6CWorld37FindObjectsIntersectingCubeSectorListER8CPtrListRK7CVectorS4_PssPP7CEntity");
+    static void FindObjectsIntersectingAngledCollisionBox(CBox* Box, CMatrix* RotationOfBoxMatrix, CVector* BoxCentre, float MinX, float MinY, float MaxX, float MaxY, int16_t* pNum, int16_t MaxNum, nativeptr ppResults, bool bCheckBuildings, bool bCheckVehicles, bool bCheckPeds, bool bCheckObjects, bool bCheckDummies) = symbol("libGTASA.so", "_ZN6CWorld41FindObjectsIntersectingAngledCollisionBoxERK4CBoxRK7CMatrixRK7CVectorffffPssPP7CEntitybbbbb");
+    static void FindObjectsIntersectingAngledCollisionBoxSectorList(CPtrList* list, CBox* Box, CMatrix* RotationOfBoxMatrix, CVector* BoxCentre, int16_t* pNum, int16_t MaxNum, nativeptr ppResults) = symbol("libGTASA.so", "_ZN6CWorld51FindObjectsIntersectingAngledCollisionBoxSectorListER8CPtrListRK4CBoxRK7CMatrixRK7CVectorPssPP7CEntity");
+    static void FindMissionEntitiesIntersectingCube(CVector* CoorsMin, CVector* CoorsMax, int16_t* pNum, int16_t MaxNum, nativeptr ppResults, bool bCheckVehicles, bool bCheckPeds, bool bCheckObjects) = symbol("libGTASA.so", "_ZN6CWorld35FindMissionEntitiesIntersectingCubeERK7CVectorS2_PssPP7CEntitybbb");
+    static void FindMissionEntitiesIntersectingCubeSectorList(CPtrList* list, CVector* CoorsMin, CVector* CoorsMax, int16_t* pNum, int16_t MaxNum, nativeptr ppResults, bool EntitiesAreVehicles, bool EntitiesArePeds, bool EntitiesAreObjects) = symbol("libGTASA.so", "_ZN6CWorld45FindMissionEntitiesIntersectingCubeSectorListER8CPtrListRK7CVectorS4_PssPP7CEntitybbb");
+    static CEntity* FindNearestObjectOfType(int ModelIndex, CVector* Coors, float Range, bool Dist2D, bool bCheckBuildings, bool bCheckVehicles, bool bCheckPeds, bool bCheckObjects, bool bCheckDummies) = symbol("libGTASA.so", "_ZN6CWorld23FindNearestObjectOfTypeEiRK7CVectorfbbbbbb");
+    static void FindNearestObjectOfTypeSectorList(int ModelIndex, CPtrList* list, CVector* Coors, float Range, bool Dist2D, nativeptr ppResult, float* pNearestDist) = symbol("libGTASA.so", "_ZN6CWorld33FindNearestObjectOfTypeSectorListEiR8CPtrListRK7CVectorfbPP7CEntityPf");
+    static float FindGroundZForCoord(float x, float y) = symbol("libGTASA.so", "_ZN6CWorld19FindGroundZForCoordEff");
+    static float FindGroundZFor3DCoord(float x, float y, float z, bool* pBool, nativeptr ppEnt) = symbol("libGTASA.so", "_ZN6CWorld21FindGroundZFor3DCoordEfffPbPP7CEntity");
+    static float FindRoofZFor3DCoord(float x, float y, float z, bool* pBool) = symbol("libGTASA.so", "_ZN6CWorld19FindRoofZFor3DCoordEfffPb");
+    static float FindLowestZForCoord(float x, float y) = symbol("libGTASA.so", "_ZN6CWorld19FindLowestZForCoordEff");
+    static void RemoveReferencesToDeletedObject(CEntity* pToBeDeletedEntity) = symbol("libGTASA.so", "_ZN6CWorld31RemoveReferencesToDeletedObjectEP7CEntity");
+    static void SetPedsOnFire(float CenterX, float CenterY, float CenterZ, float Radius, CEntity* pCulprit) = symbol("libGTASA.so", "_ZN6CWorld13SetPedsOnFireEffffP7CEntity");
+    static void SetPedsChoking(float CenterX, float CenterY, float CenterZ, float Radius, CEntity* pCulprit) = symbol("libGTASA.so", "_ZN6CWorld14SetPedsChokingEffffP7CEntity");
+    static void SetCarsOnFire(float CenterX, float CenterY, float CenterZ, float Radius, CEntity* pCulprit) = symbol("libGTASA.so", "_ZN6CWorld13SetCarsOnFireEffffP7CEntity");
+    static void SetWorldOnFire(float CenterX, float CenterY, float CenterZ, float Radius, CEntity* pCulprit) = symbol("libGTASA.so", "_ZN6CWorld14SetWorldOnFireEffffP7CEntity");
+    static int SprayPaintWorld(CVector* vecPos, CVector* vecHitNormal, float fRadius, bool bFadeUp) = symbol("libGTASA.so", "_ZN6CWorld15SprayPaintWorldER7CVectorS1_fb");
+    static void RepositionCertainDynamicObjects() = symbol("libGTASA.so", "_ZN6CWorld31RepositionCertainDynamicObjectsEv");
+    static void RepositionOneObject(CEntity* pEntity) = symbol("libGTASA.so", "_ZN6CWorld19RepositionOneObjectEP7CEntity");
+    static void UseDetonator(CEntity* pUser) = symbol("libGTASA.so", "_ZN6CWorld12UseDetonatorEP7CEntity");
+    static void PrintCarChanges() = symbol("libGTASA.so", "_ZN6CWorld15PrintCarChangesEv");
+    static void RemoveStaticObjects() = symbol("libGTASA.so", "_ZN6CWorld19RemoveStaticObjectsEv");
+    static void TestForUnusedModels(CPtrList* list, int32_t* modelCounts) = symbol("libGTASA.so", "_ZN6CWorld19TestForUnusedModelsER8CPtrListPi");
+    static void ClearExcitingStuffFromArea(CVector* Centre, float Radius, uint8_t bRemoveProjectiles) = symbol("libGTASA.so", "_ZN6CWorld26ClearExcitingStuffFromAreaERK7CVectorfh");
+    static void ClearCarsFromArea(float MinX, float MinY, float MinZ, float MaxX, float MaxY, float MaxZ) = symbol("libGTASA.so", "_ZN6CWorld17ClearCarsFromAreaEffffff");
+    static void ClearPedsFromArea(float MinX, float MinY, float MinZ, float MaxX, float MaxY, float MaxZ) = symbol("libGTASA.so", "_ZN6CWorld17ClearPedsFromAreaEffffff");
+    static void SetAllCarsCanBeDamaged(bool bDmgFlag) = symbol("libGTASA.so", "_ZN6CWorld22SetAllCarsCanBeDamagedEb");
+    static void CallOffChaseForArea(float MinX, float MinY, float MaxX, float MaxY) = symbol("libGTASA.so", "_ZN6CWorld19CallOffChaseForAreaEffff");
+    static void CallOffChaseForAreaSectorListVehicles(CPtrList* list, float MinX, float MinY, float MaxX, float MaxY, float BiggerMinX, float BiggerMinY, float BiggerMaxX, float BiggerMaxY) = symbol("libGTASA.so", "_ZN6CWorld37CallOffChaseForAreaSectorListVehiclesER8CPtrListffffffff");
+    static void CallOffChaseForAreaSectorListPeds(CPtrList* list, float MinX, float MinY, float MaxX, float MaxY, float BiggerMinX, float BiggerMinY, float BiggerMaxX, float BiggerMaxY) = symbol("libGTASA.so", "_ZN6CWorld33CallOffChaseForAreaSectorListPedsER8CPtrListffffffff");
+    static void StopAllLawEnforcersInTheirTracks() = symbol("libGTASA.so", "_ZN6CWorld32StopAllLawEnforcersInTheirTracksEv");
+    static int32_t FindPlayerSlotWithPedPointer(void* pPlayersPed) = symbol("libGTASA.so", "_ZN6CWorld28FindPlayerSlotWithPedPointerEPv");
+    static int32_t FindPlayerSlotWithRemoteVehiclePointer(void* pRemote) = symbol("libGTASA.so", "_ZN6CWorld38FindPlayerSlotWithRemoteVehiclePointerEPv");
+    static int32_t FindPlayerSlotWithVehiclePointer(CEntity* pEntity) = symbol("libGTASA.so", "_ZN6CWorld32FindPlayerSlotWithVehiclePointerEP7CEntity");
+};
+#endif

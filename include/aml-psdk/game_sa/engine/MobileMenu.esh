@@ -1,0 +1,68 @@
+#ifndef PSDK_game_sa_engine_MobileMenu_h
+#define PSDK_game_sa_engine_MobileMenu_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/base/Lists.esh"
+#include "../../gta_base/Vector.esh"
+#include "../../gta_base/RGBA.esh"
+#include "../../game_sa/engine/OS.esh"
+native class MobileMenu = size(bits(0xb0, 0xd0))
+{
+    CVector2D bgUVSize = offset(0x0);
+    CVector2D bgTargetCoords = offset(0x8);
+    CVector2D bgCurCoords = offset(0x10);
+    CVector2D bgStartCoords = offset(0x18);
+    MenuScreen* pendingScreen = offset(bits(0x2c, 0x30));
+    RwTexture* bgTex = offset(bits(0x30, 0x38));
+    RwTexture* sliderEmpty = offset(bits(0x34, 0x40));
+    RwTexture* sliderFull = offset(bits(0x38, 0x48));
+    RwTexture* sliderNub = offset(bits(0x3c, 0x50));
+    RwTexture* controlsBack = offset(bits(0x40, 0x58));
+    RwTexture* controlsBack2 = offset(bits(0x44, 0x60));
+    int m_nTargetBlipIndex = offset(bits(0x48, 0x68));
+    uint8_t m_bWantToRestart = offset(bits(0x4c, 0x6c));
+    bool m_bWantToLoad = offset(bits(0x4d, 0x6d));
+    int m_nSaveSlot = offset(bits(0x50, 0x70));
+    bool m_bOnlyNewGame = offset(bits(0x54, 0x74));
+    bool m_bSocialClubLogged = offset(bits(0x55, 0x75));
+    float m_fMapZoom = offset(bits(0x58, 0x78));
+    float m_fMapBaseX = offset(bits(0x5c, 0x7c));
+    float m_fMapBaseY = offset(bits(0x60, 0x80));
+    float m_fMapEndX = offset(bits(0x64, 0x84));
+    float m_fMapEndY = offset(bits(0x68, 0x88));
+    bool m_bDrawRadarOrMap = offset(bits(0x6c, 0x8c));
+    bool m_bOpenMenuMap = offset(bits(0x6d, 0x8d));
+    bool m_nPointerMode = offset(bits(0x6e, 0x8e));
+    bool m_bShowMouse = offset(bits(0x6f, 0x8f));
+    CVector2D m_vMousePos[4] = offset(bits(0x70, 0x90));
+    int m_nPointerState[4] = offset(bits(0x90, 0xb0));
+    uint32_t m_nPointerActivateTime[4] = offset(bits(0xa0, 0xc0));
+    static void DrawQuad2(CVector2D* coords, CRGBA* col) = symbol("libGTASA.so", "_ZN10MobileMenu8DrawQuadEP9CVector2DP5CRGBA");
+    static void DrawSprite1(RwTexture* texture, CVector2D* coords, CVector2D* uvs, CRGBA* col) = symbol("libGTASA.so", "_ZN10MobileMenu10DrawSpriteEP9RwTextureP9CVector2DS3_P5CRGBA");
+    void Initialize() = symbol("libGTASA.so", "_ZN10MobileMenu10InitializeEv");
+    void Render() = symbol("libGTASA.so", "_ZN10MobileMenu6RenderEv");
+    void PrepareToRender() = symbol("libGTASA.so", "_ZN10MobileMenu15PrepareToRenderEv");
+    void ProcessPending() = symbol("libGTASA.so", "_ZN10MobileMenu14ProcessPendingEv");
+    void PopAllScreens() = symbol("libGTASA.so", "_ZN10MobileMenu13PopAllScreensEv");
+    void Update() = symbol("libGTASA.so", "_ZN10MobileMenu6UpdateEv");
+    void InitForPause() = symbol("libGTASA.so", "_ZN10MobileMenu12InitForPauseEv");
+    bool IsMainMenuScreen() = symbol("libGTASA.so", "_ZN10MobileMenu16IsMainMenuScreenEv");
+    void Exit() = symbol("libGTASA.so", "_ZN10MobileMenu4ExitEv");
+    void Load() = symbol("libGTASA.so", "_ZN10MobileMenu4LoadEv");
+    void Unload() = symbol("libGTASA.so", "_ZN10MobileMenu6UnloadEv");
+    void InitForTitle() = symbol("libGTASA.so", "_ZN10MobileMenu12InitForTitleEv");
+    void InitForDownload() = symbol("libGTASA.so", "_ZN10MobileMenu15InitForDownloadEv");
+    void InitForSignedOut() = symbol("libGTASA.so", "_ZN10MobileMenu16InitForSignedOutEv");
+    void InitForSave() = symbol("libGTASA.so", "_ZN10MobileMenu11InitForSaveEv");
+    void InitForRetry() = symbol("libGTASA.so", "_ZN10MobileMenu12InitForRetryEv");
+    void LoadFailed() = symbol("libGTASA.so", "_ZN10MobileMenu10LoadFailedEv");
+    void SaveFailed() = symbol("libGTASA.so", "_ZN10MobileMenu10SaveFailedEv");
+    void InitForNag() = symbol("libGTASA.so", "_ZN10MobileMenu10InitForNagEv");
+    void InitGameVars() = symbol("libGTASA.so", "_ZN10MobileMenu12InitGameVarsEv");
+    void UpdateDownload(int percent, bool done) = symbol("libGTASA.so", "_ZN10MobileMenu14UpdateDownloadEib");
+    void AddScreen(MenuScreen* toAdd, bool immediate) = symbol("libGTASA.so", "_ZN10MobileMenu9AddScreenEP10MenuScreenb");
+    void RemoveTopScreen(bool immediate, bool dontExit) = symbol("libGTASA.so", "_ZN10MobileMenu15RemoveTopScreenEbb");
+    void ClampBGCoords(CVector2D* toClamp) = symbol("libGTASA.so", "_ZN10MobileMenu13ClampBGCoordsER9CVector2D");
+};
+#endif

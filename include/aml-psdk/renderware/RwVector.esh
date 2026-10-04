@@ -1,0 +1,35 @@
+#ifndef PSDK_renderware_RwVector_h
+#define PSDK_renderware_RwVector_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../sdk_forward.esh"
+#include "../gta_base/Vector.esh"
+#include "../renderware/RwBase.esh"
+native class RQVector = size(0x10)
+{
+    float v[4] = offset(0x0);
+    float x = offset(0x0);
+    float y = offset(0x4);
+    float z = offset(0x8);
+    float w = offset(0xc);
+    float r = offset(0x0);
+    float g = offset(0x4);
+    float b = offset(0x8);
+    float a = offset(0xc);
+};
+native class RwSphere = size(0x10)
+{
+    CVector center = offset(0x0);
+    float radius = offset(0xc);
+};
+native class RwBBox = size(0x18)
+{
+    CVector sup = offset(0x0);
+    CVector inf = offset(0xc);
+};
+native class RwPlane = size(0x10)
+{
+    CVector normal = offset(0x0);
+    float distance = offset(0xc);
+};
+#endif

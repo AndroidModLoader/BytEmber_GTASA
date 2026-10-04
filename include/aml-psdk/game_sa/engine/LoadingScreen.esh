@@ -1,0 +1,30 @@
+#ifndef PSDK_game_sa_engine_LoadingScreen_h
+#define PSDK_game_sa_engine_LoadingScreen_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../game_sa/engine/Sprite2d.esh"
+native class CLoadingScreen = size(0x1)
+{
+    static void Init(bool bLegalScreen, bool dont_reload) = symbol("libGTASA.so", "_ZN14CLoadingScreen4InitEbb");
+    static void LoadSplashes(uint8_t use_splash_id, uint8_t id) = symbol("libGTASA.so", "_ZN14CLoadingScreen12LoadSplashesEhh");
+    static float GetClockTime(bool bRealTime) = symbol("libGTASA.so", "_ZN14CLoadingScreen12GetClockTimeEb");
+    static void Shutdown(bool bForce) = symbol("libGTASA.so", "_ZN14CLoadingScreen8ShutdownEb");
+    static void Pause() = symbol("libGTASA.so", "_ZN14CLoadingScreen5PauseEv");
+    static void Continue() = symbol("libGTASA.so", "_ZN14CLoadingScreen8ContinueEv");
+    static void NewChunkLoaded() = symbol("libGTASA.so", "_ZN14CLoadingScreen14NewChunkLoadedEv");
+    static void DisplayPCScreen() = symbol("libGTASA.so", "_ZN14CLoadingScreen15DisplayPCScreenEv");
+    static void RenderSplash() = symbol("libGTASA.so", "_ZN14CLoadingScreen12RenderSplashEv");
+    static void DoPCTitleFadeIn() = symbol("libGTASA.so", "_ZN14CLoadingScreen15DoPCTitleFadeInEv");
+    static void DoPCTitleFadeOut() = symbol("libGTASA.so", "_ZN14CLoadingScreen16DoPCTitleFadeOutEv");
+    static void SetChunksToLoad(int num, bool AddTo) = symbol("libGTASA.so", "_ZN14CLoadingScreen15SetChunksToLoadEib");
+    static void DoPCScreenChange(uint32_t bLastOne, uint32_t change) = symbol("libGTASA.so", "_ZN14CLoadingScreen16DoPCScreenChangeEjj");
+    static void RenderLoadingBar() = symbol("libGTASA.so", "_ZN14CLoadingScreen16RenderLoadingBarEv");
+    static void DisplayNextSplash() = symbol("libGTASA.so", "_ZN14CLoadingScreen17DisplayNextSplashEv");
+    static void DisplayMessage(uint8_t* pMsg) = symbol("libGTASA.so", "_ZN14CLoadingScreen14DisplayMessageEPKc");
+    static void SetLoadingBarMsg(uint8_t* pMsg, uint8_t* pMsg2) = symbol("libGTASA.so", "_ZN14CLoadingScreen16SetLoadingBarMsgEPKcS1_");
+    static void Update() = symbol("libGTASA.so", "_ZN14CLoadingScreen6UpdateEv");
+    static void StartFading() = symbol("libGTASA.so", "_ZN14CLoadingScreen11StartFadingEv");
+};
+#endif

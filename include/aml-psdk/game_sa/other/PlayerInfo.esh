@@ -1,0 +1,93 @@
+#ifndef PSDK_game_sa_other_PlayerInfo_h
+#define PSDK_game_sa_other_PlayerInfo_h
+#pragma once
+#define PLAYERSTATE_PLAYING 0
+#define PLAYERSTATE_HASDIED 1
+#define PLAYERSTATE_HASBEENARRESTED 2
+#define PLAYERSTATE_FAILEDMISSION 3
+#define PLAYERSTATE_LEFTGAME 4
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../gta_base/Vector.esh"
+#include "../../game_sa/other/PlayerData.esh"
+native class CPlayerInfo = size(bits(0x194, 0x1d8))
+{
+    CPlayerPed* m_pPed = offset(0x0);
+    CPlayerData m_PlayerData = offset(bits(0x4, 0x8));
+    CVehicle* m_pRemoteVehicle = offset(bits(0xb0, 0xe0));
+    CVehicle* m_pSpecCar = offset(bits(0xb4, 0xe8));
+    int m_nMoney = offset(bits(0xb8, 0xf0));
+    int m_nDisplayMoney = offset(bits(0xbc, 0xf4));
+    uint32_t m_nCollectablesPickedUp = offset(bits(0xc0, 0xf8));
+    uint32_t m_nTotalNumCollectables = offset(bits(0xc4, 0xfc));
+    uint32_t m_nLastBumpPlayerCarTimer = offset(bits(0xc8, 0x100));
+    uint32_t m_nTaxiTimer = offset(bits(0xcc, 0x104));
+    uint32_t m_nVehicleTimeCounter = offset(bits(0xd0, 0x108));
+    bool m_bTaxiTimerScore = offset(bits(0xd4, 0x10c));
+    bool m_bTryingToExitCar = offset(bits(0xd5, 0x10d));
+    CVehicle* m_pLastTargetVehicle = offset(bits(0xd8, 0x110));
+    uint8_t m_nPlayerState = offset(bits(0xdc, 0x118));
+    bool m_bAfterRemoteVehicleExplosion = offset(bits(0xdd, 0x119));
+    bool m_bCreateRemoteVehicleExplosion = offset(bits(0xde, 0x11a));
+    bool m_bFadeAfterRemoteVehicleExplosion = offset(bits(0xdf, 0x11b));
+    uint32_t m_nTimeOfRemoteVehicleExplosion = offset(bits(0xe0, 0x11c));
+    uint32_t m_nLastTimeEnergyLost = offset(bits(0xe4, 0x120));
+    uint32_t m_nLastTimeArmourLost = offset(bits(0xe8, 0x124));
+    uint32_t m_nLastTimeBigGunFired = offset(bits(0xec, 0x128));
+    uint32_t m_nTimesUpsideDownInARow = offset(bits(0xf0, 0x12c));
+    uint32_t m_nTimesStuckInARow = offset(bits(0xf4, 0x130));
+    uint32_t m_nCarTwoWheelCounter = offset(bits(0xf8, 0x134));
+    float m_fCarTwoWheelDist = offset(bits(0xfc, 0x138));
+    uint32_t m_nCarLess3WheelCounter = offset(bits(0x100, 0x13c));
+    uint32_t m_nBikeRearWheelCounter = offset(bits(0x104, 0x140));
+    float m_fBikeRearWheelDist = offset(bits(0x108, 0x144));
+    uint32_t m_nBikeFrontWheelCounter = offset(bits(0x10c, 0x148));
+    float m_fBikeFrontWheelDist = offset(bits(0x110, 0x14c));
+    uint32_t m_nTempBufferCounter = offset(bits(0x114, 0x150));
+    uint32_t m_nBestCarTwoWheelsTimeMs = offset(bits(0x118, 0x154));
+    float m_fBestCarTwoWheelsDistM = offset(bits(0x11c, 0x158));
+    uint32_t m_nBestBikeWheelieTimeMs = offset(bits(0x120, 0x15c));
+    float m_fBestBikeWheelieDistM = offset(bits(0x124, 0x160));
+    uint32_t m_nBestBikeStoppieTimeMs = offset(bits(0x128, 0x164));
+    float m_fBestBikeStoppieDistM = offset(bits(0x12c, 0x168));
+    uint16_t m_nCarDensityForCurrentZone = offset(bits(0x130, 0x16c));
+    float m_fRoadDensityAroundPlayer = offset(bits(0x134, 0x170));
+    uint32_t m_nTimeOfLastCarExplosionCaused = offset(bits(0x138, 0x174));
+    uint32_t m_nExplosionMultiplier = offset(bits(0x13c, 0x178));
+    uint32_t m_nHavocCaused = offset(bits(0x140, 0x17c));
+    uint16_t m_nNumHoursDidntEat = offset(bits(0x144, 0x180));
+    float m_fCurrentChaseValue = offset(bits(0x148, 0x184));
+    bool m_bDoesNotGetTired = offset(bits(0x14c, 0x188));
+    bool m_bFastReload = offset(bits(0x14d, 0x189));
+    bool m_bFireProof = offset(bits(0x14e, 0x18a));
+    uint8_t m_nMaxHealth = offset(bits(0x14f, 0x18b));
+    uint8_t m_nMaxArmour = offset(bits(0x150, 0x18c));
+    bool m_bGetOutOfJailFree = offset(bits(0x151, 0x18d));
+    bool m_bGetOutOfHospitalFree = offset(bits(0x152, 0x18e));
+    bool m_bCanDoDriveBy = offset(bits(0x153, 0x18f));
+    uint8_t m_nBustedAudioStatus = offset(bits(0x154, 0x190));
+    uint16_t m_nLastBustMessageNumber = offset(bits(0x156, 0x192));
+    uint32_t m_nCrosshairActivated = offset(bits(0x158, 0x194));
+    CVector2D m_vecCrosshairTarget = offset(bits(0x15c, 0x198));
+    bool m_bGetObject = offset(bits(0x164, 0x1a0));
+    uint8_t m_szSkinName[32] = offset(bits(0x165, 0x1a1));
+    RwTexture* m_pSkinTexture = offset(bits(0x188, 0x1c8));
+    bool m_bParachuteReferenced = offset(bits(0x18c, 0x1d0));
+    uint32_t m_nRequireParachuteTimer = offset(bits(0x190, 0x1d4));
+    void Clear() = symbol("libGTASA.so", "_ZN11CPlayerInfo5ClearEv");
+    void WorkOutEnergyFromHunger() = symbol("libGTASA.so", "_ZN11CPlayerInfo23WorkOutEnergyFromHungerEv");
+    void GivePlayerParachute() = symbol("libGTASA.so", "_ZN11CPlayerInfo19GivePlayerParachuteEv");
+    bool IsPlayerInRemoteMode() = symbol("libGTASA.so", "_ZN11CPlayerInfo20IsPlayerInRemoteModeEv");
+    uint8_t IsRestartingAfterDeath() = symbol("libGTASA.so", "_ZN11CPlayerInfo22IsRestartingAfterDeathEv");
+    uint8_t IsRestartingAfterArrest() = symbol("libGTASA.so", "_ZN11CPlayerInfo23IsRestartingAfterArrestEv");
+    uint8_t IsRestartingAfterMissionFailed() = symbol("libGTASA.so", "_ZN11CPlayerInfo30IsRestartingAfterMissionFailedEv");
+    void KillPlayer() = symbol("libGTASA.so", "_ZN11CPlayerInfo10KillPlayerEv");
+    void ArrestPlayer() = symbol("libGTASA.so", "_ZN11CPlayerInfo12ArrestPlayerEv");
+    void PlayerFailedCriticalMission() = symbol("libGTASA.so", "_ZN11CPlayerInfo27PlayerFailedCriticalMissionEv");
+    void LoadPlayerSkin() = symbol("libGTASA.so", "_ZN11CPlayerInfo14LoadPlayerSkinEv");
+    void DeletePlayerSkin() = symbol("libGTASA.so", "_ZN11CPlayerInfo16DeletePlayerSkinEv");
+    bool Save() = symbol("libGTASA.so", "_ZN11CPlayerInfo4SaveEv");
+    bool Load() = symbol("libGTASA.so", "_ZN11CPlayerInfo4LoadEv");
+};
+#endif

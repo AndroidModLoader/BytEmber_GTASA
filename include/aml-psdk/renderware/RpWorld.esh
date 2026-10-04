@@ -1,0 +1,145 @@
+#ifndef PSDK_renderware_RpWorld_h
+#define PSDK_renderware_RpWorld_h
+#pragma once
+#define rpWORLDRENDERNARENDERORDER 0
+#define rpWORLDRENDERFRONT2BACK 1
+#define rpWORLDRENDERBACK2FRONT 2
+#define rpWORLDTRISTRIP 1
+#define rpWORLDPOSITIONS 2
+#define rpWORLDTEXTURED 4
+#define rpWORLDPRELIT 8
+#define rpWORLDNORMALS 16
+#define rpWORLDLIGHT 32
+#define rpWORLDMODULATEMATERIALCOLOR 64
+#define rpWORLDTEXTURED2 128
+#define rpWORLDNATIVE 16777216
+#define rpWORLDNATIVEINSTANCE 33554432
+#define rpWORLDFLAGSMASK 255
+#define rpWORLDNATIVEFLAGSMASK 251658240
+#define rpWORLDSECTORSOVERLAP 1073741824
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../sdk_forward.esh"
+#include "../sdk_base.esh"
+#include "../renderware/RwBase.esh"
+#include "../renderware/RwLinks.esh"
+#include "../renderware/RwObject.esh"
+#include "../renderware/RwVector.esh"
+#include "../renderware/RwRGBA.esh"
+#include "../renderware/RwResource.esh"
+#include "../renderware/RxPipeline.esh"
+#include "../renderware/RpMesh.esh"
+#include "../renderware/RpMaterial.esh"
+#include "../renderware/RpGeometry.esh"
+native class RpPolygon = size(0x8)
+{
+    uint16_t matIndex = offset(0x0);
+    uint16_t vertIndex[3] = offset(0x2);
+};
+native class RpVertexNormal = size(0x4)
+{
+    int8_t x = offset(0x0);
+    int8_t y = offset(0x1);
+    int8_t z = offset(0x2);
+    uint8_t pad = offset(0x3);
+};
+native class RpSector = size(0x4)
+{
+    int type = offset(0x0);
+};
+native class RpWorldSector = size(bits(0x90, 0xe8))
+{
+    int type = offset(0x0);
+    RpPolygon* polygons = offset(bits(0x4, 0x8));
+    CVector* vertices = offset(bits(0x8, 0x10));
+    RpVertexNormal* normals = offset(bits(0xc, 0x18));
+    RwTexCoords* texCoords[8] = offset(bits(0x10, 0x20));
+    CRGBA* preLitLum = offset(bits(0x30, 0x60));
+    RwResEntry* repEntry = offset(bits(0x34, 0x68));
+    RwLinkList collAtomicsInWorldSector = offset(bits(0x38, 0x70));
+    RwLinkList noCollAtomicsInWorldSector = offset(bits(0x40, 0x80));
+    RwLinkList lightsInWorldSector = offset(bits(0x48, 0x90));
+    RwBBox boundingBox = offset(bits(0x50, 0xa0));
+    RwBBox tightBoundingBox = offset(bits(0x68, 0xb8));
+    RpMeshHeader* mesh = offset(bits(0x80, 0xd0));
+    RxPipeline* pipeline = offset(bits(0x84, 0xd8));
+    uint16_t matListWindowBase = offset(bits(0x88, 0xe0));
+    uint16_t numVertices = offset(bits(0x8a, 0xe2));
+    uint16_t numPolygons = offset(bits(0x8c, 0xe4));
+    uint16_t pad = offset(bits(0x8e, 0xe6));
+};
+native class RpWorld = size(bits(0x70, 0xa8))
+{
+    RwObject object = offset(0x0);
+    uint32_t flags = offset(bits(0x8, 0x10));
+    int renderOrder = offset(bits(0xc, 0x14));
+    RpMaterialList matList = offset(bits(0x10, 0x18));
+    RpSector* rootSector = offset(bits(0x1c, 0x28));
+    int numTexCoordSets = offset(bits(0x20, 0x30));
+    int numClumpsInWorld = offset(bits(0x24, 0x34));
+    RwLLLink* currentClumpLink = offset(bits(0x28, 0x38));
+    RwLinkList clumpList = offset(bits(0x2c, 0x40));
+    RwLinkList lightList = offset(bits(0x34, 0x50));
+    RwLinkList directionalLightList = offset(bits(0x3c, 0x60));
+    CVector worldOrigin = offset(bits(0x44, 0x70));
+    RwBBox boundingBox = offset(bits(0x50, 0x7c));
+    nativeptr renderCallBack = offset(bits(0x68, 0x98));
+    RxPipeline* pipeline = offset(bits(0x6c, 0xa0));
+};
+native class RpWorldChunkInfo = size(0x40)
+{
+    int rootIsWorldSector = offset(0x0);
+    CVector invWorldOrigin = offset(0x4);
+    int numPolygons = offset(0x10);
+    int numVertices = offset(0x14);
+    int numPlaneSectors = offset(0x18);
+    int numWorldSectors = offset(0x1c);
+    int colSectorSize = offset(0x20);
+    int format = offset(0x24);
+    RwBBox boundingBox = offset(0x28);
+};
+native class RpWorldChunkInfoSector = size(0x2c)
+{
+    int matListWindowBase = offset(0x0);
+    int numPolygons = offset(0x4);
+    int numVertices = offset(0x8);
+    CVector inf = offset(0xc);
+    CVector sup = offset(0x18);
+    int collSectorPresent = offset(0x24);
+    int unused = offset(0x28);
+};
+native RpWorldChunkInfo* _rpWorldChunkInfoRead(RwStream* stream, RpWorldChunkInfo* worldChunkInfo, RwInt32* bytesRead) = symbol("libGTASA.so", "_Z21_rpWorldChunkInfoReadP8RwStreamP16RpWorldChunkInfoPi");
+native void _rpWorldPipelineClose() = symbol("libGTASA.so", "_Z21_rpWorldPipelineClosev");
+native RpWorldChunkInfoSector* _rpWorldSectorChunkInfoRead(RwStream* stream, RpWorldChunkInfoSector* worldSectorChunkInfo, RwInt32* bytesRead) = symbol("libGTASA.so", "_Z27_rpWorldSectorChunkInfoReadP8RwStreamP22RpWorldChunkInfoSectorPi");
+native RpWorldSector* _rpWorldSectorForAllLocalLights(RpWorldSector* sector, nativeptr callBack, void* pData) = symbol("libGTASA.so", "_Z31_rpWorldSectorForAllLocalLightsP13RpWorldSectorPFP7RpLightS2_PvES3_");
+native RpWorldSector* _rpWorldSectorNativeRead(RwStream* stream, RpWorldSector* sector) = symbol("libGTASA.so", "_Z24_rpWorldSectorNativeReadP8RwStreamP13RpWorldSector");
+native RwStream* _rpWorldSectorNativeWrite(RwStream* stream, RpWorldSector* sector) = symbol("libGTASA.so", "_Z25_rpWorldSectorNativeWriteP8RwStreamPK13RpWorldSector");
+native RpWorld* _rpWorldSetupSectorBoundingBoxes(RpWorld* world) = symbol("libGTASA.so", "_Z32_rpWorldSetupSectorBoundingBoxesP7RpWorld");
+native void _rpWorldUnregisterWorld(RpWorld* world) = symbol("libGTASA.so", "_Z23_rpWorldUnregisterWorldP7RpWorld");
+native RpWorld* RpWorldAddAtomic(RpWorld* world, RpAtomic* atomic) = symbol("libGTASA.so", "_Z16RpWorldAddAtomicP7RpWorldP8RpAtomic");
+native RpWorld* RpWorldAddCamera(RpWorld* world, RwCamera* camera) = symbol("libGTASA.so", "_Z16RpWorldAddCameraP7RpWorldP8RwCamera");
+native RpWorld* RpWorldAddClump(RpWorld* world, RpClump* clump) = symbol("libGTASA.so", "_Z15RpWorldAddClumpP7RpWorldP7RpClump");
+native RpWorld* RpWorldAddLight(RpWorld* world, RpLight* light) = symbol("libGTASA.so", "_Z15RpWorldAddLightP7RpWorldP7RpLight");
+native RpWorld* RpWorldCreate(RwBBox* boundingBox) = symbol("libGTASA.so", "_Z13RpWorldCreateP6RwBBox");
+native RpWorld* RpWorldForAllClumps(RpWorld* world, nativeptr fpCallBack, void* pData) = symbol("libGTASA.so", "_Z19RpWorldForAllClumpsP7RpWorldPFP7RpClumpS2_PvES3_");
+native RpWorld* RpWorldForAllLights(RpWorld* world, nativeptr fpCallBack, void* pData) = symbol("libGTASA.so", "_Z19RpWorldForAllLightsP7RpWorldPFP7RpLightS2_PvES3_");
+native RpWorld* RpWorldForAllMaterials(RpWorld* world, nativeptr fpCallBack, void* pData) = symbol("libGTASA.so", "_Z22RpWorldForAllMaterialsP7RpWorldPFP10RpMaterialS2_PvES3_");
+native RpWorld* RpWorldForAllWorldSectors(RpWorld* world, nativeptr fpCallBack, void* pData) = symbol("libGTASA.so", "_Z25RpWorldForAllWorldSectorsP7RpWorldPFP13RpWorldSectorS2_PvES3_");
+native nativeptr RpWorldGetSectorRenderCallBack(RpWorld* world) = symbol("libGTASA.so", "_Z30RpWorldGetSectorRenderCallBackPK7RpWorld");
+native RpWorld* RpWorldLock(RpWorld* world) = symbol("libGTASA.so", "_Z11RpWorldLockP7RpWorld");
+native RpWorld* RpWorldRemoveAtomic(RpWorld* world, RpAtomic* atomic) = symbol("libGTASA.so", "_Z19RpWorldRemoveAtomicP7RpWorldP8RpAtomic");
+native RpWorld* RpWorldRemoveCamera(RpWorld* world, RwCamera* camera) = symbol("libGTASA.so", "_Z19RpWorldRemoveCameraP7RpWorldP8RwCamera");
+native RpWorld* RpWorldRemoveClump(RpWorld* world, RpClump* clump) = symbol("libGTASA.so", "_Z18RpWorldRemoveClumpP7RpWorldP7RpClump");
+native RpWorld* RpWorldRemoveLight(RpWorld* world, RpLight* light) = symbol("libGTASA.so", "_Z18RpWorldRemoveLightP7RpWorldP7RpLight");
+native RpWorld* RpWorldRender(RpWorld* world) = symbol("libGTASA.so", "_Z13RpWorldRenderP7RpWorld");
+native RpWorldSector* RpWorldSectorForAllAtomics(RpWorldSector* sector, nativeptr callback, void* data) = symbol("libGTASA.so", "_Z26RpWorldSectorForAllAtomicsP13RpWorldSectorPFP8RpAtomicS2_PvES3_");
+native RpWorldSector* RpWorldSectorForAllCollisionAtomics(RpWorldSector* sector, nativeptr callback, void* data) = symbol("libGTASA.so", "_Z35RpWorldSectorForAllCollisionAtomicsP13RpWorldSectorPFP8RpAtomicS2_PvES3_");
+native RpWorldSector* RpWorldSectorForAllLights(RpWorldSector* sector, nativeptr callback, void* data) = symbol("libGTASA.so", "_Z25RpWorldSectorForAllLightsP13RpWorldSectorPFP7RpLightS2_PvES3_");
+native RpWorldSector* RpWorldSectorForAllMeshes(RpWorldSector* sector, nativeptr fpCallBack, void* pData) = symbol("libGTASA.so", "_Z25RpWorldSectorForAllMeshesPK13RpWorldSectorPFP6RpMeshS3_P12RpMeshHeaderPvES6_");
+native RpWorld* RpWorldSectorGetWorld(RpWorldSector* sector) = symbol("libGTASA.so", "_Z21RpWorldSectorGetWorldPK13RpWorldSector");
+native RpWorldSector* RpWorldSectorRender(RpWorldSector* sector) = symbol("libGTASA.so", "_Z19RpWorldSectorRenderP13RpWorldSector");
+native RxPipeline* RpWorldSetDefaultSectorPipeline(RxPipeline* pipeline) = symbol("libGTASA.so", "_Z31RpWorldSetDefaultSectorPipelineP10RxPipeline");
+native RpWorld* RpWorldSetSectorRenderCallBack(RpWorld* world, nativeptr fpCallBack) = symbol("libGTASA.so", "_Z30RpWorldSetSectorRenderCallBackP7RpWorldPFP13RpWorldSectorS2_E");
+native RpWorld* RpWorldStreamRead(RwStream* stream) = symbol("libGTASA.so", "_Z17RpWorldStreamReadP8RwStream");
+native RpWorld* RpWorldStreamWrite(RpWorld* world, RwStream* stream) = symbol("libGTASA.so", "_Z18RpWorldStreamWritePK7RpWorldP8RwStream");
+native RpWorld* RpWorldUnlock(RpWorld* world) = symbol("libGTASA.so", "_Z13RpWorldUnlockP7RpWorld");
+#endif

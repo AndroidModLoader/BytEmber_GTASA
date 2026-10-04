@@ -1,0 +1,23 @@
+#ifndef PSDK_game_sa_entity_PlayerPed_h
+#define PSDK_game_sa_entity_PlayerPed_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/entity/Ped.esh"
+native class CPlayerPed : public CPed = size(bits(0x7ac, 0x998))
+{
+    CPed* m_pPlayerTargettedPed = offset(bits(0x7a4, 0x988));
+    int m_iMouseLockOnRecruitTimer = offset(bits(0x7a8, 0x990));
+};
+native CPlayerPed* FindPlayerPed(int PlayerNum) = symbol("libGTASA.so", "_Z13FindPlayerPedi");
+native CVector* FindPlayerSpeed(int PlayerNum) = symbol("libGTASA.so", "_Z15FindPlayerSpeedi");
+native CVehicle* FindPlayerVehicle(int PlayerNum, bool bReturnRemoteVehicle) = symbol("libGTASA.so", "_Z17FindPlayerVehicleib");
+native CVehicle* FindPlayerTrain(int PlayerNum) = symbol("libGTASA.so", "_Z15FindPlayerTraini");
+native bool IsPlayerRemotePlane() = symbol("libGTASA.so", "_Z19IsPlayerRemotePlanev");
+native CEntity* FindPlayerEntity(int PlayerNum) = symbol("libGTASA.so", "_Z16FindPlayerEntityi");
+native CWanted* FindPlayerWanted(int PlayerNum) = symbol("libGTASA.so", "_Z16FindPlayerWantedi");
+native CVector* FindPlayerCentreOfWorld(int PlayerNum) = symbol("libGTASA.so", "_Z23FindPlayerCentreOfWorldi");
+native CVector* FindPlayerCentreOfWorld_NoSniperShift(int PlayerNum) = symbol("libGTASA.so", "_Z37FindPlayerCentreOfWorld_NoSniperShifti");
+native float FindPlayerHeading(int PlayerNum) = symbol("libGTASA.so", "_Z17FindPlayerHeadingi");
+native float FindPlayerHeight() = symbol("libGTASA.so", "_Z16FindPlayerHeightv");
+#endif

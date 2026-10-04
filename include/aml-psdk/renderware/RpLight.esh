@@ -1,0 +1,54 @@
+#ifndef PSDK_renderware_RpLight_h
+#define PSDK_renderware_RpLight_h
+#pragma once
+#define rpNALIGHTTYPE 0
+#define rpLIGHTDIRECTIONAL 1
+#define rpLIGHTAMBIENT 2
+#define rpLIGHTPOINT 128
+#define rpLIGHTSPOT 129
+#define rpLIGHTSPOTSOFT 130
+#define rpLIGHTLIGHTATOMICS 1
+#define rpLIGHTLIGHTWORLD 2
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../sdk_forward.esh"
+#include "../sdk_base.esh"
+#include "../renderware/RwBase.esh"
+#include "../renderware/RwLinks.esh"
+#include "../renderware/RwObject.esh"
+#include "../renderware/RwRGBA.esh"
+native class RpLight = size(bits(0x40, 0x68))
+{
+    RwObjectHasFrame object = offset(0x0);
+    float radius = offset(bits(0x14, 0x28));
+    RwRGBAReal color = offset(bits(0x18, 0x2c));
+    float minusCosAngle = offset(bits(0x28, 0x3c));
+    RwLinkList WorldSectorsInLight = offset(bits(0x2c, 0x40));
+    RwLLLink inWorld = offset(bits(0x34, 0x50));
+    uint16_t lightFrame = offset(bits(0x3c, 0x60));
+    uint8_t isMainLight = offset(bits(0x3e, 0x62));
+    uint8_t pad = offset(bits(0x3f, 0x63));
+};
+native class RpLightTie = size(bits(0x18, 0x30))
+{
+    RwLLLink lightInWorldSector = offset(0x0);
+    RpLight* light = offset(bits(0x8, 0x10));
+    RwLLLink WorldSectorInLight = offset(bits(0xc, 0x18));
+    RpWorldSector* sect = offset(bits(0x14, 0x28));
+};
+native class RpLightChunkInfo = size(0x18)
+{
+    float radius = offset(0x0);
+    float red = offset(0x4);
+    float green = offset(0x8);
+    float blue = offset(0xc);
+    float minusCosAngle = offset(0x10);
+    uint32_t typeAndFlags = offset(0x14);
+};
+native RpLightChunkInfo* _rpLightChunkInfoRead(RwStream* stream, RpLightChunkInfo* lightChunkInfo, RwInt32* bytesRead) = symbol("libGTASA.so", "_Z21_rpLightChunkInfoReadP8RwStreamP16RpLightChunkInfoPi");
+native RpLight* RpLightForAllWorldSectors(RpLight* light, nativeptr callback, void* data) = symbol("libGTASA.so", "_Z25RpLightForAllWorldSectorsP7RpLightPFP13RpWorldSectorS2_PvES3_");
+native RpClump* RpLightGetClump(RpLight* light) = symbol("libGTASA.so", "_Z15RpLightGetClumpPK7RpLight");
+native RpWorld* RpLightGetWorld(RpLight* light) = symbol("libGTASA.so", "_Z15RpLightGetWorldPK7RpLight");
+native RpLight* RpLightSetColor(RpLight* light, RwRGBAReal* color) = symbol("libGTASA.so", "_Z15RpLightSetColorP7RpLightPK10RwRGBAReal");
+native RpLight* RpLightStreamRead(RwStream* stream) = symbol("libGTASA.so", "_Z17RpLightStreamReadP8RwStream");
+native RpLight* RpLightStreamWrite(RpLight* light, RwStream* stream) = symbol("libGTASA.so", "_Z18RpLightStreamWritePK7RpLightP8RwStream");
+#endif

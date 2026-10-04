@@ -1,0 +1,59 @@
+#ifndef PSDK_renderware_RwStream_h
+#define PSDK_renderware_RwStream_h
+#pragma once
+#define rwNASTREAM 0
+#define rwSTREAMFILE 1
+#define rwSTREAMFILENAME 2
+#define rwSTREAMMEMORY 3
+#define rwSTREAMCUSTOM 4
+#define rwNASTREAMACCESS 0
+#define rwSTREAMREAD 1
+#define rwSTREAMWRITE 2
+#define rwSTREAMAPPEND 3
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../sdk_forward.esh"
+#include "../sdk_base.esh"
+#include "../renderware/RwVector.esh"
+native class RwStreamMemory = size(bits(0xc, 0x10))
+{
+    uint32_t position = offset(0x0);
+    uint32_t nSize = offset(0x4);
+    uint8_t* memBlock = offset(0x8);
+};
+native class RwStreamFile = size(bits(0x4, 0x8))
+{
+    void* fpFile = offset(0x0);
+    void* constfpFile = offset(0x0);
+};
+native class RwStreamCustom = size(bits(0x14, 0x28))
+{
+    nativeptr sfnclose = offset(0x0);
+    nativeptr sfnread = offset(bits(0x4, 0x8));
+    nativeptr sfnwrite = offset(bits(0x8, 0x10));
+    nativeptr sfnskip = offset(bits(0xc, 0x18));
+    void* data = offset(bits(0x10, 0x20));
+};
+native class RwStreamUnion = size(bits(0x14, 0x28))
+{
+    RwStreamMemory memory = offset(0x0);
+    RwStreamFile file = offset(0x0);
+    RwStreamCustom custom = offset(0x0);
+};
+native class RwChunkHeaderInfo = size(0x14)
+{
+    uint32_t type = offset(0x0);
+    uint32_t length = offset(0x4);
+    uint32_t version = offset(0x8);
+    uint32_t buildNum = offset(0xc);
+    int isComplex = offset(0x10);
+};
+native class RwStream = size(bits(0x24, 0x40))
+{
+    int type = offset(0x0);
+    int accessType = offset(0x4);
+    int position = offset(0x8);
+    RwStreamUnion Type = offset(bits(0xc, 0x10));
+    int rwOwned = offset(bits(0x20, 0x38));
+};
+native RwStream* RwStreamReadChunkHeaderInfo(RwStream* stream, RwChunkHeaderInfo* chunkHeaderInfo) = symbol("libGTASA.so", "_Z27RwStreamReadChunkHeaderInfoP8RwStreamP17RwChunkHeaderInfo");
+#endif

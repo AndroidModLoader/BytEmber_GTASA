@@ -1,0 +1,52 @@
+#ifndef PSDK_game_sa_other_Weather_h
+#define PSDK_game_sa_other_Weather_h
+#pragma once
+#define WEATHER_EXTRASUNNY_LA 0
+#define WEATHER_SUNNY_LA 1
+#define WEATHER_EXTRASUNNY_SMOG_LA 2
+#define WEATHER_SUNNY_SMOG_LA 3
+#define WEATHER_CLOUDY_LA 4
+#define WEATHER_SUNNY_SF 5
+#define WEATHER_EXTRASUNNY_SF 6
+#define WEATHER_CLOUDY_SF 7
+#define WEATHER_RAINY_SF 8
+#define WEATHER_FOGGY_SF 9
+#define WEATHER_SUNNY_VEGAS 10
+#define WEATHER_EXTRASUNNY_VEGAS 11
+#define WEATHER_CLOUDY_VEGAS 12
+#define WEATHER_EXTRASUNNY_COUNTRYSIDE 13
+#define WEATHER_SUNNY_COUNTRYSIDE 14
+#define WEATHER_CLOUDY_COUNTRYSIDE 15
+#define WEATHER_RAINY_COUNTRYSIDE 16
+#define WEATHER_EXTRASUNNY_DESERT 17
+#define WEATHER_SUNNY_DESERT 18
+#define WEATHER_SANDSTORM_DESERT 19
+#define WEATHER_UNDERWATER 20
+#define WEATHER_EXTRACOLOURS_1 21
+#define WEATHER_EXTRACOLOURS_2 22
+#define WEATHER_REGION_DEFAULT 0
+#define WEATHER_REGION_LA 1
+#define WEATHER_REGION_SF 2
+#define WEATHER_REGION_LV 3
+#define WEATHER_REGION_DESERT 4
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../game_sa/audio/AEAudioEntity.esh"
+native class CWeather = size(0x1)
+{
+    static void Init() = symbol("libGTASA.so", "_ZN8CWeather4InitEv");
+    static void Update() = symbol("libGTASA.so", "_ZN8CWeather6UpdateEv");
+    static void UpdateWeatherRegion(CVector* pCoors) = symbol("libGTASA.so", "_ZN8CWeather19UpdateWeatherRegionEP7CVector");
+    static int8_t* FindWeatherTypesList() = symbol("libGTASA.so", "_ZN8CWeather20FindWeatherTypesListEv");
+    static void AddRain() = symbol("libGTASA.so", "_ZN8CWeather7AddRainEv");
+    static void UpdateInTunnelness() = symbol("libGTASA.so", "_ZN8CWeather18UpdateInTunnelnessEv");
+    static void ForceWeather(int16_t type) = symbol("libGTASA.so", "_ZN8CWeather12ForceWeatherEs");
+    static void ForceWeatherNow(int16_t type) = symbol("libGTASA.so", "_ZN8CWeather15ForceWeatherNowEs");
+    static void SetWeatherToAppropriateTypeNow() = symbol("libGTASA.so", "_ZN8CWeather30SetWeatherToAppropriateTypeNowEv");
+    static void ReleaseWeather() = symbol("libGTASA.so", "_ZN8CWeather14ReleaseWeatherEv");
+    static void AddSandStormParticles() = symbol("libGTASA.so", "_ZN8CWeather21AddSandStormParticlesEv");
+    static void RenderRainStreaks() = symbol("libGTASA.so", "_ZN8CWeather17RenderRainStreaksEv");
+    static bool ForecastWeather(int WeatherType, int HoursAhead) = symbol("libGTASA.so", "_ZN8CWeather15ForecastWeatherEii");
+};
+#endif

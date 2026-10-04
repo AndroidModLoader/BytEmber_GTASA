@@ -1,0 +1,27 @@
+#ifndef PSDK_game_sa_engine_FileMgr_h
+#define PSDK_game_sa_engine_FileMgr_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+native class CFileMgr = size(0x1)
+{
+    static void Initialise() = symbol("libGTASA.so", "_ZN8CFileMgr10InitialiseEv");
+    static void ChangeDir(uint8_t* pDirName) = symbol("libGTASA.so", "_ZN8CFileMgr9ChangeDirEPKc");
+    static void SetDir(uint8_t* pDirName) = symbol("libGTASA.so", "_ZN8CFileMgr6SetDirEPKc");
+    static void SetDirMyDocuments() = symbol("libGTASA.so", "_ZN8CFileMgr17SetDirMyDocumentsEv");
+    static uintptr_t LoadFile(uint8_t* pFilename, uint8_t* pBuffer, int bufferSize, uint8_t* pReadString) = symbol("libGTASA.so", "_ZN8CFileMgr8LoadFileEPKcPhiS1_");
+    static uintptr_t OpenFile(uint8_t* pFilename, uint8_t* pReadString) = symbol("libGTASA.so", "_ZN8CFileMgr8OpenFileEPKcS1_");
+    static uintptr_t OpenFileForWriting(uint8_t* pFilename) = symbol("libGTASA.so", "_ZN8CFileMgr18OpenFileForWritingEPKc");
+    static uintptr_t OpenFileForAppending(uint8_t* pFilename) = symbol("libGTASA.so", "_ZN8CFileMgr20OpenFileForAppendingEPKc");
+    static int32_t Read_old(uint64_t id, uint8_t* pData, int size) = symbol("libGTASA.so", "_ZN8CFileMgr8Read_oldEyPci");
+    static int32_t ReadBytes(uint64_t id, uint8_t* pData, int size) = symbol("libGTASA.so", "_ZN8CFileMgr9ReadBytesEyPci");
+    static int32_t Write(uint64_t id, uint8_t* pData, int size) = symbol("libGTASA.so", "_ZN8CFileMgr5WriteEyPci");
+    static bool Seek(uint64_t id, int offset, int origin) = symbol("libGTASA.so", "_ZN8CFileMgr4SeekEyii");
+    static bool ReadLine(uint64_t id, uint8_t* pLine, int maxLen) = symbol("libGTASA.so", "_ZN8CFileMgr8ReadLineEyPci");
+    static int32_t CloseFile(uint64_t id) = symbol("libGTASA.so", "_ZN8CFileMgr9CloseFileEy");
+    static int32_t GetTotalSize(uint64_t id) = symbol("libGTASA.so", "_ZN8CFileMgr12GetTotalSizeEy");
+    static int32_t Tell(uint64_t id) = symbol("libGTASA.so", "_ZN8CFileMgr4TellEy");
+    static int32_t GetErrorReadWrite(uint64_t id) = symbol("libGTASA.so", "_ZN8CFileMgr17GetErrorReadWriteEy");
+};
+#endif

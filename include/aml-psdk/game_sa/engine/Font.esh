@@ -1,0 +1,117 @@
+#ifndef PSDK_game_sa_engine_Font_h
+#define PSDK_game_sa_engine_Font_h
+#pragma once
+#define ALIGN_CENTER 0
+#define ALIGN_LEFT 1
+#define ALIGN_RIGHT 2
+#define FONT_GOTHIC 0
+#define FONT_SUBTITLES 1
+#define FONT_MENU 2
+#define FONT_PRICEDOWN 3
+#define FO_FONT_STYLE_BANK 0
+#define FO_FONT_STYLE_STANDARD 1
+#define FO_FONT_STYLE_SPACEAGE 2
+#define FO_FONT_STYLE_HEADING 3
+#define FO_FONT_STYLE_JAPAN_BANK 4
+#define FO_FONT_STYLE_HEADING_JAPAN 5
+#define FO_FONT_STYLE_STANDARD_JAPAN 6
+#define FO_FONT_STYLE_JAPAN 2
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../gta_base/RGBA.esh"
+#include "../../gta_base/Rect.esh"
+#include "../../gta_base/GxtChar.esh"
+native class tFontData = size(0xd2)
+{
+    uint8_t m_propValues[208] = offset(0x0);
+    uint8_t m_spaceValue = offset(0xd0);
+    uint8_t m_unpropValue = offset(0xd1);
+};
+native class CFontRenderState = size(0x30)
+{
+    int id = offset(0x0);
+    float x = offset(0x4);
+    float y = offset(0x8);
+    float ScaleX = offset(0xc);
+    float ScaleY = offset(0x10);
+    CRGBA Colour = offset(0x14);
+    float PixelsToAdd = offset(0x18);
+    float Slope = offset(0x1c);
+    float SlopeRefX = offset(0x20);
+    float SlopeRefY = offset(0x24);
+    uint8_t Shadow = offset(0x28);
+    uint8_t ExtraFont = offset(0x29);
+    uint8_t Proportional = offset(0x2a);
+    int16_t Style = offset(0x2c);
+    int8_t EdgeAmount = offset(0x2e);
+};
+native class CFontDetails = size(0x40)
+{
+    CRGBA Color = offset(0x0);
+    float ScaleX = offset(0x4);
+    float ScaleY = offset(0x8);
+    float Slope = offset(0xc);
+    float SlopeRefX = offset(0x10);
+    float SlopeRefY = offset(0x14);
+    uint8_t Justify = offset(0x18);
+    uint8_t Centre = offset(0x19);
+    uint8_t RightJustify = offset(0x1a);
+    uint8_t Background = offset(0x1b);
+    uint8_t BackgroundOutline = offset(0x1c);
+    uint8_t Proportional = offset(0x1d);
+    uint8_t Shadow = offset(0x1e);
+    float AlphaFade = offset(0x20);
+    CRGBA BGColor = offset(0x24);
+    float WrapEnd = offset(0x28);
+    float Centrex = offset(0x2c);
+    float RightJustifyWrap = offset(0x30);
+    uint8_t Style = offset(0x34);
+    uint8_t ExtraFont = offset(0x35);
+    int8_t DropAmount = offset(0x36);
+    CRGBA DropColor = offset(0x37);
+    int8_t EdgeAmount = offset(0x3b);
+    int8_t EdgeSpace = offset(0x3c);
+};
+native class CFont = size(0x1)
+{
+    static void Initialise() = symbol("libGTASA.so", "_ZN5CFont10InitialiseEv");
+    static void ClearSpecialLanguages() = symbol("libGTASA.so", "_ZN5CFont21ClearSpecialLanguagesEv");
+    static void AddJapaneseTexture() = symbol("libGTASA.so", "_ZN5CFont18AddJapaneseTextureEv");
+    static void AddStandardTexture() = symbol("libGTASA.so", "_ZN5CFont18AddStandardTextureEv");
+    static void AddEFIGSFont() = symbol("libGTASA.so", "_ZN5CFont12AddEFIGSFontEv");
+    static void AddRussianTexture() = symbol("libGTASA.so", "_ZN5CFont17AddRussianTextureEv");
+    static void LoadFontValues() = symbol("libGTASA.so", "_ZN5CFont14LoadFontValuesEv");
+    static void Shutdown() = symbol("libGTASA.so", "_ZN5CFont8ShutdownEv");
+    static void InitPerFrame() = symbol("libGTASA.so", "_ZN5CFont12InitPerFrameEv");
+    static void SetDropShadowPosition(int8_t Amount) = symbol("libGTASA.so", "_ZN5CFont21SetDropShadowPositionEa");
+    static float GetHeight(bool UseRenderState) = symbol("libGTASA.so", "_ZN5CFont9GetHeightEb");
+    static void RenderFontBuffer() = symbol("libGTASA.so", "_ZN5CFont16RenderFontBufferEv");
+    static float ComputeHeight(float fHeight) = symbol("libGTASA.so", "_ZN5CFont13ComputeHeightEf");
+    static GxtChar* ParseToken(GxtChar* pCharacters, CRGBA* color, uint8_t shadow, uint8_t* latest_token) = symbol("libGTASA.so", "_ZN5CFont10ParseTokenEPtR5CRGBAhPc");
+    static void RenderString(float x, float y, GxtChar* pCharacterStart, GxtChar* pCharacterEnd, float PixelsToAdd) = symbol("libGTASA.so", "_ZN5CFont12RenderStringEffPtS0_f");
+    static void PrintStringFromBottom(float x, float Bottomy, GxtChar* pCharacters) = symbol("libGTASA.so", "_ZN5CFont21PrintStringFromBottomEffPt");
+    static uintptr_t GetNumberLines(float x, float y, GxtChar* pCharacters) = symbol("libGTASA.so", "_ZN5CFont14GetNumberLinesEffPt");
+    static void PrintString1(float x, float y, GxtChar* pCharacters) = symbol("libGTASA.so", "_ZN5CFont11PrintStringEffPt");
+    static void GetTextRect(CRect* pRect, float x, float y, GxtChar* pCharacters) = symbol("libGTASA.so", "_ZN5CFont11GetTextRectEP5CRectffPt");
+    static void ProcessStringToDisplay(float x, float y, GxtChar* pCharacters) = symbol("libGTASA.so", "_ZN5CFont22ProcessStringToDisplayEffPt");
+    static uintptr_t ProcessCurrentString(uint8_t PrintTheString, float x, float y, GxtChar* NewStringChars) = symbol("libGTASA.so", "_ZN5CFont20ProcessCurrentStringEhffPt");
+    static float GetStringWidth1(GxtChar* pInCharacters, uint8_t bIncludeSpaces, uint8_t bUsingWithScriptValues) = symbol("libGTASA.so", "_ZN5CFont14GetStringWidthEPthh");
+    static GxtChar* GetNextSpace(GxtChar* pCharacters) = symbol("libGTASA.so", "_ZN5CFont12GetNextSpaceEPt");
+    static float GetStringWidth2(GxtChar* pCharacters, uint8_t bIncludeSpaces, uint8_t bUsingWithScriptValues, uint8_t isAscii) = symbol("libGTASA.so", "_ZN5CFont14GetStringWidthEPthhh");
+    static void FilterOutTokensFromString(GxtChar* str) = symbol("libGTASA.so", "_ZN5CFont25FilterOutTokensFromStringEPt");
+    static void SetScale1(float fHeight) = symbol("libGTASA.so", "_ZN5CFont8SetScaleEf");
+    static void SetSlantRefPoint(float x, float y) = symbol("libGTASA.so", "_ZN5CFont16SetSlantRefPointEff");
+    static void SetSlant(float angle) = symbol("libGTASA.so", "_ZN5CFont8SetSlantEf");
+    static void SetFontStyle(uint8_t style) = symbol("libGTASA.so", "_ZN5CFont12SetFontStyleEh");
+    static void SetWrapx(float x) = symbol("libGTASA.so", "_ZN5CFont8SetWrapxEf");
+    static void SetCentreSize(float x) = symbol("libGTASA.so", "_ZN5CFont13SetCentreSizeEf");
+    static void SetRightJustifyWrap(float wrap) = symbol("libGTASA.so", "_ZN5CFont19SetRightJustifyWrapEf");
+    static void SetAlphaFade(float alpha) = symbol("libGTASA.so", "_ZN5CFont12SetAlphaFadeEf");
+    static void SetEdge(int8_t amount) = symbol("libGTASA.so", "_ZN5CFont7SetEdgeEa");
+    static void SetProportional(uint8_t prop) = symbol("libGTASA.so", "_ZN5CFont15SetProportionalEh");
+    static void SetBackground(uint8_t bg, uint8_t outline) = symbol("libGTASA.so", "_ZN5CFont13SetBackgroundEhh");
+    static void SetJustify(uint8_t justify) = symbol("libGTASA.so", "_ZN5CFont10SetJustifyEh");
+    static void SetOrientation(uint8_t orientation) = symbol("libGTASA.so", "_ZN5CFont14SetOrientationEh");
+};
+#endif

@@ -1,0 +1,53 @@
+#ifndef PSDK_game_sa_entity_Boat_h
+#define PSDK_game_sa_entity_Boat_h
+#pragma once
+#define BOAT_NODE_NONE 0
+#define BOAT_MOVING 1
+#define BOAT_WINDSCREEN 2
+#define BOAT_RUDDER 3
+#define BOAT_FLAP_LEFT 4
+#define BOAT_FLAP_RIGHT 5
+#define BOAT_REARFLAP_LEFT 6
+#define BOAT_REARFLAP_RIGHT 7
+#define BOAT_STATIC_PROP 8
+#define BOAT_MOVING_PROP 9
+#define BOAT_STATIC_PROP_2 10
+#define BOAT_MOVING_PROP_2 11
+#define BOAT_NUM_NODES 12
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/entity/Vehicle.esh"
+native class CBoat : public CVehicle = size(bits(0x7fc, 0x9e0))
+{
+    float m_fMovingHiRotation = offset(bits(0x5b4, 0x758));
+    float m_fPropSpeed = offset(bits(0x5b8, 0x75c));
+    float m_fPropRotation = offset(bits(0x5bc, 0x760));
+    CBoat_m_nBoatFlags m_nBoatFlags = offset(bits(0x5c0, 0x764));
+    uint8_t m_nCurrentLOD = offset(bits(0x5c1, 0x765));
+    RwFrame* m_aBoatNodes[12] = offset(bits(0x5c4, 0x768));
+    CDoor m_boatFlap = offset(bits(0x5f4, 0x7c8));
+    tBoatHandlingData* m_pBoatHandling = offset(bits(0x60c, 0x7e0));
+    float m_fAnchoredAngle = offset(bits(0x610, 0x7e8));
+    int m_nAttackPlayerTime = offset(bits(0x614, 0x7ec));
+    int m_nLastParticleTime = offset(bits(0x618, 0x7f0));
+    float m_fBurningTimer = offset(bits(0x61c, 0x7f4));
+    CEntity* m_pWhoDestroyedMe = offset(bits(0x620, 0x7f8));
+    CVector m_vecBoatMoveForce = offset(bits(0x624, 0x800));
+    CVector m_vecBoatTurnForce = offset(bits(0x630, 0x80c));
+    FxSystem_c* m_apPropSplashFx[2] = offset(bits(0x63c, 0x818));
+    CVector m_vecWaterDamping = offset(bits(0x644, 0x828));
+    uint8_t m_nCurrentField = offset(bits(0x650, 0x834));
+    uint8_t m_nPadNumber = offset(bits(0x651, 0x835));
+    float m_fWaterResistance = offset(bits(0x654, 0x838));
+    int16_t m_nNumWaterTrailPoints = offset(bits(0x658, 0x83c));
+    CVector2D m_avecWakePoints[32] = offset(bits(0x65c, 0x840));
+    float m_afWakePointLifeTime[32] = offset(bits(0x75c, 0x940));
+    uint8_t m_anWakePointIntensity[32] = offset(bits(0x7dc, 0x9c0));
+};
+native class CBoat_m_nBoatFlags = size(0x1)
+{
+    uint8_t bOnWater = offset(0x0) bits(0, 1, 1);
+    uint8_t bMovingOnWater = offset(0x0) bits(1, 1, 1);
+    uint8_t bAnchored = offset(0x0) bits(2, 1, 1);
+};
+#endif

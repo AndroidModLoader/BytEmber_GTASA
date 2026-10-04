@@ -1,0 +1,76 @@
+#ifndef PSDK_game_sa_base_Lists_h
+#define PSDK_game_sa_base_Lists_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+native class CPtrNode = size(bits(0x8, 0x10))
+{
+    void* m_pVoid = offset(0x0);
+    CPtrNode* m_pNext = offset(bits(0x4, 0x8));
+};
+native class CPtrNodeSingleLink : public CPtrNode = size(bits(0x8, 0x10))
+{
+};
+native class CPtrNodeDoubleLink : public CPtrNode = size(bits(0xc, 0x18))
+{
+    CPtrNodeDoubleLink* m_pPrevious = offset(bits(0x8, 0x10));
+};
+native class CPtrList = size(bits(0x4, 0x8))
+{
+    CPtrNode* m_pHead = offset(0x0);
+};
+native class CPtrListDoubleLink : public CPtrList = size(bits(0x4, 0x8))
+{
+};
+native class CPtrListSingleLink : public CPtrList = size(bits(0x4, 0x8))
+{
+};
+native class CSector = size(bits(0x8, 0x10))
+{
+    CPtrListSingleLink m_buildingPtrListArray = offset(0x0);
+    CPtrListDoubleLink m_dummyPtrListArray = offset(bits(0x4, 0x8));
+};
+native class CRepeatSector = size(bits(0xc, 0x18))
+{
+    CPtrListDoubleLink m_ptrListArray[3] = offset(0x0);
+};
+native class CEntryInfoNode = size(bits(0x14, 0x28))
+{
+    CPtrListDoubleLink* m_pList = offset(0x0);
+    CPtrNodeDoubleLink* m_pNode = offset(bits(0x4, 0x8));
+    CSector* m_pStandardSector = offset(bits(0x8, 0x10));
+    CRepeatSector* m_pRepeatSector = offset(bits(0x8, 0x10));
+    CEntryInfoNode* m_pPrevious = offset(bits(0xc, 0x18));
+    CEntryInfoNode* m_pNext = offset(bits(0x10, 0x20));
+};
+native class CEntryInfoList = size(bits(0x4, 0x8))
+{
+    CEntryInfoNode* m_pHead = offset(0x0);
+};
+native class CNodeAddress = size(0x4)
+{
+    int16_t m_nAreaId = offset(0x0);
+    int16_t m_nNodeId = offset(0x2);
+};
+native class CCarPathLinkAddress = size(0x2)
+{
+    int16_t m_nCarPathLinkId = offset(0x0) bits(0, 10, 2);
+    int16_t m_nAreaId = offset(0x1) bits(2, 6, 1);
+};
+native class CNodeRoute = size(0x24)
+{
+    int m_iRouteSize = offset(0x0);
+    CNodeAddress m_routePoints[8] = offset(0x4);
+};
+native class ListItem_c = size(bits(0x8, 0x10))
+{
+    ListItem_c* next = offset(0x0);
+    ListItem_c* prev = offset(bits(0x4, 0x8));
+};
+native class List_c = size(bits(0xc, 0x18))
+{
+    ListItem_c* first = offset(0x0);
+    ListItem_c* last = offset(bits(0x4, 0x8));
+    uint32_t count = offset(bits(0x8, 0x10));
+};
+#endif

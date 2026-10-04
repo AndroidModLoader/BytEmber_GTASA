@@ -1,0 +1,13 @@
+#ifndef PSDK_game_sa_ai_TaskTimer_h
+#define PSDK_game_sa_ai_TaskTimer_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+native class CTaskTimer = size(0xc)
+{
+    int m_nStartTime = offset(0x0);
+    int m_nInterval = offset(0x4);
+    bool m_bStarted = offset(0x8);
+    bool m_bStopped = offset(0x9);
+};
+#endif

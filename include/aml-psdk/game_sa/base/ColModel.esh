@@ -1,0 +1,128 @@
+#ifndef PSDK_game_sa_base_ColModel_h
+#define PSDK_game_sa_base_ColModel_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../gta_base/Vector.esh"
+#include "../../game_sa/enum/SurfaceType.esh"
+native class CColTriangle = size(0x10)
+{
+    int m_nVertA = offset(0x0);
+    int m_nVertB = offset(0x4);
+    int m_nVertC = offset(0x8);
+    uint8_t m_nMaterial = offset(0xc);
+    uint8_t m_nLight = offset(0xd);
+};
+native class CColTrianglePlane = size(0x14)
+{
+    CVector m_normal = offset(0x0);
+    float m_nDistance = offset(0xc);
+    uint8_t m_nOrientation = offset(0x10);
+};
+native class CCollisionData = size(bits(0x34, 0x58))
+{
+    uint16_t m_nNumSpheres = offset(0x0);
+    uint16_t m_nNumBoxes = offset(0x2);
+    uint16_t m_nNumTriangles = offset(0x4);
+    uint8_t m_nNumLines = offset(0x6);
+    uint8_t m_nNumDisks = offset(0x6);
+    CCollisionData_m_nFlags m_nFlags = offset(0x7);
+    CColSphere* m_pSpheres = offset(0x8);
+    CColBox* m_pBoxes = offset(bits(0xc, 0x10));
+    CColLine* m_pLines = offset(bits(0x10, 0x18));
+    CColDisk* m_pDisks = offset(bits(0x10, 0x18));
+    CVector* m_pVertices = offset(bits(0x14, 0x20));
+    CColTriangle* m_pTriangles = offset(bits(0x18, 0x28));
+    CColTrianglePlane* m_pTrianglePlanes = offset(bits(0x1c, 0x30));
+    uint32_t m_nNumShadowTriangles = offset(bits(0x20, 0x38));
+    uint32_t m_nNumShadowVertices = offset(bits(0x24, 0x3c));
+    CVector* m_pShadowVertices = offset(bits(0x28, 0x40));
+    CColTriangle* m_pShadowTriangles = offset(bits(0x2c, 0x48));
+    int* m_modelSec = offset(bits(0x30, 0x50));
+};
+native class CCollisionData_m_nFlags = size(0x1)
+{
+    uint8_t bUsesDisks = offset(0x0) bits(0, 1, 1);
+    uint8_t bNotEmpty = offset(0x0) bits(1, 1, 1);
+    uint8_t bHasShadowTris = offset(0x0) bits(2, 1, 1);
+    uint8_t bHasFaceGroups = offset(0x0) bits(3, 1, 1);
+    uint8_t bHasShadow = offset(0x0) bits(4, 1, 1);
+};
+native class ColData = size(0x3)
+{
+    uint8_t m_nSurfaceType = offset(0x0);
+    uint8_t m_nPieceType = offset(0x1);
+    uint8_t m_lighting = offset(0x2);
+};
+native class CBox = size(0x18)
+{
+    CVector m_vecMin = offset(0x0);
+    CVector m_vecMax = offset(0xc);
+};
+native class CColBox : public CBox = size(0x1c)
+{
+    ColData m_data = offset(0x18);
+};
+native class CSphere = size(0x10)
+{
+    CVector m_vecCentre = offset(0x0);
+    float m_fRadius = offset(0xc);
+};
+native class CColSphere : public CSphere = size(0x14)
+{
+    ColData m_data = offset(0x10);
+};
+native class CColDisk : public CColSphere = size(0x24)
+{
+    CVector m_vecThickness = offset(0x14);
+    float m_fThickness = offset(0x20);
+};
+native class CBoundingBox : public CBox = size(0x18)
+{
+};
+native class CColModel = size(bits(0x30, 0x38))
+{
+    CBoundingBox m_boundBox = offset(0x0);
+    CSphere m_boundSphere = offset(0x18);
+    uint8_t m_nColSlot = offset(0x28);
+    uint8_t m_bHasCollisionVolumes = offset(0x29) bits(0, 1, 1);
+    uint8_t m_bIsSingleColDataAlloc = offset(0x29) bits(1, 1, 1);
+    uint8_t m_bIsActive = offset(0x29) bits(2, 1, 1);
+    uint8_t m_nFlags = offset(0x29);
+    CCollisionData* m_pColData = offset(bits(0x2c, 0x30));
+    void MakeMultipleAlloc() = symbol("libGTASA.so", "_ZN9CColModel17MakeMultipleAllocEv");
+    void AllocateData() = symbol("libGTASA.so", "_ZN9CColModel12AllocateDataEv");
+    void RemoveCollisionVolumes() = symbol("libGTASA.so", "_ZN9CColModel22RemoveCollisionVolumesEv");
+    void CalculateTrianglePlanes() = symbol("libGTASA.so", "_ZN9CColModel23CalculateTrianglePlanesEv");
+    void RemoveTrianglePlanes() = symbol("libGTASA.so", "_ZN9CColModel20RemoveTrianglePlanesEv");
+    void AllocateData1(int numSpheres, int numBoxes, int numLines, int numVertices, int numTriangles, bool bUseDisksNotLines) = symbol("libGTASA.so", "_ZN9CColModel12AllocateDataEiiiiib");
+    void AllocateData2(int size) = symbol("libGTASA.so", "_ZN9CColModel12AllocateDataEi");
+};
+native class tColLighting = size(0x1)
+{
+    uint8_t day = offset(0x0) bits(0, 4, 1);
+    uint8_t night = offset(0x0) bits(4, 4, 1);
+};
+native class CColPoint = size(0x2c)
+{
+    CVector m_vecPoint = offset(0x0);
+    float field_C = offset(0xc);
+    CVector m_vecNormal = offset(0x10);
+    float field_1C = offset(0x1c);
+    uint8_t m_nSurfaceTypeA = offset(0x20);
+    uint8_t m_nPieceTypeA = offset(0x21);
+    tColLighting m_nLightingA = offset(0x22);
+    uint8_t _pad = offset(0x23);
+    uint8_t m_nSurfaceTypeB = offset(0x24);
+    uint8_t m_nPieceTypeB = offset(0x25);
+    tColLighting m_nLightingB = offset(0x26);
+    uint8_t _pad2 = offset(0x27);
+    float m_fDepth = offset(0x28);
+};
+native class CStoredCollPoly = size(0x2c)
+{
+    CVector m_aMeshVertices[3] = offset(0x0);
+    bool m_bIsActual = offset(0x24);
+    uint32_t m_nLighting = offset(0x28);
+};
+#endif

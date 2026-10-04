@@ -1,0 +1,63 @@
+#ifndef PSDK_game_sa_engine_Fx_h
+#define PSDK_game_sa_engine_Fx_h
+#pragma once
+#define FXQUALITY_LOW 0
+#define FXQUALITY_MEDIUM 1
+#define FXQUALITY_HIGH 2
+#define FXQUALITY_VERY_HIGH 3
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../gta_base/Vector.esh"
+#include "../../game_sa/base/Lists.esh"
+#include "../../renderware/RwRGBA.esh"
+native class Fx_c = size(bits(0x58, 0xa8))
+{
+    FxSystem_c* m_pPrtBlood = offset(0x0);
+    FxSystem_c* m_pPrtBoatsplash = offset(bits(0x4, 0x8));
+    FxSystem_c* m_pPrtBubble = offset(bits(0x8, 0x10));
+    FxSystem_c* m_pPrtCardebris = offset(bits(0xc, 0x18));
+    FxSystem_c* m_pPrtCollisionsmoke = offset(bits(0x10, 0x20));
+    FxSystem_c* m_pPrtGunshell = offset(bits(0x14, 0x28));
+    FxSystem_c* m_pPrtSand = offset(bits(0x18, 0x30));
+    FxSystem_c* m_pPrtSand2 = offset(bits(0x1c, 0x38));
+    FxSystem_c* m_pPrtSmoke_huge = offset(bits(0x20, 0x40));
+    FxSystem_c* m_pPrtSmokeII3expand = offset(bits(0x24, 0x48));
+    FxSystem_c* m_pPrtSpark = offset(bits(0x28, 0x50));
+    FxSystem_c* m_pPrtSpark2 = offset(bits(0x2c, 0x58));
+    FxSystem_c* m_pPrtSplash = offset(bits(0x30, 0x60));
+    FxSystem_c* m_pPrtWake = offset(bits(0x34, 0x68));
+    FxSystem_c* m_pPrtWatersplash = offset(bits(0x38, 0x70));
+    FxSystem_c* m_pPrtWheeldirt = offset(bits(0x3c, 0x78));
+    FxSystem_c* m_pPrtGlass = offset(bits(0x40, 0x80));
+    uint32_t m_nBloodPoolsCount = offset(bits(0x50, 0xa0));
+    uint32_t m_fxQuality = offset(bits(0x54, 0xa4));
+    uint8_t Init() = symbol("libGTASA.so", "_ZN4Fx_c4InitEv");
+    void InitStaticSystems() = symbol("libGTASA.so", "_ZN4Fx_c17InitStaticSystemsEv");
+    void InitEntitySystems() = symbol("libGTASA.so", "_ZN4Fx_c17InitEntitySystemsEv");
+    void Exit() = symbol("libGTASA.so", "_ZN4Fx_c4ExitEv");
+    void ExitEntitySystems() = symbol("libGTASA.so", "_ZN4Fx_c17ExitEntitySystemsEv");
+    void ExitStaticSystems() = symbol("libGTASA.so", "_ZN4Fx_c17ExitStaticSystemsEv");
+    void Reset() = symbol("libGTASA.so", "_ZN4Fx_c5ResetEv");
+    uint32_t GetFxQuality() = symbol("libGTASA.so", "_ZN4Fx_c12GetFxQualityEv");
+    void Update(RwCamera* camPtr, float deltaTime) = symbol("libGTASA.so", "_ZN4Fx_c6UpdateEP8RwCameraf");
+    void Render(RwCamera* camPtr, uint8_t doHeatHaze) = symbol("libGTASA.so", "_ZN4Fx_c6RenderEP8RwCamerah");
+    void AddBlood(CVector* pos, CVector* dir, int num, float lightMult) = symbol("libGTASA.so", "_ZN4Fx_c8AddBloodER7CVectorS1_if");
+    void AddWood(CVector* pos, CVector* dir, int num, float lightMult) = symbol("libGTASA.so", "_ZN4Fx_c7AddWoodER7CVectorS1_if");
+    void AddTyreBurst(CVector* pos, CVector* dir) = symbol("libGTASA.so", "_ZN4Fx_c12AddTyreBurstER7CVectorS1_");
+    void AddBulletImpact(CVector* pos, CVector* dir, int surfaceId, int num, float lightMult) = symbol("libGTASA.so", "_ZN4Fx_c15AddBulletImpactER7CVectorS1_iif");
+    void AddPunchImpact(CVector* pos, CVector* dir, int num) = symbol("libGTASA.so", "_ZN4Fx_c14AddPunchImpactER7CVectorS1_i");
+    void AddDebris(CVector* pos, RwRGBA* col, float sizeScale, int num) = symbol("libGTASA.so", "_ZN4Fx_c9AddDebrisER7CVectorR6RwRGBAfi");
+    void AddGlass(CVector* pos, RwRGBA* col, float sizeScale, int num) = symbol("libGTASA.so", "_ZN4Fx_c8AddGlassER7CVectorR6RwRGBAfi");
+    void TriggerWaterHydrant(CVector* pos) = symbol("libGTASA.so", "_ZN4Fx_c19TriggerWaterHydrantER7CVector");
+    void TriggerGunshot(CEntity* pEntity, CVector* pos, CVector* dir, bool bDoFlash) = symbol("libGTASA.so", "_ZN4Fx_c14TriggerGunshotEP7CEntityR7CVectorS3_b");
+    void CreateMatFromVec(RwMatrix* resMat, CVector* pos, CVector* dir) = symbol("libGTASA.so", "_ZN4Fx_c16CreateMatFromVecEP11RwMatrixTagP7CVectorS3_");
+    void TriggerTankFire(CVector* pos, CVector* dir) = symbol("libGTASA.so", "_ZN4Fx_c15TriggerTankFireER7CVectorS1_");
+    void TriggerWaterSplash(CVector* pos) = symbol("libGTASA.so", "_ZN4Fx_c18TriggerWaterSplashER7CVector");
+    void TriggerBulletSplash(CVector* pos) = symbol("libGTASA.so", "_ZN4Fx_c19TriggerBulletSplashER7CVector");
+    void TriggerFootSplash(CVector* pos) = symbol("libGTASA.so", "_ZN4Fx_c17TriggerFootSplashER7CVector");
+    void SetFxQuality(uint32_t fxQuality) = symbol("libGTASA.so", "_ZN4Fx_c12SetFxQualityE11FxQuality_e");
+    void CreateEntityFx(CEntity* pEntity, uint8_t* bpName, RwV3d* offsetPos, RwMatrix* parentMat) = symbol("libGTASA.so", "_ZN4Fx_c14CreateEntityFxEP7CEntityPcP5RwV3dP11RwMatrixTag");
+    void DestroyEntityFx(CEntity* pEntity) = symbol("libGTASA.so", "_ZN4Fx_c15DestroyEntityFxEP7CEntity");
+};
+#endif

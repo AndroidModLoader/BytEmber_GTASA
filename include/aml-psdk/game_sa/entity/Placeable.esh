@@ -1,0 +1,30 @@
+#ifndef PSDK_game_sa_entity_Placeable_h
+#define PSDK_game_sa_entity_Placeable_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../game_sa/base/Matrix.esh"
+native class CSimpleTransform = size(0x10)
+{
+    CVector m_vPosn = offset(0x0);
+    float m_fHeading = offset(0xc);
+    void UpdateRwMatrix(RwMatrix* pMatrix) = symbol("libGTASA.so", "_ZNK16CSimpleTransform14UpdateRwMatrixEP11RwMatrixTag");
+    void UpdateMatrix(CMatrix* pMatrix) = symbol("libGTASA.so", "_ZNK16CSimpleTransform12UpdateMatrixEP7CMatrix");
+    void Invert(CSimpleTransform* orig) = symbol("libGTASA.so", "_ZN16CSimpleTransform6InvertERKS_");
+};
+native class CPlaceable = size(bits(0x18, 0x20))
+{
+    CSimpleTransform m_placement = offset(bits(0x4, 0x8));
+    CMatrix* m_matrix = offset(bits(0x14, 0x18));
+    static void InitMatrixArray() = symbol("libGTASA.so", "_ZN10CPlaceable15InitMatrixArrayEv");
+    static void ShutdownMatrixArray() = symbol("libGTASA.so", "_ZN10CPlaceable19ShutdownMatrixArrayEv");
+    void RemoveMatrix() = symbol("libGTASA.so", "_ZN10CPlaceable12RemoveMatrixEv");
+    void AllocateMatrix() = symbol("libGTASA.so", "_ZN10CPlaceable14AllocateMatrixEv");
+    void AllocateStaticMatrix() = symbol("libGTASA.so", "_ZN10CPlaceable20AllocateStaticMatrixEv");
+    void FreeStaticMatrix() = symbol("libGTASA.so", "_ZN10CPlaceable16FreeStaticMatrixEv");
+    void SetMatrix(CMatrix* mat) = symbol("libGTASA.so", "_ZN10CPlaceable9SetMatrixERK7CMatrix");
+    uint8_t IsWithinArea(float x1, float y1, float x2, float y2) = symbol("libGTASA.so", "_ZNK10CPlaceable12IsWithinAreaEffff");
+    uint8_t IsWithinArea2(float x1, float y1, float z1, float x2, float y2, float z2) = symbol("libGTASA.so", "_ZNK10CPlaceable12IsWithinAreaEffffff");
+};
+#endif

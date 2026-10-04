@@ -1,0 +1,104 @@
+#ifndef PSDK_game_sa_other_TextureDatabase_h
+#define PSDK_game_sa_other_TextureDatabase_h
+#pragma once
+#define DF_UNC 0
+#define DF_DXT 1
+#define DF_360 2
+#define DF_PS3 3
+#define DF_PVR 4
+#define DF_ETC 5
+#define DF_Default 6
+#define DF_ALL 7
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../game_sa/base/Lists.esh"
+native class TextureCategory = size(bits(0x14, 0x18))
+{
+    uint8_t* name = offset(0x0);
+    uint32_t onFootPriority = offset(bits(0x4, 0x8));
+    uint32_t slowCarPriority = offset(bits(0x8, 0xc));
+    uint32_t fastCarPriority = offset(bits(0xc, 0x10));
+    uint16_t defaultFormat = offset(bits(0x10, 0x14));
+    uint16_t defaultStreamMode = offset(bits(0x12, 0x16));
+};
+native class TextureDatabaseEntry = size(bits(0x18, 0x20))
+{
+    uint8_t* name = offset(0x0);
+    uint32_t nameHash = offset(bits(0x4, 0x8));
+    uint16_t format = offset(bits(0x8, 0xc)) bits(0, 4, 1);
+    uint16_t alphaFormat = offset(bits(0x8, 0xc)) bits(4, 4, 1);
+    uint16_t streamMode = offset(bits(0x9, 0xd)) bits(0, 4, 1);
+    uint16_t status = offset(bits(0x9, 0xd)) bits(4, 4, 1);
+    uint16_t flags = offset(bits(0xa, 0xe));
+    uint8_t category = offset(bits(0xc, 0x10));
+    uint8_t detailTexture = offset(bits(0xd, 0x11));
+    uint8_t detailTiling = offset(bits(0xe, 0x12));
+    uint16_t width = offset(bits(0x10, 0x14));
+    uint16_t height = offset(bits(0x12, 0x16));
+    RwTexture* instance = offset(bits(0x14, 0x18));
+    RwTexture* LoadInstance(TextureListingContainer* container) = symbol("libGTASA.so", "_ZN20TextureDatabaseEntry12LoadInstanceERK23TextureListingContainer");
+    RwTexture* LoadPNG(uint8_t* filename) = symbol("libGTASA.so", "_ZN20TextureDatabaseEntry7LoadPNGEPKc");
+    uint32_t Delete() = symbol("libGTASA.so", "_ZN20TextureDatabaseEntry6DeleteEv");
+};
+native class TextureListing = size(0x8)
+{
+    uint16_t nameHash = offset(0x0);
+    uint16_t format = offset(0x2);
+    uint16_t width = offset(0x4);
+    uint16_t height = offset(0x6) bits(0, 15, 2);
+    uint16_t hasMipChain = offset(0x7) bits(7, 1, 1);
+    uint32_t GetTotalSize() = symbol("libGTASA.so", "_ZNK14TextureListing12GetTotalSizeEv");
+    uint32_t GetMipCount() = symbol("libGTASA.so", "_ZNK14TextureListing11GetMipCountEv");
+    uint32_t GetRLESegSize() = symbol("libGTASA.so", "_ZNK14TextureListing13GetRLESegSizeEv");
+    int GetRQFormat() = symbol("libGTASA.so", "_ZNK14TextureListing11GetRQFormatEv");
+    uint32_t GetMipSize(uint32_t mip) = symbol("libGTASA.so", "_ZNK14TextureListing10GetMipSizeEj");
+};
+native class TextureListingContainer = size(bits(0x14, 0x18))
+{
+    TextureListing listing = offset(0x0);
+    void* data = offset(0x8);
+    uint32_t dataSize = offset(bits(0xc, 0x10));
+    bool ownsData = offset(bits(0x10, 0x14));
+};
+native class TextureDatabase = size(bits(0x78, 0xa8))
+{
+    uint8_t* name = offset(bits(0x4, 0x8));
+    int loadedFormat = offset(bits(0x74, 0xa0));
+    void LoadEntry(uint8_t* line, bool hashName) = symbol("libGTASA.so", "_ZN15TextureDatabase9LoadEntryEPcb");
+    bool LoadEntries(bool hashNames, bool fromBackup) = symbol("libGTASA.so", "_ZN15TextureDatabase11LoadEntriesEbb");
+    bool LoadThumbs(int32_t forFormat, bool setEntries) = symbol("libGTASA.so", "_ZN15TextureDatabase10LoadThumbsE21TextureDatabaseFormatb");
+    void GetPNGFilename(uint8_t* pngBuffer, uint8_t* entryName) = symbol("libGTASA.so", "_ZN15TextureDatabase14GetPNGFilenameEPcPKc");
+};
+native class TextureDatabaseRuntime : public TextureDatabase = size(bits(0xc8, 0x118))
+{
+    void* streamFile = offset(bits(0xa8, 0xe8));
+    uint32_t numHashes = offset(bits(0xc4, 0x110));
+    static void UpdateStreaming(float deltaTime, bool flush) = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime15UpdateStreamingEfb");
+    static void Register(TextureDatabaseRuntime* toRegister) = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime8RegisterEPS_");
+    static void Unregister(TextureDatabaseRuntime* toUnregister) = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime10UnregisterEPS_");
+    static RwTexture* GetTexture(uint8_t* name) = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime10GetTextureEPKc");
+    static TextureDatabaseRuntime* GetDatabaseFor(TextureDatabaseEntry* entry, uint32_t* intoIndex) = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime14GetDatabaseForEP20TextureDatabaseEntryPj");
+    static void RenderingTextureEntry(TextureDatabaseEntry* entry) = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime21RenderingTextureEntryEP20TextureDatabaseEntry");
+    static void CanUnloadTextureEntry(TextureDatabaseEntry* entry) = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime21CanUnloadTextureEntryEP20TextureDatabaseEntry");
+    static void SetWriteMode(bool withValue) = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime12SetWriteModeEb");
+    static TextureDatabaseRuntime* Load(uint8_t* withName, bool fullyLoad, int32_t forcedFormat) = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime4LoadEPKcb21TextureDatabaseFormat");
+    static TextureDatabaseRuntime* GetDatabase(uint8_t* withName) = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime11GetDatabaseEPKc");
+    static void ListOverrun() = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime11ListOverrunEv");
+    int GetEntry(uint8_t* name, bool* hasSibling) = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime8GetEntryEPKcRb");
+    RwTexture* GetRWTexture(int entryNum) = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime12GetRWTextureEi");
+    uint32_t LoadFullTexture(uint32_t entryIndex) = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime15LoadFullTextureEj");
+    void StreamFullTexture(uint32_t entryIndex) = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime17StreamFullTextureEj");
+    void CancelDeletion(uint32_t index) = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime14CancelDeletionEj");
+    void FullyLoad() = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime9FullyLoadEv");
+    void DeleteTextures(uint32_t toDelete) = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime14DeleteTexturesEj");
+    uint32_t UpdateTextureStreaming(uint32_t toStream, uint32_t priorityClass) = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime22UpdateTextureStreamingEjj");
+    void MarkTexturesAsUnrendered() = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime24MarkTexturesAsUnrenderedEv");
+    void SetAsRendered(uint32_t index) = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime13SetAsRenderedEj");
+    void StopStreaming(uint32_t index) = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime13StopStreamingEj");
+    void QueueForDeletion(uint32_t index) = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime16QueueForDeletionEj");
+    void SortEntries(bool justEntries) = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime11SortEntriesEb");
+    void ReloadEntries() = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime13ReloadEntriesEv");
+    void Unload() = symbol("libGTASA.so", "_ZN22TextureDatabaseRuntime6UnloadEv");
+};
+#endif

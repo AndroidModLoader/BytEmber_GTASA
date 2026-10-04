@@ -1,0 +1,47 @@
+#ifndef PSDK_renderware_RpClump_h
+#define PSDK_renderware_RpClump_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../sdk_forward.esh"
+#include "../sdk_base.esh"
+#include "../renderware/RwBase.esh"
+#include "../renderware/RwLinks.esh"
+#include "../renderware/RwObject.esh"
+#include "../renderware/RwVector.esh"
+#include "../renderware/RpLight.esh"
+#include "../renderware/RwCamera.esh"
+native class RpClumpChunkInfo = size(0xc)
+{
+    int numAtomics = offset(0x0);
+    int numLights = offset(0x4);
+    int numCameras = offset(0x8);
+};
+native class RpClump = size(bits(0x30, 0x60))
+{
+    RwObject object = offset(0x0);
+    RwLinkList atomicList = offset(bits(0x8, 0x10));
+    RwLinkList lightList = offset(bits(0x10, 0x20));
+    RwLinkList cameraList = offset(bits(0x18, 0x30));
+    RwLLLink inWorldLink = offset(bits(0x20, 0x40));
+    nativeptr callback = offset(bits(0x28, 0x50));
+    uint16_t renderFrame = offset(bits(0x2c, 0x58));
+    uint16_t pad = offset(bits(0x2e, 0x5a));
+};
+native RpClump* RpClumpForAllAtomics(RpClump* clump, nativeptr callback, void* pData) = symbol("libGTASA.so", "_Z20RpClumpForAllAtomicsP7RpClumpPFP8RpAtomicS2_PvES3_");
+native RpClump* RpClumpForAllLights(RpClump* clump, nativeptr callback, void* pData) = symbol("libGTASA.so", "_Z19RpClumpForAllLightsP7RpClumpPFP7RpLightS2_PvES3_");
+native RpClump* RpClumpForAllCameras(RpClump* clump, nativeptr callback, void* pData) = symbol("libGTASA.so", "_Z20RpClumpForAllCamerasP7RpClumpPFP8RwCameraS2_PvES3_");
+native RpClump* RpClumpAddAtomic(RpClump* clump, RpAtomic* atomic) = symbol("libGTASA.so", "_Z16RpClumpAddAtomicP7RpClumpP8RpAtomic");
+native RpClump* RpClumpRender(RpClump* clump) = symbol("libGTASA.so", "_Z13RpClumpRenderP7RpClump");
+native RpClump* RpClumpClone(RpClump* clump) = symbol("libGTASA.so", "_Z12RpClumpCloneP7RpClump");
+native RpClump* RpClumpSetCallBack(RpClump* clump, nativeptr callback) = symbol("libGTASA.so", "_Z18RpClumpSetCallBackP7RpClumpPFS0_S0_PvE");
+native nativeptr RpClumpGetCallBack(RpClump* clump) = symbol("libGTASA.so", "_Z18RpClumpGetCallBackPK7RpClump");
+native RpClump* RpClumpRemoveAtomic(RpClump* clump, RpAtomic* atomic) = symbol("libGTASA.so", "_Z19RpClumpRemoveAtomicP7RpClumpP8RpAtomic");
+native RpClump* RpClumpAddLight(RpClump* clump, RpLight* light) = symbol("libGTASA.so", "_Z15RpClumpAddLightP7RpClumpP7RpLight");
+native RpClump* RpClumpRemoveLight(RpClump* clump, RpLight* light) = symbol("libGTASA.so", "_Z18RpClumpRemoveLightP7RpClumpP7RpLight");
+native RpClump* RpClumpAddCamera(RpClump* clump, RwCamera* camera) = symbol("libGTASA.so", "_Z16RpClumpAddCameraP7RpClumpP8RwCamera");
+native RpClump* RpClumpRemoveCamera(RpClump* clump, RwCamera* camera) = symbol("libGTASA.so", "_Z19RpClumpRemoveCameraP7RpClumpP8RwCamera");
+native RpClump* RpClumpStreamWrite(RpClump* clump, RwStream* stream) = symbol("libGTASA.so", "_Z18RpClumpStreamWriteP7RpClumpP8RwStream");
+native RpClump* RpClumpStreamRead(RwStream* stream) = symbol("libGTASA.so", "_Z17RpClumpStreamReadP8RwStream");
+native RpClumpChunkInfo* _rpClumpChunkInfoRead(RwStream* stream, RpClumpChunkInfo* clumpChunkInfo, RwInt32* bytesRead) = symbol("libGTASA.so", "_Z21_rpClumpChunkInfoReadP8RwStreamP16RpClumpChunkInfoPi");
+native RpWorld* RpClumpGetWorld(RpClump* clump) = symbol("libGTASA.so", "_Z15RpClumpGetWorldPK7RpClump");
+#endif

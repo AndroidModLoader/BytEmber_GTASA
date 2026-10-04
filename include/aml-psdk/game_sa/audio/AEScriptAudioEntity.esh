@@ -1,0 +1,35 @@
+#ifndef PSDK_game_sa_audio_AEScriptAudioEntity_h
+#define PSDK_game_sa_audio_AEScriptAudioEntity_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/audio/AEDoorAudioEntity.esh"
+native class CAudioLink = size(bits(0x20, 0x30))
+{
+    CVector m_vPosition = offset(0x0);
+    CEntity* m_pEntity = offset(bits(0xc, 0x10));
+    CAESound* pSound = offset(bits(0x10, 0x18));
+    int m_nAudioEvent = offset(bits(0x14, 0x20));
+    int m_nBankId = offset(bits(0x18, 0x24));
+    int m_nBankSlotId = offset(bits(0x1c, 0x28));
+};
+native class CAEExplosionAudioEntity : public CAEAudioEntity = size(bits(0x80, 0x98))
+{
+    uint8_t m_nLastExplosionFrequencyIndex = offset(bits(0x7c, 0x90));
+};
+native class CAEScriptAudioEntity = size(bits(0x21c, 0x2a8))
+{
+    CAEAudioEntity audio = offset(0x0);
+    bool m_bMiniGameOneShotTriggered = offset(bits(0x7c, 0x90));
+    bool m_bInACrane = offset(bits(0x7d, 0x91));
+    uint8_t m_nMeshGateTriggerCount = offset(bits(0x7e, 0x92));
+    int m_dwLastTimeHornPlayed = offset(bits(0x80, 0x94));
+    float m_fCraneVolume = offset(bits(0x84, 0x98));
+    float m_fCraneFrequencyScaling = offset(bits(0x88, 0x9c));
+    float m_fMissionSoundEnvelopePhase = offset(bits(0x8c, 0xa0));
+    CAudioLink wavLinks[4] = offset(bits(0x90, 0xa8));
+    CPhysical* m_pCrane = offset(bits(0x110, 0x168));
+    CAEDoorAudioEntity m_doorAudio = offset(bits(0x114, 0x170));
+    CAEExplosionAudioEntity m_explosionAudio = offset(bits(0x19c, 0x210));
+};
+#endif

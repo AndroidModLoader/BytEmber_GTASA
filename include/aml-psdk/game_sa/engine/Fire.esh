@@ -1,0 +1,30 @@
+#ifndef PSDK_game_sa_engine_Fire_h
+#define PSDK_game_sa_engine_Fire_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../gta_base/Vector.esh"
+#include "../../renderware/RwMatrix.esh"
+native class CFire = size(bits(0x28, 0x38))
+{
+    uint8_t m_bActive = offset(0x0) bits(0, 1, 1);
+    uint8_t m_bCreatedByScript = offset(0x0) bits(1, 1, 1);
+    uint8_t m_bMakesNoise = offset(0x0) bits(2, 1, 1);
+    uint8_t m_bBeingExtinguished = offset(0x0) bits(3, 1, 1);
+    uint8_t m_bFirstGeneration = offset(0x0) bits(4, 1, 1);
+    uint16_t ScriptReferenceIndex = offset(0x2);
+    CVector m_vLocation = offset(0x4);
+    CEntity* m_pEntityOnFire = offset(0x10);
+    CEntity* m_pEntityStartedFire = offset(bits(0x14, 0x18));
+    uint32_t m_nTimeToBurn = offset(bits(0x18, 0x20));
+    float m_Strength = offset(bits(0x1c, 0x24));
+    int8_t m_nNumGenerationsAllowed = offset(bits(0x20, 0x28));
+    uint8_t m_RemovalDist = offset(bits(0x21, 0x29));
+    FxSystem_c* m_fxSysPtr = offset(bits(0x24, 0x30));
+    void Initialise() = symbol("libGTASA.so", "_ZN5CFire10InitialiseEv");
+    void Extinguish() = symbol("libGTASA.so", "_ZN5CFire10ExtinguishEv");
+    void ProcessFire() = symbol("libGTASA.so", "_ZN5CFire11ProcessFireEv");
+    void CreateFxSysForStrength(RwV3d* vecPosition, RwMatrix* parentMat) = symbol("libGTASA.so", "_ZN5CFire22CreateFxSysForStrengthEP5RwV3dP11RwMatrixTag");
+};
+#endif

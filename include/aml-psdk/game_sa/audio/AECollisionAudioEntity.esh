@@ -1,0 +1,25 @@
+#ifndef PSDK_game_sa_audio_AECollisionAudioEntity_h
+#define PSDK_game_sa_audio_AECollisionAudioEntity_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/audio/AEAudioEntity.esh"
+native class tCollisionAudioEntry = size(bits(0x14, 0x20))
+{
+    CEntity* pEntityA = offset(0x0);
+    CEntity* pEntityB = offset(bits(0x4, 0x8));
+    CAESound* pSound = offset(bits(0x8, 0x10));
+    uint32_t LoopStopTimeMs = offset(bits(0xc, 0x18));
+    uint8_t SoundStatus = offset(bits(0x10, 0x1c));
+    uint8_t SurfaceA = offset(bits(0x11, 0x1d));
+    uint8_t SurfaceB = offset(bits(0x12, 0x1e));
+};
+native class CAECollisionAudioEntity = size(bits(0x1978, 0x27a0))
+{
+    CAEAudioEntity audio = offset(0x0);
+    int16_t m_CollisionSoundIDHistory[195] = offset(bits(0x7c, 0x90));
+    int16_t m_nLastBulletHitSoundID = offset(bits(0x202, 0x216));
+    int m_nActiveCollisionSounds = offset(bits(0x204, 0x218));
+    tCollisionAudioEntry m_CollisionSoundList[300] = offset(bits(0x208, 0x220));
+};
+#endif

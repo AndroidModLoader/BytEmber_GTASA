@@ -1,0 +1,43 @@
+#ifndef PSDK_renderware_RwImage_h
+#define PSDK_renderware_RwImage_h
+#pragma once
+#define rwNAIMAGEFLAG 0
+#define rwIMAGEALLOCATED 1
+#define rwIMAGEGAMMACORRECTED 2
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../sdk_forward.esh"
+#include "../sdk_base.esh"
+#include "../renderware/RwBase.esh"
+#include "../renderware/RwLinks.esh"
+#include "../renderware/RwRGBA.esh"
+native class RwImage = size(bits(0x1c, 0x28))
+{
+    int flags = offset(0x0);
+    int width = offset(0x4);
+    int height = offset(0x8);
+    int depth = offset(0xc);
+    int stride = offset(0x10);
+    uint8_t* cpPixels = offset(bits(0x14, 0x18));
+    CRGBA* palette = offset(bits(0x18, 0x20));
+};
+native RwImage* RwImageFreePixels(RwImage* image) = symbol("libGTASA.so", "_Z17RwImageFreePixelsP7RwImage");
+native RwImage* RwImageAllocatePixels(RwImage* image) = symbol("libGTASA.so", "_Z21RwImageAllocatePixelsP7RwImage");
+native RwImage* RwImageMakeMask(RwImage* image) = symbol("libGTASA.so", "_Z15RwImageMakeMaskP7RwImage");
+native RwImage* RwImageApplyMask(RwImage* image, RwImage* mask) = symbol("libGTASA.so", "_Z16RwImageApplyMaskP7RwImagePKS_");
+native RwImage* RwImageCopy(RwImage* destImage, RwImage* sourceImage) = symbol("libGTASA.so", "_Z11RwImageCopyP7RwImagePKS_");
+native RwChar* RwImageSetPath(RwChar* path) = symbol("libGTASA.so", "_Z14RwImageSetPathPKc");
+native RwChar* RwImageGetPath() = symbol("libGTASA.so", "_Z14RwImageGetPathv");
+native RwImage* RwImageRead(RwChar* imageName) = symbol("libGTASA.so", "_Z11RwImageReadPKc");
+native RwChar* RwImageFindFileType(RwChar* imageName) = symbol("libGTASA.so", "_Z19RwImageFindFileTypePKc");
+native RwImage* RwImageWrite(RwImage* image, RwChar* imageName) = symbol("libGTASA.so", "_Z12RwImageWriteP7RwImagePKc");
+native RwImage* RwImageReadMaskedImage(RwChar* imageName, RwChar* maskName) = symbol("libGTASA.so", "_Z22RwImageReadMaskedImagePKcS0_");
+native RwImage* RwImageStreamRead(RwStream* stream) = symbol("libGTASA.so", "_Z17RwImageStreamReadP8RwStream");
+native RwImage* RwImageStreamWrite(RwImage* image, RwStream* stream) = symbol("libGTASA.so", "_Z18RwImageStreamWritePK7RwImageP8RwStream");
+native RwImage* RwImageGammaCorrect(RwImage* image) = symbol("libGTASA.so", "_Z19RwImageGammaCorrectP7RwImage");
+native RwImage* RwImageSetFromRaster(RwImage* image, RwRaster* raster) = symbol("libGTASA.so", "_Z20RwImageSetFromRasterP7RwImageP8RwRaster");
+native RwImage* RwImageResample(RwImage* dstImage, RwImage* srcImage) = symbol("libGTASA.so", "_Z15RwImageResampleP7RwImagePKS_");
+native RwImage* RtBMPImageWrite(RwImage* image, RwChar* imageName) = symbol("libGTASA.so", "_Z15RtBMPImageWriteP7RwImagePKc");
+native RwImage* RtPNGImageWrite(RwImage* image, RwChar* imageName) = symbol("libGTASA.so", "_Z15RtPNGImageWriteP7RwImagePKc");
+native RwImage* RtBMPImageRead(RwChar* imageName) = symbol("libGTASA.so", "_Z14RtBMPImageReadPKc");
+native RwImage* RtPNGImageRead(RwChar* imageName) = symbol("libGTASA.so", "_Z14RtPNGImageReadPKc");
+#endif

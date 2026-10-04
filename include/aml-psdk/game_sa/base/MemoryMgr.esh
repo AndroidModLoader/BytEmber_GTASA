@@ -1,0 +1,71 @@
+#ifndef PSDK_game_sa_base_MemoryMgr_h
+#define PSDK_game_sa_base_MemoryMgr_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../game_sa/base/Lists.esh"
+native class CMemoryMgr = size(0x1)
+{
+    static void Init() = symbol("libGTASA.so", "_ZN10CMemoryMgr4InitEv");
+    static void Shutdown() = symbol("libGTASA.so", "_ZN10CMemoryMgr8ShutdownEv");
+#if IS_64BIT
+    static void* InternalMalloc(uintptr_t size) = symbol("libGTASA.so", "_ZN10CMemoryMgr14InternalMallocEm");
+#else
+    static void* InternalMalloc(uint32_t size) = symbol("libGTASA.so", "_ZN10CMemoryMgr14InternalMallocEj");
+#endif
+#if IS_64BIT
+    static void* InternalRealloc(void* pMem, uintptr_t size) = symbol("libGTASA.so", "_ZN10CMemoryMgr15InternalReallocEPvm");
+#else
+    static void* InternalRealloc(void* pMem, uint32_t size) = symbol("libGTASA.so", "_ZN10CMemoryMgr15InternalReallocEPvj");
+#endif
+    static void Free(void* pMem) = symbol("libGTASA.so", "_ZN10CMemoryMgr4FreeEPv");
+#if IS_64BIT
+    static void* Malloc(uintptr_t size) = symbol("libGTASA.so", "_ZN10CMemoryMgr6MallocEm");
+#else
+    static void* Malloc(uint32_t size) = symbol("libGTASA.so", "_ZN10CMemoryMgr6MallocEj");
+#endif
+#if IS_64BIT
+    static void* Realloc(void* pMem, uintptr_t size) = symbol("libGTASA.so", "_ZN10CMemoryMgr7ReallocEPvm");
+#else
+    static void* Realloc(void* pMem, uint32_t size) = symbol("libGTASA.so", "_ZN10CMemoryMgr7ReallocEPvj");
+#endif
+#if IS_64BIT
+    static void* Calloc(uintptr_t numObj, uintptr_t sizeObj) = symbol("libGTASA.so", "_ZN10CMemoryMgr6CallocEmm");
+#else
+    static void* Calloc(uint32_t numObj, uint32_t sizeObj) = symbol("libGTASA.so", "_ZN10CMemoryMgr6CallocEjj");
+#endif
+    static void InitScratchPad() = symbol("libGTASA.so", "_ZN10CMemoryMgr14InitScratchPadEv");
+#if IS_64BIT
+    static void* MallocFromScratchPad(uintptr_t size) = symbol("libGTASA.so", "_ZN10CMemoryMgr20MallocFromScratchPadEm");
+#else
+    static void* MallocFromScratchPad(uint32_t size) = symbol("libGTASA.so", "_ZN10CMemoryMgr20MallocFromScratchPadEj");
+#endif
+    static void RegisterMalloc(void* pMem) = symbol("libGTASA.so", "_ZN10CMemoryMgr14RegisterMallocEPv");
+#if IS_64BIT
+    static void* MallocAlignFromScratchPad(uintptr_t size, uintptr_t align) = symbol("libGTASA.so", "_ZN10CMemoryMgr25MallocAlignFromScratchPadEmm");
+#else
+    static void* MallocAlignFromScratchPad(uint32_t size, uint32_t align) = symbol("libGTASA.so", "_ZN10CMemoryMgr25MallocAlignFromScratchPadEjj");
+#endif
+    static void LockScratchPad() = symbol("libGTASA.so", "_ZN10CMemoryMgr14LockScratchPadEv");
+    static void ReleaseScratchPad() = symbol("libGTASA.so", "_ZN10CMemoryMgr17ReleaseScratchPadEv");
+#if IS_64BIT
+    static void* MallocAlign(uintptr_t size, uintptr_t align) = symbol("libGTASA.so", "_ZN10CMemoryMgr11MallocAlignEmm");
+#else
+    static void* MallocAlign(uint32_t size, uint32_t align) = symbol("libGTASA.so", "_ZN10CMemoryMgr11MallocAlignEjj");
+#endif
+    static void FreeAlign(void* pMem) = symbol("libGTASA.so", "_ZN10CMemoryMgr9FreeAlignEPv");
+    static void* MoveMemory(void* pMem) = symbol("libGTASA.so", "_ZN10CMemoryMgr10MoveMemoryEPv");
+    static void* MoveMemory1(void* pMem, void** pMemAlign, int align) = symbol("libGTASA.so", "_ZN10CMemoryMgr10MoveMemoryEPvPS0_i");
+    static void SetRestrictMemoryMove(bool bRestrict) = symbol("libGTASA.so", "_ZN10CMemoryMgr21SetRestrictMemoryMoveEb");
+    static uint32_t GetLargestFreeBlock() = symbol("libGTASA.so", "_ZN10CMemoryMgr19GetLargestFreeBlockEv");
+    static uint32_t GetSizeOfHoles() = symbol("libGTASA.so", "_ZN10CMemoryMgr14GetSizeOfHolesEv");
+    static void PrintFrequencies() = symbol("libGTASA.so", "_ZN10CMemoryMgr16PrintFrequenciesEv");
+    static void InitMemoryTracking(int numIds) = symbol("libGTASA.so", "_ZN10CMemoryMgr18InitMemoryTrackingEi");
+    static void PushMemId(int id) = symbol("libGTASA.so", "_ZN10CMemoryMgr9PushMemIdEi");
+    static void PopMemId() = symbol("libGTASA.so", "_ZN10CMemoryMgr8PopMemIdEv");
+    static void RegisterFree(void* pMem) = symbol("libGTASA.so", "_ZN10CMemoryMgr12RegisterFreeEPv");
+    static int32_t GetMemoryUsed(int id) = symbol("libGTASA.so", "_ZN10CMemoryMgr13GetMemoryUsedEi");
+    static int32_t GetBlocksUsed(int id) = symbol("libGTASA.so", "_ZN10CMemoryMgr13GetBlocksUsedEi");
+};
+#endif

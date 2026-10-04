@@ -1,0 +1,82 @@
+#ifndef PSDK_game_sa_other_Coronas_h
+#define PSDK_game_sa_other_Coronas_h
+#pragma once
+#define CORONATYPE_SHINYSTAR 0
+#define CORONATYPE_HEADLIGHT 1
+#define CORONATYPE_MOON 2
+#define CORONATYPE_REFLECTION 3
+#define CORONATYPE_HEADLIGHTLINE 4
+#define CORONATYPE_HEX 5
+#define CORONATYPE_CIRCLE 6
+#define CORONATYPE_RING 7
+#define CORONATYPE_STREAK 8
+#define CORONATYPE_TORUS 9
+#define CORONATYPE_NONE 10
+#define FLARETYPE_NONE 0
+#define FLARETYPE_SUN 1
+#define FLARETYPE_HEADLIGHTS 2
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../gta_base/Vector.esh"
+#include "../../gta_base/RGBA.esh"
+native class CFlareDefinition = size(0x14)
+{
+    float Position = offset(0x0);
+    float Size = offset(0x4);
+    int16_t RedMult = offset(0x8);
+    int16_t GreenMult = offset(0xa);
+    int16_t BlueMult = offset(0xc);
+    int16_t IntensityMult = offset(0xe);
+    int16_t Sprite = offset(0x10);
+};
+native class CRegisteredCorona = size(bits(0x3c, 0x50))
+{
+    CVector m_vPosn = offset(0x0);
+    uint32_t m_dwId = offset(bits(0xc, 0x10));
+    RwTexture* m_pTexture = offset(bits(0x10, 0x18));
+    float m_fSize = offset(bits(0x14, 0x20));
+    float m_fAngle = offset(bits(0x18, 0x24));
+    float m_fFarClip = offset(bits(0x1c, 0x28));
+    float m_fNearClip = offset(bits(0x20, 0x2c));
+    float m_fHeightAboveGround = offset(bits(0x24, 0x30));
+    float m_fFadeSpeed = offset(bits(0x28, 0x34));
+    CRGBA m_Color = offset(bits(0x2c, 0x38));
+    uint8_t m_nFadeState = offset(bits(0x30, 0x3c));
+    uint8_t m_bRegisteredThisFrame = offset(bits(0x31, 0x3d));
+    uint8_t m_nFlareType = offset(bits(0x32, 0x3e));
+    uint8_t m_bUsesReflection = offset(bits(0x33, 0x3f));
+    uint8_t m_bCheckObstacles = offset(bits(0x34, 0x40)) bits(0, 1, 1);
+    uint8_t m_bOffScreen = offset(bits(0x34, 0x40)) bits(1, 1, 1);
+    uint8_t m_bJustCreated = offset(bits(0x35, 0x41));
+    uint8_t m_bFlashWhileFading = offset(bits(0x36, 0x42)) bits(0, 1, 1);
+    uint8_t m_bOnlyFromBelow = offset(bits(0x36, 0x42)) bits(1, 1, 1);
+    uint8_t m_bReflectionDelay = offset(bits(0x36, 0x42)) bits(2, 1, 1);
+    uint8_t m_bDrawWithWhiteCore = offset(bits(0x36, 0x42)) bits(3, 1, 1);
+    uint8_t m_bAttached = offset(bits(0x36, 0x42)) bits(4, 1, 1);
+    CEntity* m_pAttachedTo = offset(bits(0x38, 0x48));
+    void Update() = symbol("libGTASA.so", "_ZN17CRegisteredCorona6UpdateEv");
+};
+native class CCoronas = size(0x1)
+{
+    static void Update() = symbol("libGTASA.so", "_ZN8CCoronas6UpdateEv");
+    static void Render() = symbol("libGTASA.so", "_ZN8CCoronas6RenderEv");
+    static void RenderReflections() = symbol("libGTASA.so", "_ZN8CCoronas17RenderReflectionsEv");
+    static void RenderOutGeometryBufferForReflections() = symbol("libGTASA.so", "_ZN8CCoronas37RenderOutGeometryBufferForReflectionsEv");
+    static void RenderSunReflection() = symbol("libGTASA.so", "_ZN8CCoronas19RenderSunReflectionEv");
+    static void Init() = symbol("libGTASA.so", "_ZN8CCoronas4InitEv");
+    static void Shutdown() = symbol("libGTASA.so", "_ZN8CCoronas8ShutdownEv");
+#if IS_64BIT
+    static void RegisterCorona1(uint64_t ID, CEntity* pAttachedToEntity, uint8_t R, uint8_t G, uint8_t B, uint8_t Intensity, CVector* Coors, float Size, float Range, uint8_t CoronaType, uint8_t FlareType, uint8_t ReflType, uint8_t LOSCheck, uint8_t UsesTrails, float fNormalAngle, bool bNeonFade, float ArgPullTowardsCam, bool bFullBrightAtStart, float FadeSpeed, bool bOnlyFromBelow, bool bWhiteCore) = symbol("libGTASA.so", "_ZN8CCoronas14RegisterCoronaEyP7CEntityhhhhRK7CVectorffhhhhhfbfbfbb");
+#else
+    static void RegisterCorona1(uint32_t ID, CEntity* pAttachedToEntity, uint8_t R, uint8_t G, uint8_t B, uint8_t Intensity, CVector* Coors, float Size, float Range, uint8_t CoronaType, uint8_t FlareType, uint8_t ReflType, uint8_t LOSCheck, uint8_t UsesTrails, float fNormalAngle, bool bNeonFade, float ArgPullTowardsCam, bool bFullBrightAtStart, float FadeSpeed, bool bOnlyFromBelow, bool bWhiteCore) = symbol("libGTASA.so", "_ZN8CCoronas14RegisterCoronaEjP7CEntityhhhhRK7CVectorffhhhhhfbfbfbb");
+#endif
+#if IS_64BIT
+    static void RegisterCorona2(uint64_t ID, CEntity* pAttachedToEntity, uint8_t R, uint8_t G, uint8_t B, uint8_t Intensity, CVector* Coors, float Size, float Range, RwTexture* pCoronaTex, uint8_t FlareType, uint8_t ReflType, uint8_t LOSCheck, uint8_t UsesTrails, float fNormalAngle, bool bNeonFade, float ArgPullTowardsCam, bool bFullBrightAtStart, float FadeSpeed, bool bOnlyFromBelow, bool bWhiteCore) = symbol("libGTASA.so", "_ZN8CCoronas14RegisterCoronaEyP7CEntityhhhhRK7CVectorffP9RwTexturehhhhfbfbfbb");
+#else
+    static void RegisterCorona2(uint32_t ID, CEntity* pAttachedToEntity, uint8_t R, uint8_t G, uint8_t B, uint8_t Intensity, CVector* Coors, float Size, float Range, RwTexture* pCoronaTex, uint8_t FlareType, uint8_t ReflType, uint8_t LOSCheck, uint8_t UsesTrails, float fNormalAngle, bool bNeonFade, float ArgPullTowardsCam, bool bFullBrightAtStart, float FadeSpeed, bool bOnlyFromBelow, bool bWhiteCore) = symbol("libGTASA.so", "_ZN8CCoronas14RegisterCoronaEjP7CEntityhhhhRK7CVectorffP9RwTexturehhhhfbfbfbb");
+#endif
+    static void UpdateCoronaCoors(uint32_t ID, CVector* Coors, float Range, float fNormalAngle) = symbol("libGTASA.so", "_ZN8CCoronas17UpdateCoronaCoorsEjRK7CVectorff");
+    static void DoSunAndMoon() = symbol("libGTASA.so", "_ZN8CCoronas12DoSunAndMoonEv");
+};
+#endif

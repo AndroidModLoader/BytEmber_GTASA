@@ -1,0 +1,17 @@
+#ifndef PSDK_game_sa_extdata_CoronasExtender_h
+#define PSDK_game_sa_extdata_CoronasExtender_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/other/Coronas.esh"
+#include "../../game_sa/other/Weather.esh"
+#include "../../game_sa/entity/Camera.esh"
+#include "../../game_sa/entity/Bike.esh"
+#include "../../game_sa/engine/World.esh"
+#include "../../game_sa/engine/Game.esh"
+#include "../../game_sa/engine/Sprite.esh"
+#include "../../game_sa/base/Timer.esh"
+#include "../../game_sa/engine/RsGlobal.esh"
+#include "../../renderware/RwRender.esh"
+#include "../../game_sa/Events.esh"
+#endif

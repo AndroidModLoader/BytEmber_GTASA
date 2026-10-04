@@ -1,0 +1,15 @@
+#ifndef PSDK_game_sa_events_EventEditableResponse_h
+#define PSDK_game_sa_events_EventEditableResponse_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/events/Event.esh"
+native class CEventEditableResponse : public CEvent = size(bits(0x10, 0x18))
+{
+    bool m_bWitnessedFirstHand = offset(bits(0x9, 0xd));
+    int16_t m_iTaskType = offset(bits(0xa, 0xe));
+    int16_t m_iFacialTaskType = offset(bits(0xc, 0x10));
+    bool WillRespond() = symbol("libGTASA.so", "_ZNK22CEventEditableResponse11WillRespondEv");
+    void ComputeResponseTaskType(CPedGroup* pPedGroup) = symbol("libGTASA.so", "_ZN22CEventEditableResponse23ComputeResponseTaskTypeEP9CPedGroup");
+};
+#endif

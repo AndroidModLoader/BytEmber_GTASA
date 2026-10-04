@@ -1,0 +1,82 @@
+#ifndef PSDK_game_sa_other_WeaponInfo_h
+#define PSDK_game_sa_other_WeaponInfo_h
+#pragma once
+#define WEAPSKILL_POOR 0
+#define WEAPSKILL_STD 1
+#define WEAPSKILL_PRO 2
+#define WEAPSKILL_COP 3
+#define WEAPON_FIRE_MELEE 0
+#define WEAPON_FIRE_INSTANT_HIT 1
+#define WEAPON_FIRE_PROJECTILE 2
+#define WEAPON_FIRE_AREA_EFFECT 3
+#define WEAPON_FIRE_CAMERA 4
+#define WEAPON_FIRE_USE 5
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../gta_base/Vector.esh"
+#include "../../game_sa/enum/WeaponType.esh"
+native class CWeaponInfo = size(0x70)
+{
+    uint32_t m_nWeaponFire = offset(0x0);
+    float m_fTargetRange = offset(0x4);
+    float m_fWeaponRange = offset(0x8);
+    int m_nModelId = offset(0xc);
+    int m_nModelId2 = offset(0x10);
+    uint32_t m_nSlot = offset(0x14);
+    CWeaponInfo_m_nFlags m_nFlags = offset(0x18);
+    uint32_t m_nAnimToPlay = offset(0x1c);
+    uint16_t m_nAmmoClip = offset(0x20);
+    uint16_t m_nDamage = offset(0x22);
+    CVector m_vecFireOffset = offset(0x24);
+    uint32_t m_nSkillLevel = offset(0x30);
+    uint32_t m_nReqStatLevel = offset(0x34);
+    float m_fAccuracy = offset(0x38);
+    float m_fMoveSpeed = offset(0x3c);
+    float m_fAnimLoopStart = offset(0x40);
+    float m_fAnimLoopEnd = offset(0x44);
+    float m_nAnimLoopFire = offset(0x48);
+    float m_nAnimLoop2Start = offset(0x4c);
+    float m_nAnimLoop2End = offset(0x50);
+    float m_nAnimLoop2Fire = offset(0x54);
+    float m_fBreakoutTime = offset(0x58);
+    float m_fSpeed = offset(0x5c);
+    float m_fRadius = offset(0x60);
+    float m_fLifespan = offset(0x64);
+    float m_fSpread = offset(0x68);
+    uint16_t m_nAimOffsetIndex = offset(0x6c);
+    uint8_t m_nBaseCombo = offset(0x6e);
+    uint8_t m_nNumCombos = offset(0x6f);
+    static void Initialise() = symbol("libGTASA.so", "_ZN11CWeaponInfo10InitialiseEv");
+    static void LoadWeaponData() = symbol("libGTASA.so", "_ZN11CWeaponInfo14LoadWeaponDataEv");
+    static int32_t FindWeaponFireType(uint8_t* pString) = symbol("libGTASA.so", "_ZN11CWeaponInfo18FindWeaponFireTypeEPKc");
+    static void Shutdown() = symbol("libGTASA.so", "_ZN11CWeaponInfo8ShutdownEv");
+    static CWeaponInfo* GetWeaponInfo(uint32_t WeaponType, int8_t nSkillLevel) = symbol("libGTASA.so", "_ZN11CWeaponInfo13GetWeaponInfoE11eWeaponTypea");
+    static int32_t GetSkillStatIndex(uint32_t WeaponType) = symbol("libGTASA.so", "_ZN11CWeaponInfo17GetSkillStatIndexE11eWeaponType");
+    static uint32_t FindWeaponType(uint8_t* pString) = symbol("libGTASA.so", "_ZN11CWeaponInfo14FindWeaponTypeEPKc");
+    float GetTargetHeadRange() = symbol("libGTASA.so", "_ZN11CWeaponInfo18GetTargetHeadRangeEv");
+    int32_t GetWeaponReloadTime() = symbol("libGTASA.so", "_ZN11CWeaponInfo19GetWeaponReloadTimeEv");
+};
+native class CWeaponInfo_m_nFlags = size(0x4)
+{
+    uint32_t bCanAim = offset(0x0) bits(0, 1, 1);
+    uint32_t bAimWithArm = offset(0x0) bits(1, 1, 1);
+    uint32_t b1stPerson = offset(0x0) bits(2, 1, 1);
+    uint32_t bOnlyFreeAim = offset(0x0) bits(3, 1, 1);
+    uint32_t bMoveAim = offset(0x0) bits(4, 1, 1);
+    uint32_t bMoveFire = offset(0x0) bits(5, 1, 1);
+    uint32_t b06 = offset(0x0) bits(6, 1, 1);
+    uint32_t b07 = offset(0x0) bits(7, 1, 1);
+    uint32_t bThrow = offset(0x1) bits(0, 1, 1);
+    uint32_t bHeavy = offset(0x1) bits(1, 1, 1);
+    uint32_t bContinuosFire = offset(0x1) bits(2, 1, 1);
+    uint32_t bTwinPistol = offset(0x1) bits(3, 1, 1);
+    uint32_t bReload = offset(0x1) bits(4, 1, 1);
+    uint32_t bCrouchFire = offset(0x1) bits(5, 1, 1);
+    uint32_t bReload2Start = offset(0x1) bits(6, 1, 1);
+    uint32_t bLongReload = offset(0x1) bits(7, 1, 1);
+    uint32_t bSlowdown = offset(0x2) bits(0, 1, 1);
+    uint32_t bRandSpeed = offset(0x2) bits(1, 1, 1);
+    uint32_t bExpands = offset(0x2) bits(2, 1, 1);
+};
+#endif

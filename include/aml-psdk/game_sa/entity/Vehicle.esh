@@ -1,0 +1,349 @@
+#ifndef PSDK_game_sa_entity_Vehicle_h
+#define PSDK_game_sa_entity_Vehicle_h
+#pragma once
+#define CAR_WEAPON_NOT_USED 0
+#define CAR_WEAPON_HEAVY_GUN 1
+#define CAR_WEAPON_FREEFALL_BOMB 2
+#define CAR_WEAPON_LOCK_ON_ROCKET 3
+#define CAR_WEAPON_DOUBLE_ROCKET 4
+#define DOORLOCK_NOT_USED 0
+#define DOORLOCK_UNLOCKED 1
+#define DOORLOCK_LOCKED 2
+#define DOORLOCK_LOCKOUT_PLAYER_ONLY 3
+#define DOORLOCK_LOCKED_PLAYER_INSIDE 4
+#define DOORLOCK_COP_CAR 5
+#define DOORLOCK_FORCE_SHUT_DOORS 6
+#define DOORLOCK_SKIP_SHUT_DOORS 7
+#define VEHICLE_APPEARANCE_AUTOMOBILE 1
+#define VEHICLE_APPEARANCE_BIKE 2
+#define VEHICLE_APPEARANCE_HELI 3
+#define VEHICLE_APPEARANCE_BOAT 4
+#define VEHICLE_APPEARANCE_PLANE 5
+#define VEHICLE_LIGHTS_TWIN 1
+#define VEHICLE_LIGHTS_IGNORE_DAMAGE 4
+#define VEHICLE_LIGHTS_DISABLE_FRONT 16
+#define VEHICLE_LIGHTS_DISABLE_REAR 32
+#define RANDOM_VEHICLE 1
+#define MISSION_VEHICLE 2
+#define PARKED_VEHICLE 3
+#define PERMANENT_VEHICLE 4
+#define BOMB_TIMED_NOT_ACTIVATED 1
+#define BOMB_IGNITION 2
+#define BOMB_STICKY 3
+#define BOMB_TIMED_ACTIVATED 4
+#define BOMB_IGNITION_ACTIVATED 5
+#define BONNET 0
+#define BOOT 1
+#define FRONT_LEFT_DOOR 2
+#define FRONT_RIGHT_DOOR 3
+#define REAR_LEFT_DOOR 4
+#define REAR_RIGHT_DOOR 5
+#define MAX_DOORS 6
+#define DRIVINGSTYLE_STOP_FOR_CARS 0
+#define DRIVINGSTYLE_SLOW_DOWN_FOR_CARS 1
+#define DRIVINGSTYLE_AVOID_CARS 2
+#define DRIVINGSTYLE_PLOUGH_THROUGH 3
+#define DRIVINGSTYLE_STOP_FOR_CARS_IGNORE_LIGHTS 4
+#define DOOR_NOTHING 0
+#define DOOR_HIT_MAX_END 1
+#define DOOR_HIT_MIN_END 2
+#define DOOR_POP_OPEN 3
+#define DOOR_SLAM_SHUT 4
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/entity/Physical.esh"
+#include "../../game_sa/entity/Weapon.esh"
+#include "../../game_sa/audio/AEAudioEntity.esh"
+#include "../../game_sa/enum/Handling.esh"
+#include "../../game_sa/enum/CarMission.esh"
+#include "../../game_sa/enum/Vehicles.esh"
+native class CRideAnimData = size(0x1c)
+{
+    uint32_t m_nAnimGroup = offset(0x0);
+    float m_fSteerAngle = offset(0x4);
+    float m_fAnimLean = offset(0x8);
+    float m_fDesiredAnimLean = offset(0xc);
+    float m_fAnimLeanFwd = offset(0x10);
+    float m_fHandlebarsAngle = offset(0x14);
+    float m_fAnimPercentageState = offset(0x18);
+};
+native class CDoor = size(0x18)
+{
+    float m_fOpenAngle = offset(0x0);
+    float m_fClosedAngle = offset(0x4);
+    int16_t m_nDirn = offset(0x8);
+    uint8_t m_nAxis = offset(0xa);
+    uint8_t m_nDoorState = offset(0xb);
+    float m_fAngle = offset(0xc);
+    float m_fPrevAngle = offset(0x10);
+    float m_fAngVel = offset(0x14);
+    float GetAngleOpenRatio() = symbol("libGTASA.so", "_ZNK5CDoor17GetAngleOpenRatioEv");
+    bool IsClosed() = symbol("libGTASA.so", "_ZNK5CDoor8IsClosedEv");
+    bool IsFullyOpen() = symbol("libGTASA.so", "_ZNK5CDoor11IsFullyOpenEv");
+    bool Process(CVehicle* pVehicle, CVector* vecOldMoveSpeed, CVector* vecOldTurnSpeed, CVector* vecOffset) = symbol("libGTASA.so", "_ZN5CDoor7ProcessEP8CVehicleR7CVectorS3_S3_");
+    bool ProcessImpact(CVehicle* pVehicle, CVector* vecOldMoveSpeed, CVector* vecOldTurnSpeed, CVector* vecOffset) = symbol("libGTASA.so", "_ZN5CDoor13ProcessImpactEP8CVehicleR7CVectorS3_S3_");
+    bool Open(float fAngRatio) = symbol("libGTASA.so", "_ZN5CDoor4OpenEf");
+};
+native class CAutoPilot = size(bits(0x98, 0xa8))
+{
+    CNodeAddress m_currentAddress = offset(0x0);
+    CNodeAddress m_startingRouteNode = offset(0x4);
+    CNodeAddress m_preStartingRouteNode = offset(0x8);
+    uint32_t m_nStartSpeedScaleFactor = offset(0xc);
+    uint32_t m_nSpeedScaleFactor = offset(0x10);
+    CCarPathLinkAddress m_nCurrentPathNodeInfo = offset(0x14);
+    CCarPathLinkAddress m_nNextPathNodeInfo = offset(0x16);
+    CCarPathLinkAddress m_nPreviousPathNodeInfo = offset(0x18);
+    uint32_t m_nTimeToStartMission = offset(0x1c);
+    uint32_t m_nTimeSwitchedToRealPhysics = offset(0x20);
+    uint8_t _smthPreCurr = offset(0x24);
+    uint8_t _smthCurr = offset(0x25);
+    uint8_t _smthNext = offset(0x26);
+    uint8_t m_nCurrentLane = offset(0x27);
+    uint8_t m_nNextLane = offset(0x28);
+    uint8_t m_nCarDrivingStyle = offset(0x29);
+    uint8_t m_nCarMission = offset(0x2a);
+    uint8_t m_nTempAction = offset(0x2b);
+    uint32_t m_nTempActionTime = offset(0x2c);
+    uint32_t _someStartTime = offset(0x30);
+    uint8_t m_nReverseType = offset(0x34);
+    uint8_t m_nTimesWantToChangeNode = offset(0x35);
+    float m_fActualTrafficSpeed = offset(0x38);
+    float m_fMaxTrafficSpeed = offset(0x3c);
+    uint8_t m_nCruiseSpeed = offset(0x40);
+    uint8_t m_nSpeedFromNodes = offset(0x41);
+    float m_fSpeedMult = offset(0x44);
+    uint8_t m_nHooverDistFromTarget = offset(0x48);
+    uint8_t heliThrustPower = offset(0x49);
+    uint8_t m_nMoveAheadOfTarget = offset(0x4a);
+    uint8_t m_nCarCtrlFlags = offset(0x4b);
+    uint8_t SlowingDownForCar = offset(0x4b) bits(0, 1, 1);
+    uint8_t SlowingDownForPed = offset(0x4b) bits(1, 1, 1);
+    uint8_t AvoidLevelTransitions = offset(0x4b) bits(2, 1, 1);
+    uint8_t bAlwaysInFastLane = offset(0x4b) bits(3, 1, 1);
+    uint8_t bAlwaysInSlowLane = offset(0x4b) bits(4, 1, 1);
+    uint8_t bWarnTargetEntity = offset(0x4b) bits(5, 1, 1);
+    uint8_t bDontGoAgainstTraffic = offset(0x4b) bits(6, 1, 1);
+    uint8_t bLeaveAfterAWhile = offset(0x4b) bits(7, 1, 1);
+    uint8_t bWaitForValidNodes = offset(0x4c) bits(0, 1, 1);
+    uint8_t bCarHasToReverseFirst = offset(0x4c) bits(1, 1, 1);
+    uint8_t m_nSwitchToStraightLineDistance = offset(0x4d);
+    uint8_t m_nStraightLineDistance = offset(0x4e);
+    uint8_t m_nTargetReachedDistance = offset(0x4f);
+    uint8_t m_nLaneChangeCounter = offset(0x50);
+    uint8_t m_nFloatingFrames = offset(0x51);
+    int16_t m_nAreaConstrainX[2] = offset(0x52);
+    int16_t m_nAreaConstrainY[2] = offset(0x56);
+    CVector m_vecDestinationCoors = offset(0x5c);
+    CNodeAddress m_aPathFindNodesInfo[8] = offset(0x68);
+    uint16_t m_nPathFindNodesCount = offset(0x88);
+    CVehicle* m_pTargetCar = offset(bits(0x8c, 0x90));
+    CEntity* m_pCarWeMakingSlowDownFor = offset(bits(0x90, 0x98));
+    uint8_t m_nRecordingId = offset(bits(0x94, 0xa0));
+    uint8_t m_nDiversion = offset(bits(0x95, 0xa1));
+};
+native class CVehicle : public CPhysical = size(bits(0x5b4, 0x758))
+{
+    CAEVehicleAudioEntity m_vehicleAudio = offset(bits(0x13c, 0x198));
+    tHandlingData* m_pHandlingData = offset(bits(0x388, 0x4a8));
+    tFlyingHandlingData* m_pFlyingHandlingData = offset(bits(0x38c, 0x4b0));
+    uint32_t m_nHandlingFlagsIntValue = offset(bits(0x390, 0x4b8));
+    CVehicle_m_nHandlingFlags m_nHandlingFlags = offset(bits(0x390, 0x4b8));
+    CAutoPilot m_autoPilot = offset(bits(0x394, 0x4c0));
+    uint8_t bIsLawEnforcer = offset(bits(0x42c, 0x568)) bits(0, 1, 1);
+    uint8_t bIsAmbulanceOnDuty = offset(bits(0x42c, 0x568)) bits(1, 1, 1);
+    uint8_t bIsFireTruckOnDuty = offset(bits(0x42c, 0x568)) bits(2, 1, 1);
+    uint8_t bIsLocked = offset(bits(0x42c, 0x568)) bits(3, 1, 1);
+    uint8_t bEngineOn = offset(bits(0x42c, 0x568)) bits(4, 1, 1);
+    uint8_t bIsHandbrakeOn = offset(bits(0x42c, 0x568)) bits(5, 1, 1);
+    uint8_t bLightsOn = offset(bits(0x42c, 0x568)) bits(6, 1, 1);
+    uint8_t bFreebies = offset(bits(0x42c, 0x568)) bits(7, 1, 1);
+    uint8_t bIsVan = offset(bits(0x42d, 0x569)) bits(0, 1, 1);
+    uint8_t bIsBus = offset(bits(0x42d, 0x569)) bits(1, 1, 1);
+    uint8_t bIsBig = offset(bits(0x42d, 0x569)) bits(2, 1, 1);
+    uint8_t bLowVehicle = offset(bits(0x42d, 0x569)) bits(3, 1, 1);
+    uint8_t bComedyControls = offset(bits(0x42d, 0x569)) bits(4, 1, 1);
+    uint8_t bWarnedPeds = offset(bits(0x42d, 0x569)) bits(5, 1, 1);
+    uint8_t bCraneMessageDone = offset(bits(0x42d, 0x569)) bits(6, 1, 1);
+    uint8_t bTakeLessDamage = offset(bits(0x42d, 0x569)) bits(7, 1, 1);
+    uint8_t bIsDamaged = offset(bits(0x42e, 0x56a)) bits(0, 1, 1);
+    uint8_t bHasBeenOwnedByPlayer = offset(bits(0x42e, 0x56a)) bits(1, 1, 1);
+    uint8_t bFadeOut = offset(bits(0x42e, 0x56a)) bits(2, 1, 1);
+    uint8_t bIsBeingCarJacked = offset(bits(0x42e, 0x56a)) bits(3, 1, 1);
+    uint8_t bCreateRoadBlockPeds = offset(bits(0x42e, 0x56a)) bits(4, 1, 1);
+    uint8_t bCanBeDamaged = offset(bits(0x42e, 0x56a)) bits(5, 1, 1);
+    uint8_t bOccupantsHaveBeenGenerated = offset(bits(0x42e, 0x56a)) bits(6, 1, 1);
+    uint8_t bGunSwitchedOff = offset(bits(0x42e, 0x56a)) bits(7, 1, 1);
+    uint8_t bVehicleColProcessed = offset(bits(0x42f, 0x56b)) bits(0, 1, 1);
+    uint8_t bIsCarParkVehicle = offset(bits(0x42f, 0x56b)) bits(1, 1, 1);
+    uint8_t bHasAlreadyBeenRecorded = offset(bits(0x42f, 0x56b)) bits(2, 1, 1);
+    uint8_t bPartOfConvoy = offset(bits(0x42f, 0x56b)) bits(3, 1, 1);
+    uint8_t bHeliMinimumTilt = offset(bits(0x42f, 0x56b)) bits(4, 1, 1);
+    uint8_t bAudioChangingGear = offset(bits(0x42f, 0x56b)) bits(5, 1, 1);
+    uint8_t bIsDrowning = offset(bits(0x42f, 0x56b)) bits(6, 1, 1);
+    uint8_t bTyresDontBurst = offset(bits(0x42f, 0x56b)) bits(7, 1, 1);
+    uint8_t bCreatedAsPoliceVehicle = offset(bits(0x430, 0x56c)) bits(0, 1, 1);
+    uint8_t bRestingOnPhysical = offset(bits(0x430, 0x56c)) bits(1, 1, 1);
+    uint8_t bParking = offset(bits(0x430, 0x56c)) bits(2, 1, 1);
+    uint8_t bCanPark = offset(bits(0x430, 0x56c)) bits(3, 1, 1);
+    uint8_t bFireGun = offset(bits(0x430, 0x56c)) bits(4, 1, 1);
+    uint8_t bDriverLastFrame = offset(bits(0x430, 0x56c)) bits(5, 1, 1);
+    uint8_t bNeverUseSmallerRemovalRange = offset(bits(0x430, 0x56c)) bits(6, 1, 1);
+    uint8_t bIsRCVehicle = offset(bits(0x430, 0x56c)) bits(7, 1, 1);
+    uint8_t bAlwaysSkidMarks = offset(bits(0x431, 0x56d)) bits(0, 1, 1);
+    uint8_t bEngineBroken = offset(bits(0x431, 0x56d)) bits(1, 1, 1);
+    uint8_t bVehicleCanBeTargetted = offset(bits(0x431, 0x56d)) bits(2, 1, 1);
+    uint8_t bPartOfAttackWave = offset(bits(0x431, 0x56d)) bits(3, 1, 1);
+    uint8_t bWinchCanPickMeUp = offset(bits(0x431, 0x56d)) bits(4, 1, 1);
+    uint8_t bImpounded = offset(bits(0x431, 0x56d)) bits(5, 1, 1);
+    uint8_t bVehicleCanBeTargettedByHS = offset(bits(0x431, 0x56d)) bits(6, 1, 1);
+    uint8_t bSirenOrAlarm = offset(bits(0x431, 0x56d)) bits(7, 1, 1);
+    uint8_t bHasGangLeaningOn = offset(bits(0x432, 0x56e)) bits(0, 1, 1);
+    uint8_t bGangMembersForRoadBlock = offset(bits(0x432, 0x56e)) bits(1, 1, 1);
+    uint8_t bDoesProvideCover = offset(bits(0x432, 0x56e)) bits(2, 1, 1);
+    uint8_t bMadDriver = offset(bits(0x432, 0x56e)) bits(3, 1, 1);
+    uint8_t bUpgradedStereo = offset(bits(0x432, 0x56e)) bits(4, 1, 1);
+    uint8_t bConsideredByPlayer = offset(bits(0x432, 0x56e)) bits(5, 1, 1);
+    uint8_t bPetrolTankIsWeakPoint = offset(bits(0x432, 0x56e)) bits(6, 1, 1);
+    uint8_t bDisableParticles = offset(bits(0x432, 0x56e)) bits(7, 1, 1);
+    uint8_t bHasBeenResprayed = offset(bits(0x433, 0x56f)) bits(0, 1, 1);
+    uint8_t bUseCarCheats = offset(bits(0x433, 0x56f)) bits(1, 1, 1);
+    uint8_t bDontSetColourWhenRemapping = offset(bits(0x433, 0x56f)) bits(2, 1, 1);
+    uint32_t m_nCreationTime = offset(bits(0x434, 0x570));
+    uint8_t m_nPrimaryColor = offset(bits(0x438, 0x574));
+    uint8_t m_nSecondaryColor = offset(bits(0x439, 0x575));
+    uint8_t m_nTertiaryColor = offset(bits(0x43a, 0x576));
+    uint8_t m_nQuaternaryColor = offset(bits(0x43b, 0x577));
+    uint8_t m_anExtras[2] = offset(bits(0x43c, 0x578));
+    int16_t m_anUpgrades[15] = offset(bits(0x43e, 0x57a));
+    float m_fWheelScale = offset(bits(0x45c, 0x598));
+    uint16_t m_nAlarmState = offset(bits(0x460, 0x59c));
+    int16_t m_nForcedRandomRouteSeed = offset(bits(0x462, 0x59e));
+    CPed* m_pDriver = offset(bits(0x464, 0x5a0));
+    CPed* m_apPassengers[8] = offset(bits(0x468, 0x5a8));
+    uint8_t m_nNumPassengers = offset(bits(0x488, 0x5e8));
+    uint8_t m_nNumGettingIn = offset(bits(0x489, 0x5e9));
+    uint8_t m_nGettingInFlags = offset(bits(0x48a, 0x5ea));
+    uint8_t m_nGettingOutFlags = offset(bits(0x48b, 0x5eb));
+    uint8_t m_nMaxPassengers = offset(bits(0x48c, 0x5ec));
+    uint8_t m_nWindowsOpenFlags = offset(bits(0x48d, 0x5ed));
+    uint8_t m_nNitroBoosts = offset(bits(0x48e, 0x5ee));
+    uint8_t m_nSpecialColModel = offset(bits(0x48f, 0x5ef));
+    CEntity* m_pEntityWeAreOn = offset(bits(0x490, 0x5f0));
+    CFire* m_pFire = offset(bits(0x494, 0x5f8));
+    float m_fSteerAngle = offset(bits(0x498, 0x600));
+    float m_f2ndSteerAngle = offset(bits(0x49c, 0x604));
+    float m_fGasPedal = offset(bits(0x4a0, 0x608));
+    float m_fBreakPedal = offset(bits(0x4a4, 0x60c));
+    uint8_t m_nCreatedBy = offset(bits(0x4a8, 0x610));
+    float cachedTotalSteer = offset(bits(0x4ac, 0x614));
+    int16_t m_nExtendedRemovalRange = offset(bits(0x4b0, 0x618));
+    uint8_t m_nBombOnBoard = offset(bits(0x4b2, 0x61a)) bits(0, 3, 1);
+    uint8_t m_nOverrideLights = offset(bits(0x4b2, 0x61a)) bits(3, 2, 1);
+    uint8_t m_nWinchType = offset(bits(0x4b2, 0x61a)) bits(5, 2, 1);
+    uint8_t m_nGunsCycleIndex = offset(bits(0x4b3, 0x61b)) bits(0, 2, 1);
+    uint8_t m_nOrdnanceCycleIndex = offset(bits(0x4b3, 0x61b)) bits(2, 2, 1);
+    uint8_t m_nUsedForCover = offset(bits(0x4b4, 0x61c));
+    uint8_t m_nAmmoInClip = offset(bits(0x4b5, 0x61d));
+    uint8_t m_nPacMansCollected = offset(bits(0x4b6, 0x61e));
+    uint8_t m_nPedsPositionForRoadBlock = offset(bits(0x4b7, 0x61f));
+    uint8_t m_nNumCopsForRoadBlock = offset(bits(0x4b8, 0x620));
+    float m_fDirtLevel = offset(bits(0x4bc, 0x624));
+    uint8_t m_nCurrentGear = offset(bits(0x4c0, 0x628));
+    float m_fGearChangeCount = offset(bits(0x4c4, 0x62c));
+    float m_fWheelSpinForAudio = offset(bits(0x4c8, 0x630));
+    float m_fHealth = offset(bits(0x4cc, 0x634));
+    CVehicle* m_pTractor = offset(bits(0x4d0, 0x638));
+    CVehicle* m_pTrailer = offset(bits(0x4d4, 0x640));
+    bool m_bFireAutoFlare = offset(bits(0x4d8, 0x648));
+    CPed* m_pWhoInstalledBombOnMe = offset(bits(0x4dc, 0x650));
+    uint32_t m_nTimeTillWeNeedThisCar = offset(bits(0x4e0, 0x658));
+    uint32_t m_nGunFiringTime = offset(bits(0x4e4, 0x65c));
+    uint32_t m_nTimeWhenBlowedUp = offset(bits(0x4e8, 0x660));
+    int16_t m_nCopsInCarTimer = offset(bits(0x4ec, 0x664));
+    int16_t m_wBombTimer = offset(bits(0x4ee, 0x666));
+    CPed* m_pWhoDetonatedMe = offset(bits(0x4f0, 0x668));
+    float m_fVehicleFrontGroundZ = offset(bits(0x4f4, 0x670));
+    float m_fVehicleRearGroundZ = offset(bits(0x4f8, 0x674));
+    uint8_t m_nOilSpills = offset(bits(0x4fc, 0x678));
+    float m_fLastOilSpillX = offset(bits(0x500, 0x67c));
+    float m_fLastOilSpillY = offset(bits(0x504, 0x680));
+    uint32_t m_eDoorLock = offset(bits(0x508, 0x684));
+    uint32_t m_nProjectileWeaponFiringTime = offset(bits(0x50c, 0x688));
+    uint32_t m_nAdditionalProjectileWeaponFiringTime = offset(bits(0x510, 0x68c));
+    uint32_t m_nTimeForMinigunFiring = offset(bits(0x514, 0x690));
+    uint8_t m_nLastWeaponDamageType = offset(bits(0x518, 0x694));
+    CEntity* m_pLastDamageEntity = offset(bits(0x51c, 0x698));
+    uint8_t m_nRadioStation = offset(bits(0x520, 0x6a0));
+    uint8_t m_nRainHitCount = offset(bits(0x521, 0x6a1));
+    uint8_t m_nSoundIndex = offset(bits(0x522, 0x6a2));
+    uint8_t m_nVehicleWeaponInUse = offset(bits(0x523, 0x6a3));
+    uint32_t m_nHornCounter = offset(bits(0x524, 0x6a4));
+    uint8_t m_nHornPattern = offset(bits(0x528, 0x6a8));
+    uint8_t m_nNoHornCounter = offset(bits(0x529, 0x6a9));
+    uint8_t m_nComedyControlsStatus = offset(bits(0x52a, 0x6aa));
+    uint8_t m_nHasslePosId = offset(bits(0x52b, 0x6ab));
+    CStoredCollPoly m_FrontCollPoly = offset(bits(0x52c, 0x6ac));
+    CStoredCollPoly m_RearCollPoly = offset(bits(0x558, 0x6d8));
+    uint8_t m_anCollisionLighting[4] = offset(bits(0x584, 0x704));
+    FxSystem_c* m_pOverheatParticle = offset(bits(0x588, 0x708));
+    FxSystem_c* m_pFireParticle = offset(bits(0x58c, 0x710));
+    FxSystem_c* m_pDustParticle = offset(bits(0x590, 0x718));
+    uint8_t m_nRenderLightsFlags = offset(bits(0x594, 0x720));
+    CVehicle_m_renderLights m_renderLights = offset(bits(0x594, 0x720));
+    RwTexture* m_pCustomCarPlate = offset(bits(0x598, 0x728));
+    float m_fSteer = offset(bits(0x59c, 0x730));
+    uint32_t m_nVehicleClass = offset(bits(0x5a0, 0x734));
+    uint32_t m_nVehicleSubClass = offset(bits(0x5a4, 0x738));
+    uint8_t* m_szPreviousRemapTxdName = offset(bits(0x5a8, 0x740));
+    uint8_t* m_szRemapTxdName = offset(bits(0x5ac, 0x748));
+    RwTexture* m_pRemapTexture = offset(bits(0x5b0, 0x750));
+};
+native class CVehicle_m_nHandlingFlags = size(0x4)
+{
+    uint32_t b1gBoost = offset(0x0) bits(0, 1, 1);
+    uint32_t b2gBoost = offset(0x0) bits(1, 1, 1);
+    uint32_t bNpcAntiRoll = offset(0x0) bits(2, 1, 1);
+    uint32_t bNpcNeutralHandl = offset(0x0) bits(3, 1, 1);
+    uint32_t bNoHandbrake = offset(0x0) bits(4, 1, 1);
+    uint32_t bSteerRearwheels = offset(0x0) bits(5, 1, 1);
+    uint32_t bHbRearwheelSteer = offset(0x0) bits(6, 1, 1);
+    uint32_t bAltSteerOpt = offset(0x0) bits(7, 1, 1);
+    uint32_t bWheelFNarrow2 = offset(0x1) bits(0, 1, 1);
+    uint32_t bWheelFNarrow = offset(0x1) bits(1, 1, 1);
+    uint32_t bWheelFWide = offset(0x1) bits(2, 1, 1);
+    uint32_t bWheelFWide2 = offset(0x1) bits(3, 1, 1);
+    uint32_t bWheelRNarrow2 = offset(0x1) bits(4, 1, 1);
+    uint32_t bWheelRNarrow = offset(0x1) bits(5, 1, 1);
+    uint32_t bWheelRWide = offset(0x1) bits(6, 1, 1);
+    uint32_t bWheelRWide2 = offset(0x1) bits(7, 1, 1);
+    uint32_t bHydraulicGeom = offset(0x2) bits(0, 1, 1);
+    uint32_t bHydraulicInst = offset(0x2) bits(1, 1, 1);
+    uint32_t bHydraulicNone = offset(0x2) bits(2, 1, 1);
+    uint32_t bNosInst = offset(0x2) bits(3, 1, 1);
+    uint32_t bOffroadAbility = offset(0x2) bits(4, 1, 1);
+    uint32_t bOffroadAbility2 = offset(0x2) bits(5, 1, 1);
+    uint32_t bHalogenLights = offset(0x2) bits(6, 1, 1);
+    uint32_t bProcRearwheelFirst = offset(0x2) bits(7, 1, 1);
+    uint32_t bUseMaxspLimit = offset(0x3) bits(0, 1, 1);
+    uint32_t bLowRider = offset(0x3) bits(1, 1, 1);
+    uint32_t bStreetRacer = offset(0x3) bits(2, 1, 1);
+    uint32_t bUnused1 = offset(0x3) bits(3, 1, 1);
+    uint32_t bSwingingChassis = offset(0x3) bits(4, 1, 1);
+};
+native class CVehicle_m_renderLights = size(0x1)
+{
+    uint8_t m_bRightFront = offset(0x0) bits(0, 1, 1);
+    uint8_t m_bLeftFront = offset(0x0) bits(1, 1, 1);
+    uint8_t m_bRightRear = offset(0x0) bits(2, 1, 1);
+    uint8_t m_bLeftRear = offset(0x0) bits(3, 1, 1);
+};
+native void DestroyVehicleAndDriverAndPassengers(CVehicle* pVehicle) = symbol("libGTASA.so", "_Z36DestroyVehicleAndDriverAndPassengersP8CVehicle");
+native bool IsVehiclePointerValid(CVehicle* pVehicle) = symbol("libGTASA.so", "_Z21IsVehiclePointerValidP8CVehicle");
+native bool IsVehiclePointerValid_NotInWorld(CVehicle* pVehicle) = symbol("libGTASA.so", "_Z32IsVehiclePointerValid_NotInWorldP8CVehicle");
+native RwObject* SetVehicleAtomicVisibility(RwObject* pObject, void* pData) = symbol("libGTASA.so", "_Z28SetVehicleAtomicVisibilityCBP8RwObjectPv");
+native RwFrame* SetVehicleAtomicVisibility_RwFrame(RwFrame* pFrame, void* pData) = symbol("libGTASA.so", "_Z28SetVehicleAtomicVisibilityCBP7RwFramePv");
+native RpMaterial* SetCompAlphaCB(RpMaterial* pMaterial, void* pData) = symbol("libGTASA.so", "_Z14SetCompAlphaCBP10RpMaterialPv");
+native RpAtomic* RemoveUpgradeCB(RpAtomic* pAtomic, void* pData) = symbol("libGTASA.so", "_Z15RemoveUpgradeCBP8RpAtomicPv");
+native RpAtomic* FindUpgradeCB(RpAtomic* pAtomic, void* pData) = symbol("libGTASA.so", "_Z13FindUpgradeCBP8RpAtomicPv");
+#endif

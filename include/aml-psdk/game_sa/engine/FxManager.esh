@@ -1,0 +1,59 @@
+#ifndef PSDK_game_sa_engine_FxManager_h
+#define PSDK_game_sa_engine_FxManager_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../game_sa/base/FxPrimitives.esh"
+#include "../../renderware/RwRGBA.esh"
+native class FxMemoryPool_c = size(bits(0xc, 0x10))
+{
+    uint8_t* data = offset(0x0);
+    uint32_t size = offset(bits(0x4, 0x8));
+    uint32_t position = offset(bits(0x8, 0xc));
+    uint8_t Init() = symbol("libGTASA.so", "_ZN14FxMemoryPool_c4InitEv");
+    void Exit() = symbol("libGTASA.so", "_ZN14FxMemoryPool_c4ExitEv");
+    void Reset() = symbol("libGTASA.so", "_ZN14FxMemoryPool_c5ResetEv");
+    void Optimise() = symbol("libGTASA.so", "_ZN14FxMemoryPool_c8OptimiseEv");
+    uint8_t* GetMem(int numBytes, int alignment) = symbol("libGTASA.so", "_ZN14FxMemoryPool_c6GetMemEii");
+};
+native class FxManager_c = size(bits(0xbc, 0x118))
+{
+    FxEmitterPrt_c* m_pFxEmitters = offset(bits(0x18, 0x30));
+    int m_nFxTxdIndex = offset(bits(0x28, 0x50));
+    CVector* m_pWindDir = offset(bits(0x2c, 0x58));
+    float* m_pfWindSpeed = offset(bits(0x30, 0x60));
+    FxFrustumInfo_c m_frustum = offset(bits(0x34, 0x68));
+    uint32_t m_nCurrentMatrix = offset(bits(0x88, 0xbc));
+    RwMatrix* m_apMatrices[8] = offset(bits(0x8c, 0xc0));
+    FxMemoryPool_c m_pool = offset(bits(0xac, 0x100));
+    uint8_t m_bFoundHeatHazeInfo = offset(bits(0xb8, 0x110));
+    uint8_t Init() = symbol("libGTASA.so", "_ZN11FxManager_c4InitEv");
+    void Exit() = symbol("libGTASA.so", "_ZN11FxManager_c4ExitEv");
+    void DestroyAllFxSystems() = symbol("libGTASA.so", "_ZN11FxManager_c19DestroyAllFxSystemsEv");
+    FxFrustumInfo_c* GetFrustumInfo() = symbol("libGTASA.so", "_ZN11FxManager_c14GetFrustumInfoEv");
+    void UnloadFxProject() = symbol("libGTASA.so", "_ZN11FxManager_c15UnloadFxProjectEv");
+    RwMatrix* FxRwMatrixCreate() = symbol("libGTASA.so", "_ZN11FxManager_c16FxRwMatrixCreateEv");
+    void FreeUpParticle() = symbol("libGTASA.so", "_ZN11FxManager_c14FreeUpParticleEv");
+    void CalcFrustumInfo(RwCamera* camPtr) = symbol("libGTASA.so", "_ZN11FxManager_c15CalcFrustumInfoEP8RwCamera");
+    void Update(RwCamera* camPtr, float deltaTime) = symbol("libGTASA.so", "_ZN11FxManager_c6UpdateEP8RwCameraf");
+    void DestroyFxSystem(FxSystem_c* fxSysPtr) = symbol("libGTASA.so", "_ZN11FxManager_c15DestroyFxSystemEP10FxSystem_c");
+    void Render(RwCamera* camPtr, uint8_t doHeatHaze) = symbol("libGTASA.so", "_ZN11FxManager_c6RenderEP8RwCamerah");
+    FxSystem_c* CreateFxSystem1(uint8_t* bpName, RwMatrix* offsetMat, RwMatrix* parentMat, uint8_t forceCreation) = symbol("libGTASA.so", "_ZN11FxManager_c14CreateFxSystemEPcP11RwMatrixTagS2_h");
+    FxSystem_c* CreateFxSystem2(FxSystemBP_c* fxSysBPPtr, RwMatrix* offsetMat, RwMatrix* parentMat, uint8_t forceCreation) = symbol("libGTASA.so", "_ZN11FxManager_c14CreateFxSystemEP12FxSystemBP_cP11RwMatrixTagS3_h");
+    void FindFxSystem(uint8_t* name) = symbol("libGTASA.so", "_ZN11FxManager_c14FindFxSystemBPEPc");
+    FxSystem_c* CreateFxSystem3(uint8_t* bpName, RwV3d* offsetPos, RwMatrix* parentMat, uint8_t forceCreation) = symbol("libGTASA.so", "_ZN11FxManager_c14CreateFxSystemEPcP5RwV3dP11RwMatrixTagh");
+    FxSystem_c* CreateFxSystem4(FxSystemBP_c* fxSysBPPtr, RwV3d* offsetPos, RwMatrix* parentMat, uint8_t forceCreation) = symbol("libGTASA.so", "_ZN11FxManager_c14CreateFxSystemEP12FxSystemBP_cP5RwV3dP11RwMatrixTagh");
+    uint8_t ShouldCreate(FxSystemBP_c* fxSysBPPtr, RwMatrix* offsetMat, RwMatrix* parentMat, uint8_t forceCreation) = symbol("libGTASA.so", "_ZN11FxManager_c12ShouldCreateEP12FxSystemBP_cP11RwMatrixTagS3_h");
+    void FxRwMatrixDestroy(RwMatrix* pTempMatrix) = symbol("libGTASA.so", "_ZN11FxManager_c17FxRwMatrixDestroyEP11RwMatrixTag");
+    void ReturnParticle(FxEmitterPrt_c* prtPtr) = symbol("libGTASA.so", "_ZN11FxManager_c14ReturnParticleEP14FxEmitterPrt_c");
+    Particle_c* GetParticle(int8_t primType) = symbol("libGTASA.so", "_ZN11FxManager_c11GetParticleEa");
+    void SetWindData(RwV3d* dir, float* strength) = symbol("libGTASA.so", "_ZN11FxManager_c11SetWindDataEP5RwV3dPf");
+    uint8_t LoadFxProject(uint8_t* filename) = symbol("libGTASA.so", "_ZN11FxManager_c13LoadFxProjectEPc");
+#if IS_64BIT
+    void LoadFxSystemBP(uint8_t* filename, uint64_t fileId) = symbol("libGTASA.so", "_ZN11FxManager_c14LoadFxSystemBPEPcy");
+#else
+    void LoadFxSystemBP(uint8_t* filename, uint32_t fileId) = symbol("libGTASA.so", "_ZN11FxManager_c14LoadFxSystemBPEPcj");
+#endif
+};
+#endif

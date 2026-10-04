@@ -1,0 +1,29 @@
+#ifndef PSDK_game_sa_enum_DecisionMaker_h
+#define PSDK_game_sa_enum_DecisionMaker_h
+#pragma once
+#define UNKNOWN -1
+#define PED_GROUPMEMBER 0
+#define PED_COP 1
+#define PED_RANDOM1 2
+#define PED_RANDOM2 3
+#define PED_RANDOM3 4
+#define PED_FIREMAN 5
+#define PED_EMPTY 6
+#define PED_INDOORS 7
+#define GROUP_RANDOM_AGGRESSIVE 8
+#define GROUP_RANDOM_PASSIVE 9
+#define MISSION0 10
+#define MISSION1 11
+#define MISSION2 12
+#define MISSION3 13
+#define MISSION4 14
+#define MISSION5 15
+#define MISSION6 16
+#define MISSION7 17
+#define MISSION8 18
+#define MISSION9 19
+#define COUNT_TOTAL 20
+#define COUNT_GAME_DM 10
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#endif

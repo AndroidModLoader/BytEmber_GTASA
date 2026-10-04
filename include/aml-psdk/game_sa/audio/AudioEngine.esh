@@ -1,0 +1,37 @@
+#ifndef PSDK_game_sa_audio_AudioEngine_h
+#define PSDK_game_sa_audio_AudioEngine_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../game_sa/audio/AEFrontendAudioEntity.esh"
+#include "../../game_sa/audio/AEScriptAudioEntity.esh"
+#include "../../game_sa/audio/AECollisionAudioEntity.esh"
+#include "../../game_sa/audio/AEPedlessSpeechAudioEntity.esh"
+native class tBeatInfoBeat = size(0x8)
+{
+    int Time = offset(0x0);
+    int Type = offset(0x4);
+};
+native class tBeatInfo = size(0xac)
+{
+    tBeatInfoBeat BeatWindow[20] = offset(0x0);
+    int bBeatInfoPresent = offset(0xa0);
+    int BeatTypeThisFrame = offset(0xa4);
+    int BeatNumber = offset(0xa8);
+};
+native class CAudioEngine = size(bits(0x1fd8, 0x2f50))
+{
+    bool m_bMissionCompleteActive = offset(0x0);
+    bool m_bStoppingMissionComplete = offset(0x1);
+    uint8_t m_nCurrentRadiostationId = offset(0x2);
+    int m_nAudioStreamClientHandle = offset(0x4);
+    tBeatInfo m_BeatInfo = offset(0x8);
+    CAEFrontendAudioEntity m_FrontendAudio = offset(bits(0xb4, 0xb8));
+    CAEScriptAudioEntity m_scriptAudio = offset(bits(0x2a0, 0x300));
+    CAECollisionAudioEntity m_collisionAudio = offset(bits(0x4bc, 0x5a8));
+    int m_pWeaponAudio = offset(bits(0x1e34, 0x2d48));
+    CAEPedlessSpeechAudioEntity m_pedlessSpeechAudio = offset(bits(0x1e38, 0x2d50));
+    CAEDoorAudioEntity m_doorAudio = offset(bits(0x1f50, 0x2eb0));
+};
+#endif

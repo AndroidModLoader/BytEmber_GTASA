@@ -1,0 +1,160 @@
+#ifndef PSDK_game_sa_engine_ModelInfo_h
+#define PSDK_game_sa_engine_ModelInfo_h
+#pragma once
+#define MODEL_INFO_NONE 0
+#define MODEL_INFO_ATOMIC 1
+#define MODEL_INFO_MLO 2
+#define MODEL_INFO_TIME 3
+#define MODEL_INFO_WEAPON 4
+#define MODEL_INFO_CLUMP 5
+#define MODEL_INFO_VEHICLE 6
+#define MODEL_INFO_PED 7
+#define MODEL_INFO_LOD 8
+#define MODEL_INFO_XTRACOMPS 9
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../renderware/RwMatrix.esh"
+#include "../../game_sa/enum/WeaponType.esh"
+native class tTimeInfo = size(0x4)
+{
+    uint8_t m_nTimeOn = offset(0x0);
+    uint8_t m_nTimeOff = offset(0x1);
+    int16_t m_nOtherTimeModel = offset(0x2);
+};
+native class RwObjectNameIdAssocation = size(bits(0xc, 0x10))
+{
+    uint8_t* m_pName = offset(0x0);
+    uint32_t m_dwHierarchyId = offset(bits(0x4, 0x8));
+    uint32_t m_dwFlags = offset(bits(0x8, 0xc));
+};
+native class CBaseModelInfo = size(bits(0x38, 0x48))
+{
+    uint32_t m_nKey = offset(bits(0x4, 0x8));
+    uint8_t m_szModelName[22] = offset(bits(0x8, 0xc));
+    uint16_t m_nRefCount = offset(bits(0x1e, 0x22));
+    int16_t m_nTxdIndex = offset(bits(0x20, 0x24));
+    uint8_t m_nAlpha = offset(bits(0x22, 0x26));
+    uint8_t m_nNum2dEffects = offset(bits(0x23, 0x27));
+    int16_t m_n2dEffectIndex = offset(bits(0x24, 0x28));
+    int16_t m_nObjectInfoIndex = offset(bits(0x26, 0x2a));
+    uint16_t m_nFlags = offset(bits(0x28, 0x2c));
+    uint8_t bHasBeenPreRendered = offset(bits(0x28, 0x2c)) bits(0, 1, 1);
+    uint8_t bDrawLast = offset(bits(0x28, 0x2c)) bits(1, 1, 1);
+    uint8_t bAdditiveRender = offset(bits(0x28, 0x2c)) bits(2, 1, 1);
+    uint8_t bDontWriteZBuffer = offset(bits(0x28, 0x2c)) bits(3, 1, 1);
+    uint8_t bDontCastShadowsOn = offset(bits(0x28, 0x2c)) bits(4, 1, 1);
+    uint8_t bDoWeOwnTheColModel = offset(bits(0x28, 0x2c)) bits(5, 1, 1);
+    uint8_t bIsBackfaceCulled = offset(bits(0x28, 0x2c)) bits(6, 1, 1);
+    uint8_t bIsLod = offset(bits(0x28, 0x2c)) bits(7, 1, 1);
+    uint8_t bIsRoad = offset(bits(0x29, 0x2d)) bits(0, 1, 1);
+    uint8_t bHasComplexAtomicHierarchy = offset(bits(0x29, 0x2d)) bits(1, 1, 1);
+    uint8_t bDontCollideWithFlyer = offset(bits(0x29, 0x2d)) bits(2, 1, 1);
+    uint8_t nSpecialType = offset(bits(0x29, 0x2d)) bits(3, 4, 1);
+    uint8_t bWetRoadReflection = offset(bits(0x29, 0x2d)) bits(7, 1, 1);
+    uint8_t bUsesVehDummy = offset(bits(0x29, 0x2d)) bits(0, 1, 1);
+    uint8_t nCarmodId = offset(bits(0x29, 0x2d)) bits(2, 5, 1);
+    uint8_t bUseCommonVehicleDictionary = offset(bits(0x29, 0x2d)) bits(7, 1, 1);
+    uint8_t bHasAnimBlend = offset(bits(0x29, 0x2d)) bits(0, 1, 1);
+    uint8_t bHasComplexHierarchy = offset(bits(0x29, 0x2d)) bits(1, 1, 1);
+    uint8_t bAnimSomething = offset(bits(0x29, 0x2d)) bits(2, 1, 1);
+    uint8_t bOwnsCollisionModel = offset(bits(0x29, 0x2d)) bits(3, 1, 1);
+    uint8_t bTagDisabled = offset(bits(0x29, 0x2d)) bits(7, 1, 1);
+    CColModel* m_pColModel = offset(bits(0x2c, 0x30));
+    float m_fDrawDistance = offset(bits(0x30, 0x38));
+    RwObject* m_pRwObject = offset(bits(0x34, 0x40));
+    RpClump* m_pRwClump = offset(bits(0x34, 0x40));
+    RpAtomic* m_pRwAtomic = offset(bits(0x34, 0x40));
+    void DeleteCollisionModel() = symbol("libGTASA.so", "_ZN14CBaseModelInfo20DeleteCollisionModelEv");
+    void ClearTexDictionary() = symbol("libGTASA.so", "_ZN14CBaseModelInfo18ClearTexDictionaryEv");
+    void AddTexDictionaryRef() = symbol("libGTASA.so", "_ZN14CBaseModelInfo19AddTexDictionaryRefEv");
+    void RemoveTexDictionaryRef() = symbol("libGTASA.so", "_ZN14CBaseModelInfo22RemoveTexDictionaryRefEv");
+    void AddRef() = symbol("libGTASA.so", "_ZN14CBaseModelInfo6AddRefEv");
+    void RemoveRef() = symbol("libGTASA.so", "_ZN14CBaseModelInfo9RemoveRefEv");
+    void Init2dEffects() = symbol("libGTASA.so", "_ZN14CBaseModelInfo13Init2dEffectsEv");
+    void SetTexDictionary(uint8_t* pName, uint8_t* dbName) = symbol("libGTASA.so", "_ZN14CBaseModelInfo16SetTexDictionaryEPKcS1_");
+    void SetColModel(CColModel* pColModel, bool bOwnColModel) = symbol("libGTASA.so", "_ZN14CBaseModelInfo11SetColModelEP9CColModelb");
+    C2dEffect* Get2dEffect(int index) = symbol("libGTASA.so", "_ZN14CBaseModelInfo11Get2dEffectEi");
+    void Add2dEffect(C2dEffect* pEffect) = symbol("libGTASA.so", "_ZN14CBaseModelInfo11Add2dEffectEP9C2dEffect");
+};
+native class CAtomicModelInfo : public CBaseModelInfo = size(bits(0x38, 0x48))
+{
+    void SetupVehicleUpgradeFlags(uint8_t* pName) = symbol("libGTASA.so", "_ZN16CAtomicModelInfo24SetupVehicleUpgradeFlagsEPKc");
+    RpAtomic* GetAtomicFromDistance(float dist) = symbol("libGTASA.so", "_ZN16CAtomicModelInfo21GetAtomicFromDistanceEf");
+};
+native class CClumpModelInfo : public CBaseModelInfo = size(bits(0x3c, 0x50))
+{
+    uint8_t* m_animFileName = offset(bits(0x38, 0x48));
+    uint32_t m_dwAnimFileIndex = offset(bits(0x38, 0x48));
+    void SetFrameIds(RwObjectNameIdAssocation* pAssocArray) = symbol("libGTASA.so", "_ZN15CClumpModelInfo11SetFrameIdsEP24RwObjectNameIdAssocation");
+    static RpAtomic* SetAtomicRendererCB(RpAtomic* pAtomic, void* pData) = symbol("libGTASA.so", "_ZN15CClumpModelInfo19SetAtomicRendererCBEP8RpAtomicPv");
+    static RwFrame* FindFrameFromNameCB(RwFrame* pFrame, void* pData) = symbol("libGTASA.so", "_ZN15CClumpModelInfo19FindFrameFromNameCBEP7RwFramePv");
+    static RwFrame* FindFrameFromNameWithoutIdCB(RwFrame* pFrame, void* pData) = symbol("libGTASA.so", "_ZN15CClumpModelInfo28FindFrameFromNameWithoutIdCBEP7RwFramePv");
+    static RwFrame* FindFrameFromIdCB(RwFrame* pFrame, void* pData) = symbol("libGTASA.so", "_ZN15CClumpModelInfo17FindFrameFromIdCBEP7RwFramePv");
+    static RwFrame* FillFrameArrayCB(RwFrame* pFrame, void* pData) = symbol("libGTASA.so", "_ZN15CClumpModelInfo16FillFrameArrayCBEP7RwFramePv");
+    static RwFrame* GetFrameFromId(RpClump* pClump, int id) = symbol("libGTASA.so", "_ZN15CClumpModelInfo14GetFrameFromIdEP7RpClumpi");
+    static RwFrame* GetFrameFromName(RpClump* pClump, uint8_t* pName) = symbol("libGTASA.so", "_ZN15CClumpModelInfo16GetFrameFromNameEP7RpClumpPKc");
+    static void FillFrameArray(RpClump* pClump, nativeptr ppFrame) = symbol("libGTASA.so", "_ZN15CClumpModelInfo14FillFrameArrayEP7RpClumpPP7RwFrame");
+};
+native class CWeaponModelInfo : public CClumpModelInfo = size(bits(0x40, 0x58))
+{
+    uint32_t m_weaponInfo = offset(bits(0x3c, 0x50));
+};
+native class CPedModelInfo : public CClumpModelInfo = size(bits(0x5c, 0x78))
+{
+    int m_nAnimType = offset(bits(0x3c, 0x50));
+    uint32_t m_nPedType = offset(bits(0x40, 0x54));
+    uint32_t m_nStatType = offset(bits(0x44, 0x58));
+    uint16_t m_nCarsCanDriveMask = offset(bits(0x48, 0x5c));
+    uint16_t m_nPedFlags = offset(bits(0x4a, 0x5e));
+    CColModel* m_pHitColModel = offset(bits(0x4c, 0x60));
+    uint8_t m_nRadio1 = offset(bits(0x50, 0x68));
+    uint8_t m_nRadio2 = offset(bits(0x51, 0x69));
+    uint8_t m_nRace = offset(bits(0x52, 0x6a));
+    int16_t m_nPedAudioType = offset(bits(0x54, 0x6c));
+    int16_t m_nVoice1 = offset(bits(0x56, 0x6e));
+    int16_t m_nVoice2 = offset(bits(0x58, 0x70));
+    int16_t m_nVoiceId = offset(bits(0x5a, 0x72));
+};
+native class CDamageAtomicModelInfo : public CAtomicModelInfo = size(bits(0x3c, 0x50))
+{
+    RpAtomic* m_pDamagedAtomic = offset(bits(0x38, 0x48));
+};
+native class CTimeModelInfo : public CAtomicModelInfo = size(bits(0x3c, 0x50))
+{
+    tTimeInfo m_timeInfo = offset(bits(0x38, 0x48));
+};
+native class CModelInfo = size(0x1)
+{
+    static void Initialise() = symbol("libGTASA.so", "_ZN10CModelInfo10InitialiseEv");
+    static CAtomicModelInfo* AddAtomicModel(int index) = symbol("libGTASA.so", "_ZN10CModelInfo14AddAtomicModelEi");
+    static void ReInit2dEffects() = symbol("libGTASA.so", "_ZN10CModelInfo15ReInit2dEffectsEv");
+    static void ShutDown() = symbol("libGTASA.so", "_ZN10CModelInfo8ShutDownEv");
+    static CBaseModelInfo* GetModelInfo1(uint8_t* pName, int32_t* pIndex) = symbol("libGTASA.so", "_ZN10CModelInfo12GetModelInfoEPKcPi");
+    static CBaseModelInfo* GetModelInfoFromHashKey(uint32_t key, int32_t* pIndex) = symbol("libGTASA.so", "_ZN10CModelInfo23GetModelInfoFromHashKeyEjPi");
+    static CBaseModelInfo* GetModelInfoUInt16(uint8_t* pName, uint16_t* pIndex) = symbol("libGTASA.so", "_ZN10CModelInfo18GetModelInfoUInt16EPKcPt");
+    static CBaseModelInfo* GetModelInfo2(uint8_t* pName, int start, int end) = symbol("libGTASA.so", "_ZN10CModelInfo12GetModelInfoEPKcii");
+    static void GetModelInfoFast(CModelInfoAccelerator* pAccel, uint8_t* pName, int32_t* pIndex) = symbol("libGTASA.so", "_ZN10CModelInfo16GetModelInfoFastEP21CModelInfoAcceleratorPKcPi");
+    static CDamageAtomicModelInfo* AddDamageAtomicModel(int index) = symbol("libGTASA.so", "_ZN10CModelInfo20AddDamageAtomicModelEi");
+    static CLodAtomicModelInfo* AddLodAtomicModel(int index) = symbol("libGTASA.so", "_ZN10CModelInfo17AddLodAtomicModelEi");
+    static CTimeModelInfo* AddTimeModel(int index) = symbol("libGTASA.so", "_ZN10CModelInfo12AddTimeModelEi");
+    static CLodTimeModelInfo* AddLodTimeModel(int index) = symbol("libGTASA.so", "_ZN10CModelInfo15AddLodTimeModelEi");
+    static CWeaponModelInfo* AddWeaponModel(int index) = symbol("libGTASA.so", "_ZN10CModelInfo14AddWeaponModelEi");
+    static CClumpModelInfo* AddClumpModel(int index) = symbol("libGTASA.so", "_ZN10CModelInfo13AddClumpModelEi");
+    static CVehicleModelInfo* AddVehicleModel(int index) = symbol("libGTASA.so", "_ZN10CModelInfo15AddVehicleModelEi");
+    static CPedModelInfo* AddPedModel(int index) = symbol("libGTASA.so", "_ZN10CModelInfo11AddPedModelEi");
+    static uintptr_t* Get2dEffectStore() = symbol("libGTASA.so", "_ZN10CModelInfo16Get2dEffectStoreEv");
+    static uint8_t IsBoatModel(int index) = symbol("libGTASA.so", "_ZN10CModelInfo11IsBoatModelEi");
+    static uint8_t IsCarModel(int index) = symbol("libGTASA.so", "_ZN10CModelInfo10IsCarModelEi");
+    static uint8_t IsTrainModel(int index) = symbol("libGTASA.so", "_ZN10CModelInfo12IsTrainModelEi");
+    static uint8_t IsHeliModel(int index) = symbol("libGTASA.so", "_ZN10CModelInfo11IsHeliModelEi");
+    static uint8_t IsPlaneModel(int index) = symbol("libGTASA.so", "_ZN10CModelInfo12IsPlaneModelEi");
+    static uint8_t IsBikeModel(int index) = symbol("libGTASA.so", "_ZN10CModelInfo11IsBikeModelEi");
+    static uint8_t IsFakePlaneModel(int index) = symbol("libGTASA.so", "_ZN10CModelInfo16IsFakePlaneModelEi");
+    static uint8_t IsMonsterTruckModel(int index) = symbol("libGTASA.so", "_ZN10CModelInfo19IsMonsterTruckModelEi");
+    static uint8_t IsQuadBikeModel(int index) = symbol("libGTASA.so", "_ZN10CModelInfo15IsQuadBikeModelEi");
+    static uint8_t IsBmxModel(int index) = symbol("libGTASA.so", "_ZN10CModelInfo10IsBmxModelEi");
+    static uint8_t IsTrailerModel(int index) = symbol("libGTASA.so", "_ZN10CModelInfo14IsTrailerModelEi");
+    static uint8_t IsVehicleModelType(int index) = symbol("libGTASA.so", "_ZN10CModelInfo18IsVehicleModelTypeEi");
+};
+#endif

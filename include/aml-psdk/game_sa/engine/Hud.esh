@@ -1,0 +1,75 @@
+#ifndef PSDK_game_sa_engine_Hud_h
+#define PSDK_game_sa_engine_Hud_h
+#pragma once
+#define HUD_SPRITE_FIST 0
+#define HUD_SPRITE_SITEM16 1
+#define HUD_SPRITE_SITEROCKET 2
+#define HUD_SPRITE_RADARDISC 3
+#define HUD_SPRITE_RADARRINGPLANE 4
+#define HUD_SPRITE_SKIPICON 5
+#define HUD_SPRITE_COUNT 6
+#define DS_WANTED 0
+#define DS_ENERGY_LOST 1
+#define DS_DISPLAY_SCORE 2
+#define DS_WEAPON 3
+#define HUD_COLOUR_RED 0
+#define HUD_COLOUR_GREEN 1
+#define HUD_COLOUR_DARK_BLUE 2
+#define HUD_COLOUR_LIGHT_BLUE 3
+#define HUD_COLOUR_BLUE 4
+#define HUD_COLOUR_WHITE 5
+#define HUD_COLOUR_BLACK 6
+#define HUD_COLOUR_BROWN 7
+#define HUD_COLOUR_PURPLE 8
+#define HUD_COLOUR_GREY 9
+#define HUD_COLOUR_DARK_RED 10
+#define HUD_COLOUR_DARK_GREEN 11
+#define HUD_COLOUR_SAND 12
+#define HUD_COLOUR_SLATE 13
+#define HUD_COLOUR_PURE_BLUE 14
+#define HUD_COLOUR_YELLOW 15
+#define HUD_COLOUR_COUNT 16
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../game_sa/engine/Sprite2d.esh"
+#include "../../gta_base/RGBA.esh"
+#include "../../gta_base/GxtChar.esh"
+native class CHudColours = size(0x40)
+{
+    CRGBA value[16] = offset(0x0);
+    void SetRGBAValue(uint8_t colour_id, uint8_t r, uint8_t g, uint8_t b, uint8_t a) = symbol("libGTASA.so", "_ZN11CHudColours12SetRGBAValueEhhhhh");
+    uint32_t GetIntColour(uint8_t colour_id) = symbol("libGTASA.so", "_ZN11CHudColours12GetIntColourEh");
+};
+native class CHud = size(0x1)
+{
+    static void Initialise() = symbol("libGTASA.so", "_ZN4CHud10InitialiseEv");
+    static void ReInitialise() = symbol("libGTASA.so", "_ZN4CHud12ReInitialiseEv");
+    static void Shutdown() = symbol("libGTASA.so", "_ZN4CHud8ShutdownEv");
+    static void GetRidOfAllHudMessages(uint8_t bIgnoreMissionTitle) = symbol("libGTASA.so", "_ZN4CHud22GetRidOfAllHudMessagesEh");
+    static float GetYPosBasedOnHealth(uint8_t player, float initial_pos, int8_t adjuster) = symbol("libGTASA.so", "_ZN4CHud20GetYPosBasedOnHealthEhfa");
+    static void SetZoneName(GxtChar* pZoneName, uint8_t forced) = symbol("libGTASA.so", "_ZN4CHud11SetZoneNameEPth");
+    static void SetHelpMessage(uint8_t* helpLabel, GxtChar* pHelpMsg, bool bQuick, bool bDisplayForever, bool bAddToBrief, uint32_t nConditionFlag) = symbol("libGTASA.so", "_ZN4CHud14SetHelpMessageEPKcPtbbbj");
+    static void SetHelpMessageStatUpdate(uint8_t bIncrement, uint16_t nStatID, float fValue, float fMaxValue) = symbol("libGTASA.so", "_ZN4CHud24SetHelpMessageStatUpdateEhtff");
+    static void SetVehicleName(GxtChar* pVehName) = symbol("libGTASA.so", "_ZN4CHud14SetVehicleNameEPt");
+    static void SetMessage1(GxtChar* pMessage) = symbol("libGTASA.so", "_ZN4CHud10SetMessageEPt");
+    static void SetBigMessage1(GxtChar* pMessage, uint16_t Row) = symbol("libGTASA.so", "_ZN4CHud13SetBigMessageEPtt");
+    static void ResetWastedText() = symbol("libGTASA.so", "_ZN4CHud15ResetWastedTextEv");
+    static void DrawCrossHairs() = symbol("libGTASA.so", "_ZN4CHud14DrawCrossHairsEv");
+    static void DrawVitalStats() = symbol("libGTASA.so", "_ZN4CHud14DrawVitalStatsEv");
+    static void DrawRadar() = symbol("libGTASA.so", "_ZN4CHud9DrawRadarEv");
+    static void DrawAreaName() = symbol("libGTASA.so", "_ZN4CHud12DrawAreaNameEv");
+    static void DrawVehicleName() = symbol("libGTASA.so", "_ZN4CHud15DrawVehicleNameEv");
+    static void DrawMissionTimers() = symbol("libGTASA.so", "_ZN4CHud17DrawMissionTimersEv");
+    static void DrawHelpText() = symbol("libGTASA.so", "_ZN4CHud12DrawHelpTextEv");
+    static void DrawScriptText(uint8_t bBeforeFade) = symbol("libGTASA.so", "_ZN4CHud14DrawScriptTextEh");
+    static void DrawSubtitles() = symbol("libGTASA.so", "_ZN4CHud13DrawSubtitlesEv");
+    static void DrawSuccessFailedMessage() = symbol("libGTASA.so", "_ZN4CHud24DrawSuccessFailedMessageEv");
+    static void DrawBustedWastedMessage() = symbol("libGTASA.so", "_ZN4CHud23DrawBustedWastedMessageEv");
+    static void DrawOddJobMessage(uint8_t bBeforeFade) = symbol("libGTASA.so", "_ZN4CHud17DrawOddJobMessageEh");
+    static void DrawMissionTitle() = symbol("libGTASA.so", "_ZN4CHud16DrawMissionTitleEv");
+    static void Draw() = symbol("libGTASA.so", "_ZN4CHud4DrawEv");
+    static void DrawAfterFade() = symbol("libGTASA.so", "_ZN4CHud13DrawAfterFadeEv");
+    static float DrawFadeState(int flag, int change) = symbol("libGTASA.so", "_ZN4CHud13DrawFadeStateE15DRAW_FADE_STATEi");
+};
+#endif

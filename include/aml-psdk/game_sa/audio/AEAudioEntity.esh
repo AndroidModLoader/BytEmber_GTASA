@@ -1,0 +1,310 @@
+#ifndef PSDK_game_sa_audio_AEAudioEntity_h
+#define PSDK_game_sa_audio_AEAudioEntity_h
+#pragma once
+#define SOUND_FRONT_END 1
+#define SOUND_UNCANCELLABLE 2
+#define SOUND_REQUEST_UPDATES 4
+#define SOUND_PLAY_PHYSICALLY 8
+#define SOUND_UNPAUSABLE 16
+#define SOUND_START_PERCENTAGE 32
+#define SOUND_MUSIC_MASTERED 64
+#define SOUND_LIFESPAN_TIED_TO_PHYSICAL_ENTITY 128
+#define SOUND_UNDUCKABLE 256
+#define SOUND_UNCOMPRESSABLE 512
+#define SOUND_ROLLED_OFF 1024
+#define SOUND_SMOOTH_DUCKING 2048
+#define SOUND_FORCED_FRONT 4096
+#define PED_TYPE_GEN 0
+#define PED_TYPE_EMG 1
+#define PED_TYPE_PLAYER 2
+#define PED_TYPE_GANG 3
+#define PED_TYPE_GFD 4
+#define PED_TYPE_SPC 5
+#define VEHICLE_SOUND_CAR 0
+#define VEHICLE_SOUND_MOTORCYCLE 1
+#define VEHICLE_SOUND_BICYCLE 2
+#define VEHICLE_SOUND_BOAT 3
+#define VEHICLE_SOUND_HELI 4
+#define VEHICLE_SOUND_PLANE 5
+#define VEHICLE_SOUND_NON_VEH 6
+#define VEHICLE_SOUND_USED_BY_NONE_VEH 7
+#define VEHICLE_SOUND_TRAIN 8
+#define VEHICLE_SOUND_TRAILER 9
+#define VEHICLE_SOUND_SPECIAL 10
+#define RADIO_CIVILIAN 0
+#define RADIO_SPECIAL 1
+#define RADIO_UNKNOWN 2
+#define RADIO_EMERGENCY 3
+#define RADIO_DISABLED 255
+#define RADIO_PLAYBACK_FM 1
+#define RADIO_K_ROSE 2
+#define RADIO_K_DST 3
+#define RADIO_BOUNCE_FM 4
+#define RADIO_SF_UR 5
+#define RADIO_LOS_SANTOS 6
+#define RADIO_RADIO_X 7
+#define RADIO_CSR_103_9 8
+#define RADIO_K_JAH_WEST 9
+#define RADIO_MASTER_SOUNDS_98_3 10
+#define RADIO_WCTR 11
+#define RADIO_USER_TRACKS 12
+#define RADIO_NONE 13
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../gta_base/Vector.esh"
+native class CAESound = size(bits(0x74, 0x80))
+{
+    int16_t m_nBankSlotId = offset(0x0);
+    int16_t m_nSoundIdInSlot = offset(0x2);
+    CAEAudioEntity* m_pBaseAudio = offset(bits(0x4, 0x8));
+    CEntity* m_pPhysicalEntity = offset(bits(0x8, 0x10));
+    uint32_t m_nEvent = offset(bits(0xc, 0x18));
+    float m_fMaxVolume = offset(bits(0x10, 0x1c));
+    float m_fVolume = offset(bits(0x14, 0x20));
+    float m_fSoundDistance = offset(bits(0x18, 0x24));
+    float m_fSpeed = offset(bits(0x1c, 0x28));
+    float m_FrequencyVariance = offset(bits(0x20, 0x2c));
+    CVector m_vecCurrPosn = offset(bits(0x24, 0x30));
+    CVector m_vecPrevPosn = offset(bits(0x30, 0x3c));
+    uint32_t m_nLastFrameUpdate = offset(bits(0x3c, 0x48));
+    uint32_t m_nCurrTimeUpdate = offset(bits(0x40, 0x4c));
+    uint32_t m_nPrevTimeUpdate = offset(bits(0x44, 0x50));
+    float m_fCurrCamDist = offset(bits(0x48, 0x54));
+    float m_fPrevCamDist = offset(bits(0x4c, 0x58));
+    float m_fTimeScale = offset(bits(0x50, 0x5c));
+    uint8_t m_FrameDelay = offset(bits(0x54, 0x60));
+    uint16_t m_nEnvironmentFlags = offset(bits(0x56, 0x62));
+    uint16_t m_bFrontEnd = offset(bits(0x56, 0x62)) bits(0, 1, 1);
+    uint16_t m_bUncancellable = offset(bits(0x56, 0x62)) bits(1, 1, 1);
+    uint16_t m_bRequestUpdates = offset(bits(0x56, 0x62)) bits(2, 1, 1);
+    uint16_t m_bPlayPhysically = offset(bits(0x56, 0x62)) bits(3, 1, 1);
+    uint16_t m_bUnpausable = offset(bits(0x56, 0x62)) bits(4, 1, 1);
+    uint16_t m_bStartPercentage = offset(bits(0x56, 0x62)) bits(5, 1, 1);
+    uint16_t m_bMusicMastered = offset(bits(0x56, 0x62)) bits(6, 1, 1);
+    uint16_t m_bLifespanTiedToPhysicalEntity = offset(bits(0x56, 0x62)) bits(7, 1, 1);
+    uint16_t m_bUndackable = offset(bits(0x57, 0x63)) bits(0, 1, 1);
+    uint16_t m_bUncompressable = offset(bits(0x57, 0x63)) bits(1, 1, 1);
+    uint16_t m_bRolledOff = offset(bits(0x57, 0x63)) bits(2, 1, 1);
+    uint16_t m_bSmoothDucking = offset(bits(0x57, 0x63)) bits(3, 1, 1);
+    uint16_t m_bForcedFront = offset(bits(0x57, 0x63)) bits(4, 1, 1);
+    uint16_t m_nIsUsed = offset(bits(0x58, 0x64));
+    uint16_t m_bAudioHardwareAware = offset(bits(0x5a, 0x66));
+    int16_t m_nCurrentPlayPosition = offset(bits(0x5c, 0x68));
+    int16_t m_bPhysicallyPlaying = offset(bits(0x5e, 0x6a));
+    float m_fFinalVolume = offset(bits(0x60, 0x6c));
+    float m_fFrequency = offset(bits(0x64, 0x70));
+    int16_t m_nPlayingState = offset(bits(0x68, 0x74));
+    float m_fSoundHeadRoom = offset(bits(0x6c, 0x78));
+    int16_t m_nSoundLength = offset(bits(0x70, 0x7c));
+    void UnregisterWithPhysicalEntity() = symbol("libGTASA.so", "_ZN8CAESound28UnregisterWithPhysicalEntityEv");
+    void NewVPSLentry() = symbol("libGTASA.so", "_ZN8CAESound12NewVPSLentryEv");
+    void CalculateFrequency() = symbol("libGTASA.so", "_ZN8CAESound18CalculateFrequencyEv");
+    uint16_t GetLifespanTiedToPhysicalEntity() = symbol("libGTASA.so", "_ZN8CAESound31GetLifespanTiedToPhysicalEntityEv");
+    void StopSound() = symbol("libGTASA.so", "_ZN8CAESound9StopSoundEv");
+    uint16_t GetRequestUpdates() = symbol("libGTASA.so", "_ZN8CAESound17GetRequestUpdatesEv");
+    void UpdateFrequency() = symbol("libGTASA.so", "_ZN8CAESound15UpdateFrequencyEv");
+    void StopSoundAndForget() = symbol("libGTASA.so", "_ZN8CAESound18StopSoundAndForgetEv");
+    uint16_t GetUncancellable() = symbol("libGTASA.so", "_ZN8CAESound16GetUncancellableEv");
+    uint16_t GetFrontEnd() = symbol("libGTASA.so", "_ZN8CAESound11GetFrontEndEv");
+    uint16_t GetUnpausable() = symbol("libGTASA.so", "_ZN8CAESound13GetUnpausableEv");
+    uint16_t GetPlayPhysically() = symbol("libGTASA.so", "_ZN8CAESound17GetPlayPhysicallyEv");
+    uint16_t GetStartPercentage() = symbol("libGTASA.so", "_ZN8CAESound18GetStartPercentageEv");
+    uint16_t GetMusicMastered() = symbol("libGTASA.so", "_ZN8CAESound16GetMusicMasteredEv");
+    uint16_t GetUnduckable() = symbol("libGTASA.so", "_ZN8CAESound13GetUnduckableEv");
+    uint16_t GetUncompressable() = symbol("libGTASA.so", "_ZN8CAESound17GetUncompressableEv");
+    uint16_t GetRolledOff() = symbol("libGTASA.so", "_ZN8CAESound12GetRolledOffEv");
+    uint16_t GetSmoothDucking() = symbol("libGTASA.so", "_ZN8CAESound16GetSmoothDuckingEv");
+    uint16_t GetForcedFront() = symbol("libGTASA.so", "_ZN8CAESound14GetForcedFrontEv");
+    void SoundHasFinished() = symbol("libGTASA.so", "_ZN8CAESound16SoundHasFinishedEv");
+    void CalculateVolume() = symbol("libGTASA.so", "_ZN8CAESound15CalculateVolumeEv");
+    float GetRelativePlaybackFrequencyWithDoppler() = symbol("libGTASA.so", "_ZN8CAESound39GetRelativePlaybackFrequencyWithDopplerEv");
+    float GetSlowMoFrequencyScalingFactor() = symbol("libGTASA.so", "_ZN8CAESound31GetSlowMoFrequencyScalingFactorEv");
+    void UpdateParameters(int16_t PlayTime) = symbol("libGTASA.so", "_ZN8CAESound16UpdateParametersEs");
+    void RegisterWithPhysicalEntity(CEntity* pPhysicalEntity) = symbol("libGTASA.so", "_ZN8CAESound26RegisterWithPhysicalEntityEP7CEntity");
+    void SetIndividualEnvironment(uint16_t environment, uint16_t tf) = symbol("libGTASA.so", "_ZN8CAESound24SetIndividualEnvironmentEtt");
+    void UpdatePlayTime(int16_t VirtualChannelSoundLength, int16_t VirtualChannelSoundLoopStartTime, int16_t TimeElapsed) = symbol("libGTASA.so", "_ZN8CAESound14UpdatePlayTimeEsss");
+    void GetRelativePosition(CVector* pRelativePosition) = symbol("libGTASA.so", "_ZN8CAESound19GetRelativePositionEP7CVector");
+};
+native class CAEAudioEntity = size(bits(0x7c, 0x90))
+{
+    CEntity* m_pEntity = offset(bits(0x4, 0x8));
+    CAESound m_tempSound = offset(bits(0x8, 0x10));
+};
+native class CAETwinLoopSoundEntity : public CAEAudioEntity = size(bits(0xa8, 0xc8))
+{
+    int16_t m_nBankSlotId = offset(bits(0x7c, 0x90));
+    int16_t m_nSoundType[2] = offset(bits(0x7e, 0x92));
+    CAEAudioEntity* m_pBaseAudio = offset(bits(0x84, 0x98));
+    int16_t m_bIsInitialised = offset(bits(0x88, 0xa0));
+    int16_t m_nFirstLength = offset(bits(0x8a, 0xa2));
+    int16_t m_nSecondLength = offset(bits(0x8c, 0xa4));
+    int16_t m_nPlayTimeMin = offset(bits(0x8e, 0xa6));
+    int16_t m_nPlayTimeMax = offset(bits(0x90, 0xa8));
+    uint32_t m_nTimeToSwapSounds = offset(bits(0x94, 0xac));
+    bool m_bPlayingFirstSound = offset(bits(0x98, 0xb0));
+    int16_t m_anStartingPlayPercentage[2] = offset(bits(0x9a, 0xb2));
+    CAESound* m_apSounds[2] = offset(bits(0xa0, 0xb8));
+};
+native class CAEPedAudioEntity : public CAEAudioEntity = size(bits(0x15c, 0x1a8))
+{
+    bool m_bInitialised = offset(bits(0x7c, 0x90));
+    int16_t m_nLastSwimSplashSoundId = offset(bits(0x7e, 0x92));
+    int m_nLastSwimWakeTriggerTimeMs = offset(bits(0x80, 0x94));
+    float m_fCurrentJetPackThrustVolume = offset(bits(0x84, 0x98));
+    float m_fCurrentJetPackGasVolume = offset(bits(0x88, 0x9c));
+    float m_fCurrentJetPackRoarVolume = offset(bits(0x8c, 0xa0));
+    float m_fCurrentJetPackRoarFrequency = offset(bits(0x90, 0xa4));
+    CPed* m_pPed = offset(bits(0x94, 0xa8));
+    uint8_t m_bJetpackOn = offset(bits(0x98, 0xb0));
+    CAESound* m_pJetPackThrustSound = offset(bits(0x9c, 0xb8));
+    CAESound* m_pJetPackGasSound = offset(bits(0xa0, 0xc0));
+    CAESound* m_pJetPackRoarSound = offset(bits(0xa4, 0xc8));
+    CAETwinLoopSoundEntity TwinLoopSoundEntity = offset(bits(0xa8, 0xd0));
+    CAESound* m_pWindRushSound = offset(bits(0x150, 0x198));
+    float m_fCurrentWindRushVolume = offset(bits(0x154, 0x1a0));
+    float m_fCurrentShirtFlapVolume = offset(bits(0x158, 0x1a4));
+};
+native class CAEPedSpeechAudioEntity : public CAEAudioEntity = size(bits(0x100, 0x130))
+{
+    CAESound* m_aSounds[5] = offset(bits(0x7c, 0x90));
+    bool m_bInitialised = offset(bits(0x90, 0xb8));
+    int16_t m_nVoiceType = offset(bits(0x92, 0xba));
+    int16_t m_nVoiceID = offset(bits(0x94, 0xbc));
+    int16_t m_nVoiceGender = offset(bits(0x96, 0xbe));
+    bool m_bTalking = offset(bits(0x98, 0xc0));
+    bool m_bEnableVocalType = offset(bits(0x99, 0xc1));
+    bool m_bMuted = offset(bits(0x9a, 0xc2));
+    uint8_t m_nVocalEnableFlag = offset(bits(0x9b, 0xc3));
+    bool m_bFrontEnd = offset(bits(0x9c, 0xc4));
+    bool m_bForceAudible = offset(bits(0x9d, 0xc5));
+    CAESound* m_pSound = offset(bits(0xa0, 0xc8));
+    int16_t m_nSoundId = offset(bits(0xa4, 0xd0));
+    int16_t m_nBankId = offset(bits(0xa6, 0xd2));
+    int16_t m_nPedSpeechSlotIndex = offset(bits(0xa8, 0xd4));
+    float m_fVoiceVolume = offset(bits(0xac, 0xd8));
+    int16_t m_nCurrentPhraseId = offset(bits(0xb0, 0xdc));
+    int m_NextTimeCanSayPain[19] = offset(bits(0xb4, 0xe0));
+};
+native class CAEWeaponAudioEntity : public CAEAudioEntity = size(bits(0xa0, 0xb8))
+{
+    bool m_bPlayedMiniGunFireSound = offset(bits(0x7c, 0x90));
+    bool m_bMiniGunFireActive = offset(bits(0x7d, 0x91));
+    uint8_t m_nLastWeaponPlaneFrequencyIndex = offset(bits(0x7e, 0x92));
+    uint8_t m_nState = offset(bits(0x7f, 0x93));
+    uint8_t m_nChainsawSoundState = offset(bits(0x80, 0x94));
+    int m_dwFlameThrowerLastPlayedTime = offset(bits(0x84, 0x98));
+    int m_dwSpraycanLastPlayedTime = offset(bits(0x88, 0x9c));
+    int m_dwExtinguisherLastPlayedTime = offset(bits(0x8c, 0xa0));
+    int m_dwMiniGunFireSoundPlayedTime = offset(bits(0x90, 0xa4));
+    int m_dwTimeChainsaw = offset(bits(0x94, 0xa8));
+    int m_dwTimeLastFired = offset(bits(0x98, 0xac));
+    CAESound* m_pSounds = offset(bits(0x9c, 0xb0));
+};
+native class CAEPedWeaponAudioEntity : public CAEWeaponAudioEntity = size(bits(0xa8, 0xc8))
+{
+    bool m_bActive = offset(bits(0xa0, 0xb8));
+    CPed* m_pPed = offset(bits(0xa4, 0xc0));
+};
+native class tVehicleAudioSettings = size(0x24)
+{
+    uint8_t m_nVehicleSoundType = offset(0x0);
+    int16_t m_nEngineOnSoundBankId = offset(0x2);
+    int16_t m_nEngineOffSoundBankId = offset(0x4);
+    uint8_t m_nBassSetting = offset(0x6);
+    float m_fBassEq = offset(0x8);
+    float m_fEnginePitch = offset(0xc);
+    uint8_t m_bHornTon = offset(0x10);
+    float m_fHornHigh = offset(0x14);
+    uint8_t m_nDoorSound = offset(0x18);
+    uint8_t m_nEngineUpgrade = offset(0x19);
+    uint8_t m_nRadioID = offset(0x1a);
+    uint8_t m_nRadioType = offset(0x1b);
+    uint8_t vehTypeForAudio = offset(0x1c);
+    float m_fHornVolumeDelta = offset(0x20);
+};
+native class tVehicleSound = size(bits(0x8, 0x10))
+{
+    uint32_t m_nIndex = offset(0x0);
+    CAESound* m_pSound = offset(bits(0x4, 0x8));
+};
+native class CAEVehicleAudioEntity : public CAEAudioEntity = size(bits(0x24c, 0x310))
+{
+    int16_t m_nStallCounter = offset(bits(0x7c, 0x90));
+    tVehicleAudioSettings m_settings = offset(bits(0x80, 0x94));
+    bool m_bEnabled = offset(bits(0xa4, 0xb8));
+    bool m_bPlayerDriver = offset(bits(0xa5, 0xb9));
+    bool m_bPlayerPassenger = offset(bits(0xa6, 0xba));
+    bool m_bVehicleRadioPaused = offset(bits(0xa7, 0xbb));
+    bool m_bSoundsStopped = offset(bits(0xa8, 0xbc));
+    uint8_t m_nEngineState = offset(bits(0xa9, 0xbd));
+    uint8_t m_nAudioGear = offset(bits(0xaa, 0xbe));
+    float m_CrzCount = offset(bits(0xac, 0xc0));
+    bool m_bInhibitAccForLowSpeed = offset(bits(0xb0, 0xc4));
+    int16_t m_nRainDropCounter = offset(bits(0xb2, 0xc6));
+    int16_t m_nStalledCounter = offset(bits(0xb4, 0xc8));
+    uint32_t m_nSwapStalledTime = offset(bits(0xb8, 0xcc));
+    bool m_bSilentStalled = offset(bits(0xbc, 0xd0));
+    bool m_bDisableHeliEngineSounds = offset(bits(0xbd, 0xd1));
+    bool m_bHornOn = offset(bits(0xbe, 0xd2));
+    bool m_bSirenOrAlarmPlaying = offset(bits(0xbf, 0xd3));
+    bool m_bHornPlaying = offset(bits(0xc0, 0xd4));
+    float m_fSirenVolume = offset(bits(0xc4, 0xd8));
+    bool m_bModelWithSiren = offset(bits(0xc8, 0xdc));
+    uint32_t m_nBoatHitWaveLastPlayedTime = offset(bits(0xcc, 0xe0));
+    uint32_t m_nTimeToInhibitAcc = offset(bits(0xd0, 0xe4));
+    uint32_t m_nTimeToInhibitCrz = offset(bits(0xd4, 0xe8));
+    float m_fGeneralVehicleSoundVolume = offset(bits(0xd8, 0xec));
+    int16_t m_nEngineDecelerateSoundBankId = offset(bits(0xdc, 0xf0));
+    int16_t m_nEngineAccelerateSoundBankId = offset(bits(0xde, 0xf2));
+    int16_t m_nEngineBankSlotId = offset(bits(0xe0, 0xf4));
+    tVehicleSound m_aEngineSounds[12] = offset(bits(0xe4, 0xf8));
+    uint32_t m_TimeLastServiced = offset(bits(0x144, 0x1b8));
+    int16_t m_ACPlayPositionThisFrame = offset(bits(0x148, 0x1bc));
+    int16_t m_ACPlayPositionLastFrame = offset(bits(0x14a, 0x1be));
+    int16_t m_FramesAgoACLooped = offset(bits(0x14c, 0x1c0));
+    int16_t m_ACPlayPercentWhenStopped = offset(bits(0x14e, 0x1c2));
+    uint32_t m_TimeACStopped = offset(bits(0x150, 0x1c4));
+    int16_t m_ACPlayPositionWhenStopped = offset(bits(0x154, 0x1c8));
+    int16_t m_nSkidSoundType = offset(bits(0x156, 0x1ca));
+    CAESound* m_pSurfaceSound = offset(bits(0x158, 0x1d0));
+    int16_t m_nRoadNoiseSoundType = offset(bits(0x15c, 0x1d8));
+    CAESound* m_pRoadNoiseSound = offset(bits(0x160, 0x1e0));
+    int16_t m_nFlatTyreSoundType = offset(bits(0x164, 0x1e8));
+    CAESound* m_pFlatTyreSound = offset(bits(0x168, 0x1f0));
+    int16_t m_nReverseGearSoundType = offset(bits(0x16c, 0x1f8));
+    CAESound* m_pReverseGearSound = offset(bits(0x170, 0x200));
+    int16_t m_nHornSoundType = offset(bits(0x174, 0x208));
+    CAESound* m_pHornTonSound = offset(bits(0x178, 0x210));
+    CAESound* m_pSirenSound = offset(bits(0x17c, 0x218));
+    CAESound* m_pPoliceSirenSound = offset(bits(0x180, 0x220));
+    CAETwinLoopSoundEntity m_skidSound = offset(bits(0x184, 0x228));
+    float m_CurrentRotorFrequency = offset(bits(0x22c, 0x2f0));
+    float m_CurrentDummyEngineVolume = offset(bits(0x230, 0x2f4));
+    float m_CurrenytDummyEngineFrequency = offset(bits(0x234, 0x2f8));
+    float m_fMovingPartSmoothedSpeed = offset(bits(0x238, 0x2fc));
+    float m_fFadeIn = offset(bits(0x23c, 0x300));
+    float m_fFadeOut = offset(bits(0x240, 0x304));
+    bool m_bNitroSoundPresent = offset(bits(0x244, 0x308));
+    float m_CurrentNitroRadio = offset(bits(0x248, 0x30c));
+};
+native class CAEWeatherAudioEntity : public CAEAudioEntity = size(bits(0x80, 0x98))
+{
+    int8_t m_nLastThunderFrequencyIndex = offset(bits(0x7c, 0x90));
+    static void StaticReset() = symbol("libGTASA.so", "_ZN21CAEWeatherAudioEntity11StaticResetEv");
+    void Service() = symbol("libGTASA.so", "_ZN21CAEWeatherAudioEntity7ServiceEv");
+    void AddAudioEvent(int AudioEvent) = symbol("libGTASA.so", "_ZN21CAEWeatherAudioEntity13AddAudioEventEi");
+};
+native class CAEFireAudioEntity : public CAEAudioEntity = size(bits(0x88, 0xa8))
+{
+    CAESound* m_pFireSound = offset(bits(0x7c, 0x90));
+    CAESound* m_pFireSound2 = offset(bits(0x80, 0x98));
+    FxSystem_c* m_pParentEffectSystem = offset(bits(0x84, 0xa0));
+    static void StaticInitialise() = symbol("libGTASA.so", "_ZN18CAEFireAudioEntity16StaticInitialiseEv");
+    void Terminate() = symbol("libGTASA.so", "_ZN18CAEFireAudioEntity9TerminateEv");
+    void Initialise(FxSystem_c* pParent) = symbol("libGTASA.so", "_ZN18CAEFireAudioEntity10InitialiseEP10FxSystem_c");
+    void AddAudioEvent(int AudioEvent, CVector* vPosition) = symbol("libGTASA.so", "_ZN18CAEFireAudioEntity13AddAudioEventEiR7CVector");
+    void PlayWaterSounds(int AudioEvent, CVector* vPosition) = symbol("libGTASA.so", "_ZN18CAEFireAudioEntity15PlayWaterSoundsEiR7CVector");
+    void PlayFireSounds(int AudioEvent, CVector* vPosition) = symbol("libGTASA.so", "_ZN18CAEFireAudioEntity14PlayFireSoundsEiR7CVector");
+};
+#endif

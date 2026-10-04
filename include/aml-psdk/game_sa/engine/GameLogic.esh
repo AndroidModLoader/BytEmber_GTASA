@@ -1,0 +1,32 @@
+#ifndef PSDK_game_sa_engine_GameLogic_h
+#define PSDK_game_sa_engine_GameLogic_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../renderware/RwMatrix.esh"
+native class CGameLogic = size(0x1)
+{
+    static void InitAtStartOfGame() = symbol("libGTASA.so", "_ZN10CGameLogic17InitAtStartOfGameEv");
+    static void ResetStuffUponResurrection() = symbol("libGTASA.so", "_ZN10CGameLogic26ResetStuffUponResurrectionEv");
+    static void PassTime(uint32_t GameMinutes) = symbol("libGTASA.so", "_ZN10CGameLogic8PassTimeEj");
+    static void SortOutStreamingAndMemory(CVector* posn, float heading) = symbol("libGTASA.so", "_ZN10CGameLogic25SortOutStreamingAndMemoryERK7CVectorf");
+    static void Update() = symbol("libGTASA.so", "_ZN10CGameLogic6UpdateEv");
+    static void SetPlayerWantedLevelForForbiddenTerritories(bool enable) = symbol("libGTASA.so", "_ZN10CGameLogic43SetPlayerWantedLevelForForbiddenTerritoriesEb");
+    static bool IsCoopGameGoingOn() = symbol("libGTASA.so", "_ZN10CGameLogic17IsCoopGameGoingOnEv");
+    static void UpdateSkip() = symbol("libGTASA.so", "_ZN10CGameLogic10UpdateSkipEv");
+    static void RestorePedsWeapons(CPed* pPed) = symbol("libGTASA.so", "_ZN10CGameLogic18RestorePedsWeaponsEP4CPed");
+    static void Remove2ndPlayerIfPresent() = symbol("libGTASA.so", "_ZN10CGameLogic24Remove2ndPlayerIfPresentEv");
+    static void ForceDeathRestart() = symbol("libGTASA.so", "_ZN10CGameLogic17ForceDeathRestartEv");
+    static bool IsPlayerUse2PlayerControls(CPlayerPed* pPlayerPed) = symbol("libGTASA.so", "_ZN10CGameLogic26IsPlayerUse2PlayerControlsEP10CPlayerPed");
+    static bool IsScriptCoopGameGoingOn() = symbol("libGTASA.so", "_ZN10CGameLogic23IsScriptCoopGameGoingOnEv");
+    static bool Disable2ndControllerForDebug() = symbol("libGTASA.so", "_ZN10CGameLogic28Disable2ndControllerForDebugEv");
+    static void ClearSkip(bool bLeaveAfterMission) = symbol("libGTASA.so", "_ZN10CGameLogic9ClearSkipEb");
+    static bool SkipCanBeActivated() = symbol("libGTASA.so", "_ZN10CGameLogic18SkipCanBeActivatedEv");
+    static bool IsSkipWaitingForScriptToFadeIn() = symbol("libGTASA.so", "_ZN10CGameLogic30IsSkipWaitingForScriptToFadeInEv");
+    static bool LaRiotsActiveHere() = symbol("libGTASA.so", "_ZN10CGameLogic17LaRiotsActiveHereEv");
+    static void DoWeaponStuffAtStartOf2PlayerGame(bool bGivePlayer2Weapons) = symbol("libGTASA.so", "_ZN10CGameLogic33DoWeaponStuffAtStartOf2PlayerGameEb");
+    static void StorePedsWeapons(CPed* pPed) = symbol("libGTASA.so", "_ZN10CGameLogic16StorePedsWeaponsEP4CPed");
+    static bool Save() = symbol("libGTASA.so", "_ZN10CGameLogic4SaveEv");
+    static bool Load() = symbol("libGTASA.so", "_ZN10CGameLogic4LoadEv");
+};
+#endif

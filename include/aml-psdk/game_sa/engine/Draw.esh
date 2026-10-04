@@ -1,0 +1,12 @@
+#ifndef PSDK_game_sa_engine_Draw_h
+#define PSDK_game_sa_engine_Draw_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+native class CDraw = size(0x1)
+{
+    static void SetFOV(float fFOV, bool isCinematic) = symbol("libGTASA.so", "_ZN5CDraw6SetFOVEfb");
+    static float CalculateAspectRatio() = symbol("libGTASA.so", "_ZN5CDraw20CalculateAspectRatioEv");
+};
+#endif

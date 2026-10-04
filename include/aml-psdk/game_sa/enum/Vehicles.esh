@@ -1,0 +1,34 @@
+#ifndef PSDK_game_sa_enum_Vehicles_h
+#define PSDK_game_sa_enum_Vehicles_h
+#pragma once
+#define VEHICLE_AUTOMOBILE 0
+#define VEHICLE_MTRUCK 1
+#define VEHICLE_QUAD 2
+#define VEHICLE_HELI 3
+#define VEHICLE_PLANE 4
+#define VEHICLE_BOAT 5
+#define VEHICLE_TRAIN 6
+#define VEHICLE_FHELI 7
+#define VEHICLE_FPLANE 8
+#define VEHICLE_BIKE 9
+#define VEHICLE_BMX 10
+#define VEHICLE_TRAILER 11
+#define UPGRADE_BONNET 0
+#define UPGRADE_BONNET_LEFT 1
+#define UPGRADE_BONNET_RIGHT 2
+#define UPGRADE_BONNET_DAM 3
+#define UPGRADE_BONNET_LEFT_DAM 4
+#define UPGRADE_BONNET_RIGHT_DAM 5
+#define UPGRADE_SPOILER 6
+#define UPGRADE_SPOILER_DAM 7
+#define UPGRADE_WING_LEFT 8
+#define UPGRADE_WING_RIGHT 9
+#define UPGRADE_FRONTBULLBAR 10
+#define UPGRADE_BACKBULLBAR 11
+#define UPGRADE_LIGHTS 12
+#define UPGRADE_LIGHTS_DAM 13
+#define UPGRADE_ROOF 14
+#define UPGRADE_NITRO 15
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#endif

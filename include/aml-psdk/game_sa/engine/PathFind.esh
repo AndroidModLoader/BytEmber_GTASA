@@ -1,0 +1,143 @@
+#ifndef PSDK_game_sa_engine_PathFind_h
+#define PSDK_game_sa_engine_PathFind_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../game_sa/base/Matrix.esh"
+#include "../../game_sa/base/Lists.esh"
+native class CPathNode = size(bits(0x1c, 0x28))
+{
+    CPathNode* m_pNext = offset(0x0);
+    CPathNode* m_pPrev = offset(bits(0x4, 0x8));
+    CompressedVector m_vecPosn = offset(bits(0x8, 0x10));
+    uint16_t m_nSearchList = offset(bits(0xe, 0x16));
+    int16_t m_nBaseLinkId = offset(bits(0x10, 0x18));
+    int16_t m_nAreaId = offset(bits(0x12, 0x1a));
+    int16_t m_nNodeId = offset(bits(0x14, 0x1c));
+    CNodeAddress m_Node = offset(bits(0x12, 0x1a));
+    uint8_t m_nPathWidth = offset(bits(0x16, 0x1e));
+    uint8_t m_nFloodFill = offset(bits(0x17, 0x1f));
+    uint8_t m_nNumLinks = offset(bits(0x18, 0x20)) bits(0, 4, 1);
+    uint8_t m_nTrafficLevel = offset(bits(0x18, 0x20)) bits(4, 2, 1);
+    uint8_t m_bRoadBlocks = offset(bits(0x18, 0x20)) bits(6, 1, 1);
+    uint8_t m_bWaterNode = offset(bits(0x18, 0x20)) bits(7, 1, 1);
+    uint8_t m_bEmergencyVehiclesOnly = offset(bits(0x19, 0x21)) bits(0, 1, 1);
+    uint8_t m_bAlreadyFound = offset(bits(0x19, 0x21)) bits(1, 1, 1);
+    uint8_t m_bDontWander = offset(bits(0x19, 0x21)) bits(2, 1, 1);
+    uint8_t m_bInteriorNode = offset(bits(0x19, 0x21)) bits(3, 1, 1);
+    uint8_t m_bNotHighway = offset(bits(0x19, 0x21)) bits(4, 1, 1);
+    uint8_t m_bHighway = offset(bits(0x19, 0x21)) bits(5, 1, 1);
+    uint8_t unk3 = offset(bits(0x19, 0x21)) bits(6, 1, 1);
+    uint8_t unk4 = offset(bits(0x19, 0x21)) bits(7, 1, 1);
+    uint8_t m_nSpawnProbability = offset(bits(0x1a, 0x22)) bits(0, 4, 1);
+    uint8_t m_nBehaviourType = offset(bits(0x1a, 0x22)) bits(4, 4, 1);
+};
+native class CCarPathLink = size(0xe)
+{
+    CompressedVector2D m_vecPosn = offset(0x0);
+    CNodeAddress m_address = offset(0x4);
+    uint8_t m_nDirX = offset(0x8);
+    uint8_t m_nDirY = offset(0x9);
+    uint8_t m_nPathNodeWidth = offset(0xa);
+    uint8_t m_nNumLeftLanes = offset(0xb) bits(0, 3, 1);
+    uint8_t m_nNumRightLanes = offset(0xb) bits(3, 3, 1);
+    uint8_t m_bTrafficLightDirection = offset(0xb) bits(6, 1, 1);
+    uint8_t unk1 = offset(0xb) bits(7, 1, 1);
+    uint8_t m_nTrafficLightState = offset(0xc) bits(0, 2, 1);
+    uint8_t m_bTrainCrossing = offset(0xc) bits(2, 1, 1);
+};
+native class CPathIntersectionInfo = size(0x1)
+{
+    uint8_t m_bRoadCross = offset(0x0) bits(0, 1, 1);
+    uint8_t m_bPedTrafficLight = offset(0x0) bits(1, 1, 1);
+};
+native class CForbiddenArea = size(0x1c)
+{
+    float m_fX1 = offset(0x0);
+    float m_fX2 = offset(0x4);
+    float m_fY1 = offset(0x8);
+    float m_fY2 = offset(0xc);
+    float m_fZ1 = offset(0x10);
+    float m_fZ2 = offset(0x14);
+    bool m_bEnable = offset(0x18);
+    uint8_t m_nType = offset(0x19);
+};
+native class CLinkAddress = size(0x2)
+{
+    uint16_t Address = offset(0x0);
+};
+native class CPathFind = size(bits(0x3cc0, 0x4ca8))
+{
+    CNodeAddress info = offset(0x0);
+    CPathNode* m_apNodesSearchLists[512] = offset(bits(0x4, 0x8));
+    CPathNode* m_pPathNodes[72] = offset(bits(0x804, 0x1008));
+    CCarPathLink* m_pNaviNodes[72] = offset(bits(0x924, 0x1248));
+    CNodeAddress* m_pNodeLinks[72] = offset(bits(0xa44, 0x1488));
+    uint8_t* m_pLinkLengths[72] = offset(bits(0xb64, 0x16c8));
+    CPathIntersectionInfo* m_pPathIntersections[72] = offset(bits(0xc84, 0x1908));
+    CCarPathLinkAddress* m_pNaviLinks[72] = offset(bits(0xda4, 0x1b48));
+    void* m_pTemporaryNodes[72] = offset(bits(0xec4, 0x1d88));
+    uint32_t m_dwNumNodes[72] = offset(bits(0xfe4, 0x1fc8));
+    uint32_t m_dwNumVehicleNodes[72] = offset(bits(0x1104, 0x20e8));
+    uint32_t m_dwNumPedNodes[72] = offset(bits(0x1224, 0x2208));
+    uint32_t m_dwNumCarPathLinks[72] = offset(bits(0x1344, 0x2328));
+    uint32_t m_dwNumAddresses[72] = offset(bits(0x1464, 0x2448));
+    uint32_t m_dwTotalNumNodesInSearchList = offset(bits(0x3584, 0x4568));
+    uint32_t m_nInteriorID[8] = offset(bits(0x3588, 0x456c));
+    uint32_t m_dwNumForbiddenAreas = offset(bits(0x35a8, 0x458c));
+    CForbiddenArea m_aForbiddenAreas[64] = offset(bits(0x35ac, 0x4590));
+    bool m_bForbiddenForScriptedCarsEnabled = offset(bits(0x3cac, 0x4c90));
+    float m_fForbiddenForScrCarsX1 = offset(bits(0x3cb0, 0x4c94));
+    float m_fForbiddenForScrCarsX2 = offset(bits(0x3cb4, 0x4c98));
+    float m_fForbiddenForScrCarsY1 = offset(bits(0x3cb8, 0x4c9c));
+    float m_fForbiddenForScrCarsY2 = offset(bits(0x3cbc, 0x4ca0));
+    void Init() = symbol("libGTASA.so", "_ZN9CPathFind4InitEv");
+    void ReInit() = symbol("libGTASA.so", "_ZN9CPathFind6ReInitEv");
+    void ReleaseRequestedNodes() = symbol("libGTASA.so", "_ZN9CPathFind21ReleaseRequestedNodesEv");
+    void PreparePathData() = symbol("libGTASA.so", "_ZN9CPathFind15PreparePathDataEv");
+    void CheckGrid() = symbol("libGTASA.so", "_ZN9CPathFind9CheckGridEv");
+    void AllocatePathFindInfoMem() = symbol("libGTASA.so", "_ZN9CPathFind23AllocatePathFindInfoMemEv");
+    void TidyUpNodeSwitchesAfterMission() = symbol("libGTASA.so", "_ZN9CPathFind30TidyUpNodeSwitchesAfterMissionEv");
+    void UnMarkAllRoadNodesAsDontWander() = symbol("libGTASA.so", "_ZN9CPathFind30UnMarkAllRoadNodesAsDontWanderEv");
+    void Shutdown() = symbol("libGTASA.so", "_ZN9CPathFind8ShutdownEv");
+    bool HaveRequestedNodesBeenLoaded() = symbol("libGTASA.so", "_ZN9CPathFind28HaveRequestedNodesBeenLoadedEv");
+    bool Save() = symbol("libGTASA.so", "_ZN9CPathFind4SaveEv");
+    bool Load() = symbol("libGTASA.so", "_ZN9CPathFind4LoadEv");
+    void LoadPathFindData1(int Region) = symbol("libGTASA.so", "_ZN9CPathFind16LoadPathFindDataEi");
+    void LoadPathFindData2(RwStream* pStream, int Region) = symbol("libGTASA.so", "_ZN9CPathFind16LoadPathFindDataEP8RwStreami");
+    void SwitchRoadsOffInAreaForOneRegion(float MinX, float MaxX, float MinY, float MaxY, float MinZ, float MaxZ, bool SwitchRoadsOff, bool bCars, int Region, bool bBackToOriginal) = symbol("libGTASA.so", "_ZN9CPathFind32SwitchRoadsOffInAreaForOneRegionEffffffbbib");
+    void UnLoadPathFindData(int Region) = symbol("libGTASA.so", "_ZN9CPathFind18UnLoadPathFindDataEi");
+    void ComputeRoute(uint8_t GraphType, CVector* StartCoors, CVector* TargetCoors, CNodeAddress* StartNode, CNodeRoute* route) = symbol("libGTASA.so", "_ZN9CPathFind12ComputeRouteEhRK7CVectorS2_RK12CNodeAddressR10CNodeRoute");
+    void AddNodeToList(CPathNode* pNode, int Dist) = symbol("libGTASA.so", "_ZN9CPathFind13AddNodeToListEP9CPathNodei");
+    void RemoveNodeFromList(CPathNode* pNode) = symbol("libGTASA.so", "_ZN9CPathFind18RemoveNodeFromListEP9CPathNode");
+    void CountFloodFillGroups(uint8_t GraphType) = symbol("libGTASA.so", "_ZN9CPathFind20CountFloodFillGroupsEh");
+    uint8_t GeneratePedCreationCoors(float CentreX, float CentreY, float MinRad, float MaxRad, float MinRadClose, float MaxRadClose, CVector* pResult, CNodeAddress* pFromNode, CNodeAddress* pToNode, float* pFraction, bool bIncludeSwitchedOffs, CMatrix* pInvCam) = symbol("libGTASA.so", "_ZN9CPathFind24GeneratePedCreationCoorsEffffffP7CVectorP12CNodeAddressS3_PfbP7CMatrix");
+    int32_t FindRegionForCoors(float X, float Y) = symbol("libGTASA.so", "_ZN9CPathFind18FindRegionForCoorsEff");
+    bool GeneratePedCreationCoors_Interior(float CentreX, float CentreY, CVector* pResult, CNodeAddress* pFromNode, CNodeAddress* pToNode, float* pFraction) = symbol("libGTASA.so", "_ZN9CPathFind33GeneratePedCreationCoors_InteriorEffP7CVectorP12CNodeAddressS3_Pf");
+    float CalcRoadDensity(float TestX, float TestY) = symbol("libGTASA.so", "_ZN9CPathFind15CalcRoadDensityEff");
+    int32_t FindXRegionForCoors(float X) = symbol("libGTASA.so", "_ZN9CPathFind19FindXRegionForCoorsEf");
+    int32_t FindYRegionForCoors(float Y) = symbol("libGTASA.so", "_ZN9CPathFind19FindYRegionForCoorsEf");
+    float FindXCoorsForRegion(int Region) = symbol("libGTASA.so", "_ZN9CPathFind19FindXCoorsForRegionEi");
+    float FindYCoorsForRegion(int Region) = symbol("libGTASA.so", "_ZN9CPathFind19FindYCoorsForRegionEi");
+    int32_t RecordNodesInCircle(CVector* Centre, float Radius, uint8_t GraphType, int NoOfNodes, CNodeAddress* Nodes, bool bIgnoreSwitchedOff, bool bIgnoreBetweenLevels, bool bIgnoreAlreadyFound, bool bBoatNodes, bool bIgnoreInteriors) = symbol("libGTASA.so", "_ZN9CPathFind19RecordNodesInCircleERK7CVectorfhiP12CNodeAddressbbbbb");
+    bool ThisNodeWillLeadIntoADeadEnd(CPathNode* pToNode, CPathNode* pFromNode) = symbol("libGTASA.so", "_ZN9CPathFind28ThisNodeWillLeadIntoADeadEndEP9CPathNodeS1_");
+    void SwitchRoadsOffInArea(float MinX, float MaxX, float MinY, float MaxY, float MinZ, float MaxZ, bool SwitchRoadsOff, bool bCars, bool bBackToOriginal) = symbol("libGTASA.so", "_ZN9CPathFind20SwitchRoadsOffInAreaEffffffbbb");
+    void SwitchPedRoadsOffInArea(float MinX, float MaxX, float MinY, float MaxY, float MinZ, float MaxZ, bool SwitchRoadsOff, bool bBackToOriginal) = symbol("libGTASA.so", "_ZN9CPathFind23SwitchPedRoadsOffInAreaEffffffbb");
+    bool ThisNodeHasToBeSwitchedOff(CPathNode* pNode) = symbol("libGTASA.so", "_ZN9CPathFind26ThisNodeHasToBeSwitchedOffEP9CPathNode");
+    void SwitchOffNodeAndNeighbours(CPathNode* pNode, nativeptr ppNextNode1, nativeptr ppNextNode2, bool bWhatToSwitchTo, bool bBackToOriginal) = symbol("libGTASA.so", "_ZN9CPathFind26SwitchOffNodeAndNeighboursEP9CPathNodePS1_S2_bb");
+    int32_t CountNeighboursToBeSwitchedOff(CPathNode* pNode) = symbol("libGTASA.so", "_ZN9CPathFind30CountNeighboursToBeSwitchedOffEP9CPathNode");
+    void MarkRoadNodeAsDontWander(float NodeX, float NodeY, float NodeZ) = symbol("libGTASA.so", "_ZN9CPathFind24MarkRoadNodeAsDontWanderEfff");
+    void FindStartPointOfRegion(int RegionX, int RegionY, float* ResultX, float* ResultY) = symbol("libGTASA.so", "_ZN9CPathFind22FindStartPointOfRegionEiiRfS0_");
+    void SetLinksBridgeLights(float MinX, float MaxX, float MinY, float MaxY, bool Value) = symbol("libGTASA.so", "_ZN9CPathFind20SetLinksBridgeLightsEffffb");
+    void SetPathsNeededAtPosition(CVector* posn) = symbol("libGTASA.so", "_ZN9CPathFind24SetPathsNeededAtPositionERK7CVector");
+    void UpdateStreaming(bool bForceLoad) = symbol("libGTASA.so", "_ZN9CPathFind15UpdateStreamingEb");
+    void MakeRequestForNodesToBeLoaded(float MinX, float MaxX, float MinY, float MaxY) = symbol("libGTASA.so", "_ZN9CPathFind29MakeRequestForNodesToBeLoadedEffff");
+    bool AreNodesLoadedForArea(float MinX, float MaxX, float MinY, float MaxY) = symbol("libGTASA.so", "_ZN9CPathFind21AreNodesLoadedForAreaEffff");
+    void StartNewInterior(uint32_t id) = symbol("libGTASA.so", "_ZN9CPathFind16StartNewInteriorEj");
+    void AddInteriorLink(int Node1, int Node2) = symbol("libGTASA.so", "_ZN9CPathFind15AddInteriorLinkEii");
+    void RemoveInteriorLinks(int Node) = symbol("libGTASA.so", "_ZN9CPathFind19RemoveInteriorLinksEi");
+    void CompleteNewInterior(CNodeAddress* pNearestExteriorNode) = symbol("libGTASA.so", "_ZN9CPathFind19CompleteNewInteriorEP12CNodeAddress");
+    void RemoveInterior(uint32_t id) = symbol("libGTASA.so", "_ZN9CPathFind14RemoveInteriorEj");
+};
+#endif

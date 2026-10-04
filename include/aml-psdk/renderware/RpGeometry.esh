@@ -1,0 +1,109 @@
+#ifndef PSDK_renderware_RpGeometry_h
+#define PSDK_renderware_RpGeometry_h
+#pragma once
+#define rpGEOMETRYTRISTRIP 1
+#define rpGEOMETRYPOSITIONS 2
+#define rpGEOMETRYTEXTURED 4
+#define rpGEOMETRYPRELIT 8
+#define rpGEOMETRYNORMALS 16
+#define rpGEOMETRYLIGHT 32
+#define rpGEOMETRYMODULATEMATERIALCOLOR 64
+#define rpGEOMETRYTEXTURED2 128
+#define rpGEOMETRYPRELIT2 512
+#define rpGEOMETRYISLOD 1024
+#define rpGEOMETRYHASLOD 2048
+#define rpGEOMETRYNATIVE 16777216
+#define rpGEOMETRYNATIVEINSTANCE 33554432
+#define rpGEOMETRYFLAGSMASK 4095
+#define rpGEOMETRYNATIVEFLAGSMASK 251658240
+#define rpGEOMETRYLOCKPOLYGONS 1
+#define rpGEOMETRYLOCKVERTICES 2
+#define rpGEOMETRYLOCKNORMALS 4
+#define rpGEOMETRYLOCKPRELIGHT 8
+#define rpGEOMETRYLOCKTEXCOORDS 16
+#define rpGEOMETRYLOCKTEXCOORDS1 16
+#define rpGEOMETRYLOCKTEXCOORDS2 32
+#define rpGEOMETRYLOCKTEXCOORDS3 64
+#define rpGEOMETRYLOCKTEXCOORDS4 128
+#define rpGEOMETRYLOCKTEXCOORDS5 256
+#define rpGEOMETRYLOCKTEXCOORDS6 512
+#define rpGEOMETRYLOCKTEXCOORDS7 1024
+#define rpGEOMETRYLOCKTEXCOORDS8 2048
+#define rpGEOMETRYLOCKTEXCOORDSALL 4080
+#define rpGEOMETRYLOCKALL 4095
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../sdk_forward.esh"
+#include "../sdk_base.esh"
+#include "../renderware/RwObject.esh"
+#include "../renderware/RwVector.esh"
+#include "../renderware/RpMaterial.esh"
+#include "../renderware/RwMatrix.esh"
+#include "../renderware/RwResource.esh"
+#include "../renderware/RpMesh.esh"
+native class RpTriangle = size(0x8)
+{
+    uint16_t vertIndex[3] = offset(0x0);
+    uint16_t matIndex = offset(0x6);
+};
+native class RwTexCoords = size(0x8)
+{
+    float u = offset(0x0);
+    float v = offset(0x4);
+};
+native class RpMorphTarget = size(bits(0x1c, 0x28))
+{
+    RpGeometry* parentGeom = offset(0x0);
+    RwSphere boundingSphere = offset(bits(0x4, 0x8));
+    CVector* verts = offset(bits(0x14, 0x18));
+    CVector* normals = offset(bits(0x18, 0x20));
+};
+native class RpGeometryChunkInfo = size(0x10)
+{
+    int format = offset(0x0);
+    int numTriangles = offset(0x4);
+    int numVertices = offset(0x8);
+    int numMorphTargets = offset(0xc);
+};
+native class RpGeometry = size(bits(0x64, 0xa8))
+{
+    RwObject object = offset(0x0);
+    uint32_t flags = offset(bits(0x8, 0x10));
+    uint16_t lockedSinceLastInst = offset(bits(0xc, 0x14));
+    int16_t refCount = offset(bits(0xe, 0x16));
+    int numTriangles = offset(bits(0x10, 0x18));
+    int numVertices = offset(bits(0x14, 0x1c));
+    int numMorphTargets = offset(bits(0x18, 0x20));
+    int numTexCoordSets = offset(bits(0x1c, 0x24));
+    RpMaterialList matList = offset(bits(0x20, 0x28));
+    RpTriangle* triangles = offset(bits(0x2c, 0x38));
+    CRGBA* preLitLum = offset(bits(0x30, 0x40));
+    RwTexCoords* texCoords[8] = offset(bits(0x34, 0x48));
+    uint32_t vertexBuffer = offset(bits(0x54, 0x88));
+    RpMeshHeader* mesh = offset(bits(0x58, 0x90));
+    RwResEntry* repEntry = offset(bits(0x5c, 0x98));
+    RpMorphTarget* morphTarget = offset(bits(0x60, 0xa0));
+};
+native bool UseSkinning(RpGeometry* geometry) = symbol("libGTASA.so", "_Z11UseSkinningPK10RpGeometry");
+native RpGeometry* RpGeometryTransform(RpGeometry* geometry, RwMatrix* matrix) = symbol("libGTASA.so", "_Z19RpGeometryTransformP10RpGeometryPK11RwMatrixTag");
+native RpGeometry* RpGeometryUnlock(RpGeometry* geometry) = symbol("libGTASA.so", "_Z16RpGeometryUnlockP10RpGeometry");
+native RpGeometry* RpGeometryTriangleSetMaterial(RpGeometry* geometry, RpTriangle* triangle, RpMaterial* material) = symbol("libGTASA.so", "_Z29RpGeometryTriangleSetMaterialP10RpGeometryP10RpTriangleP10RpMaterial");
+native RpGeometry* RpGeometryTriangleGetVertexIndices(RpGeometry* geometry, RpTriangle* triangle, RwUInt16* vert1, RwUInt16* vert2, RwUInt16* vert3) = symbol("libGTASA.so", "_Z34RpGeometryTriangleGetVertexIndicesPK10RpGeometryPK10RpTrianglePtS5_S5_");
+native RpMaterial* RpGeometryTriangleGetMaterial(RpGeometry* geometry, RpTriangle* triangle) = symbol("libGTASA.so", "_Z29RpGeometryTriangleGetMaterialPK10RpGeometryPK10RpTriangle");
+native RpGeometry* RpGeometryForAllMaterials(RpGeometry* geometry, nativeptr fpCallBack, void* pData) = symbol("libGTASA.so", "_Z25RpGeometryForAllMaterialsP10RpGeometryPFP10RpMaterialS2_PvES3_");
+native RpGeometry* RpGeometryForAllMeshes(RpGeometry* geometry, nativeptr fpCallBack, void* pData) = symbol("libGTASA.so", "_Z22RpGeometryForAllMeshesPK10RpGeometryPFP6RpMeshS3_P12RpMeshHeaderPvES6_");
+native RpGeometry* _rpGeometryAddRef(RpGeometry* geometry) = symbol("libGTASA.so", "_Z17_rpGeometryAddRefP10RpGeometry");
+native RpGeometry* RpGeometryStreamWrite(RpGeometry* geometry, RwStream* stream) = symbol("libGTASA.so", "_Z21RpGeometryStreamWritePK10RpGeometryP8RwStream");
+native RpGeometry* RpGeometryStreamRead(RwStream* stream) = symbol("libGTASA.so", "_Z20RpGeometryStreamReadP8RwStream");
+native RpGeometryChunkInfo* _rpGeometryChunkInfoRead(RwStream* stream, RpGeometryChunkInfo* geometryChunkInfo, RwInt32* bytesRead) = symbol("libGTASA.so", "_Z24_rpGeometryChunkInfoReadP8RwStreamP19RpGeometryChunkInfoPi");
+native RpGeometry* RpGeometryIsCorrectlySorted(RpGeometry* geometry, RwBool* result) = symbol("libGTASA.so", "_Z27RpGeometryIsCorrectlySortedPK10RpGeometryPi");
+native RpGeometry* RpGeometrySortByMaterial(RpGeometry* source, nativeptr callback) = symbol("libGTASA.so", "_Z24RpGeometrySortByMaterialPK10RpGeometryPFvS1_PS_PttE");
+native bool _rpGeometryNeedsPrecideUVs(RpGeometry* geometry, int texCoordIndex) = symbol("libGTASA.so", "_Z26_rpGeometryNeedsPrecideUVsPK10RpGeometryi");
+native bool _rpGeometryNeedsPreciseSkin(RpGeometry* geometry, RpSkin* skin) = symbol("libGTASA.so", "_Z27_rpGeometryNeedsPreciseSkinPK10RpGeometryP6RpSkin");
+native RwStream* _rpGeometryNativeWrite(RwStream* stream, RpGeometry* geometry) = symbol("libGTASA.so", "_Z22_rpGeometryNativeWriteP8RwStreamPK10RpGeometry");
+native RpGeometry* _rpGeometryNativeRead(RwStream* stream, RpGeometry* geometry) = symbol("libGTASA.so", "_Z21_rpGeometryNativeReadP8RwStreamP10RpGeometry");
+native void ConstructGeometryArray(nativeptr ppGeometry, uint32_t* pModelKeys, float normal, float fatness, float strength) = symbol("libGTASA.so", "_ZN15CClothesBuilder22ConstructGeometryArrayEPP10RpGeometryPjfff");
+native RpGeometry* BlendGeometry1(RpClump* pClump, uint8_t* pName1, uint8_t* pName2, uint8_t* pName3, float r1, float r2, float r3) = symbol("libGTASA.so", "_ZN15CClothesBuilder13BlendGeometryEP7RpClumpPKcS3_S3_fff");
+native RpGeometry* BlendGeometry2(RpClump* pClump, uint8_t* pName1, uint8_t* pName2, float r1, float r2) = symbol("libGTASA.so", "_ZN15CClothesBuilder13BlendGeometryEP7RpClumpPKcS3_ff");
+native RpGeometry* CopyGeometry(RpClump* pClump, uint8_t* pName1, uint8_t* pName2) = symbol("libGTASA.so", "_ZN15CClothesBuilder12CopyGeometryEP7RpClumpPKcS3_");
+native uint8_t RpGeometryReplaceOldMaterialWithNewMaterial(RpGeometry* pGeometry, RpMaterial* pOldMaterial, RpMaterial* pNewMaterial) = symbol("libGTASA.so", "_Z43RpGeometryReplaceOldMaterialWithNewMaterialP10RpGeometryP10RpMaterialS2_");
+#endif

@@ -1,0 +1,398 @@
+#ifndef PSDK_game_sa_entity_Automobile_h
+#define PSDK_game_sa_entity_Automobile_h
+#pragma once
+#define DAMSTATE_OK 0
+#define DAMSTATE_OPENED 1
+#define DAMSTATE_DAMAGED 2
+#define DAMSTATE_OPENED_DAMAGED 3
+#define DAMSTATE_NOTPRESENT 4
+#define COMPONENT_WHEEL_LF 1
+#define COMPONENT_WHEEL_RF 2
+#define COMPONENT_WHEEL_LR 3
+#define COMPONENT_WHEEL_RR 4
+#define COMPONENT_BONNET 5
+#define COMPONENT_BOOT 6
+#define COMPONENT_DOOR_LF 7
+#define COMPONENT_DOOR_RF 8
+#define COMPONENT_DOOR_LR 9
+#define COMPONENT_DOOR_RR 10
+#define COMPONENT_WING_LF 11
+#define COMPONENT_WING_RF 12
+#define COMPONENT_WING_LR 13
+#define COMPONENT_WING_RR 14
+#define COMPONENT_WINDSCREEN 15
+#define COMPONENT_BUMP_FRONT 16
+#define COMPONENT_BUMP_REAR 17
+#define COMPGROUP_PANEL 0
+#define COMPGROUP_WHEEL 1
+#define COMPGROUP_DOOR 2
+#define COMPGROUP_BONNET 3
+#define COMPGROUP_BOOT 4
+#define COMPGROUP_LIGHT 5
+#define COMPGROUP_NA 6
+#define WHEEL_FRONT_LEFT 0
+#define WHEEL_REAR_LEFT 1
+#define WHEEL_FRONT_RIGHT 2
+#define WHEEL_REAR_RIGHT 3
+#define WING_FRONT_LEFT 0
+#define WING_FRONT_RIGHT 1
+#define WING_REAR_LEFT 2
+#define WING_REAR_RIGHT 3
+#define WINDSCREEN 4
+#define BUMP_FRONT 5
+#define BUMP_REAR 6
+#define LIGHT_FRONT_LEFT 0
+#define LIGHT_FRONT_RIGHT 1
+#define LIGHT_REAR_RIGHT 2
+#define LIGHT_REAR_LEFT 3
+#define CAR_NODE_NONE 0
+#define CAR_CHASSIS 1
+#define CAR_WHEEL_RF 2
+#define CAR_WHEEL_RM 3
+#define CAR_WHEEL_RB 4
+#define CAR_WHEEL_LF 5
+#define CAR_WHEEL_LM 6
+#define CAR_WHEEL_LB 7
+#define CAR_DOOR_RF 8
+#define CAR_DOOR_RR 9
+#define CAR_DOOR_LF 10
+#define CAR_DOOR_LR 11
+#define CAR_BUMP_FRONT 12
+#define CAR_BUMP_REAR 13
+#define CAR_WING_RF 14
+#define CAR_WING_LF 15
+#define CAR_BONNET 16
+#define CAR_BOOT 17
+#define CAR_WINDSCREEN 18
+#define CAR_EXHAUST 19
+#define CAR_MISC_A 20
+#define CAR_MISC_B 21
+#define CAR_MISC_C 22
+#define CAR_MISC_D 23
+#define CAR_MISC_E 24
+#define CAR_NUM_NODES 25
+#define MONSTER_NODE_NONE 0
+#define MONSTER_CHASSIS 1
+#define MONSTER_WHEEL_RF 2
+#define MONSTER_WHEEL_RM 3
+#define MONSTER_WHEEL_RB 4
+#define MONSTER_WHEEL_LF 5
+#define MONSTER_WHEEL_LM 6
+#define MONSTER_WHEEL_LB 7
+#define MONSTER_DOOR_RF 8
+#define MONSTER_DOOR_RR 9
+#define MONSTER_DOOR_LF 10
+#define MONSTER_DOOR_LR 11
+#define MONSTER_BUMP_FRONT 12
+#define MONSTER_BUMP_REAR 13
+#define MONSTER_WING_RF 14
+#define MONSTER_WING_LF 15
+#define MONSTER_BONNET 16
+#define MONSTER_BOOT 17
+#define MONSTER_WINDSCREEN 18
+#define MONSTER_TRANSMISSION_F 19
+#define MONSTER_TRANSMISSION_R 20
+#define MONSTER_LOADBAY 21
+#define MONSTER_MISC_A 22
+#define MONSTER_NUM_NODES 23
+#define TRAILER_NODE_NONE 0
+#define TRAILER_CHASSIS 1
+#define TRAILER_WHEEL_RF 2
+#define TRAILER_WHEEL_RM 3
+#define TRAILER_WHEEL_RB 4
+#define TRAILER_WHEEL_LF 5
+#define TRAILER_WHEEL_LM 6
+#define TRAILER_WHEEL_LB 7
+#define TRAILER_DOOR_RF 8
+#define TRAILER_DOOR_RR 9
+#define TRAILER_DOOR_LF 10
+#define TRAILER_DOOR_LR 11
+#define TRAILER_BUMP_FRONT 12
+#define TRAILER_BUMP_REAR 13
+#define TRAILER_WING_RF 14
+#define TRAILER_WING_LF 15
+#define TRAILER_BONNET 16
+#define TRAILER_BOOT 17
+#define TRAILER_WINDSCREEN 18
+#define TRAILER_EXHAUST 19
+#define TRAILER_MISC_A 20
+#define TRAILER_MISC_B 21
+#define TRAILER_MISC_C 22
+#define TRAILER_NUM_NODES 23
+#define QUAD_NODE_NONE 0
+#define QUAD_CHASSIS 1
+#define QUAD_WHEEL_RF 2
+#define QUAD_WHEEL_RM 3
+#define QUAD_WHEEL_RB 4
+#define QUAD_WHEEL_LF 5
+#define QUAD_WHEEL_LM 6
+#define QUAD_WHEEL_LB 7
+#define QUAD_DOOR_RF 8
+#define QUAD_DOOR_RR 9
+#define QUAD_DOOR_LF 10
+#define QUAD_DOOR_LR 11
+#define QUAD_BODY_FRONT 12
+#define QUAD_BODY_REAR 13
+#define QUAD_SUSPENSION_RF 14
+#define QUAD_SUSPENSION_LF 15
+#define QUAD_REAR_AXLE 16
+#define QUAD_HANDLEBARS 17
+#define QUAD_MISC_A 18
+#define QUAD_MISC_B 19
+#define QUAD_NUM_NODES 20
+#define HELI_NODE_NONE 0
+#define HELI_CHASSIS 1
+#define HELI_WHEEL_RF 2
+#define HELI_WHEEL_RM 3
+#define HELI_WHEEL_RB 4
+#define HELI_WHEEL_LF 5
+#define HELI_WHEEL_LM 6
+#define HELI_WHEEL_LB 7
+#define HELI_DOOR_RF 8
+#define HELI_DOOR_RR 9
+#define HELI_DOOR_LF 10
+#define HELI_DOOR_LR 11
+#define HELI_STATIC_ROTOR 12
+#define HELI_MOVING_ROTOR 13
+#define HELI_STATIC_ROTOR2 14
+#define HELI_MOVING_ROTOR2 15
+#define HELI_RUDDER 16
+#define HELI_ELEVATORS 17
+#define HELI_MISC_A 18
+#define HELI_MISC_B 19
+#define HELI_MISC_C 20
+#define HELI_MISC_D 21
+#define HELI_NUM_NODES 22
+#define PLANE_NODE_NONE 0
+#define PLANE_CHASSIS 1
+#define PLANE_WHEEL_RF 2
+#define PLANE_WHEEL_RM 3
+#define PLANE_WHEEL_RB 4
+#define PLANE_WHEEL_LF 5
+#define PLANE_WHEEL_LM 6
+#define PLANE_WHEEL_LB 7
+#define PLANE_DOOR_RF 8
+#define PLANE_DOOR_RR 9
+#define PLANE_DOOR_LF 10
+#define PLANE_DOOR_LR 11
+#define PLANE_STATIC_PROP 12
+#define PLANE_MOVING_PROP 13
+#define PLANE_STATIC_PROP2 14
+#define PLANE_MOVING_PROP2 15
+#define PLANE_RUDDER 16
+#define PLANE_ELEVATOR_L 17
+#define PLANE_ELEVATOR_R 18
+#define PLANE_AILERON_L 19
+#define PLANE_AILERON_R 20
+#define PLANE_GEAR_L 21
+#define PLANE_GEAR_R 22
+#define PLANE_MISC_A 23
+#define PLANE_MISC_B 24
+#define PLANE_NUM_NODES 25
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/entity/Vehicle.esh"
+native class CBouncingPanel = size(0x20)
+{
+    uint16_t m_nFrameId = offset(0x0);
+    uint16_t m_nAxis = offset(0x2);
+    float m_fAngleLimit = offset(0x4);
+    CVector m_vecRotation = offset(0x8);
+    CVector m_vecPos = offset(0x14);
+};
+native class CDamageManager = size(0x18)
+{
+    float m_fWheelDamageEffect = offset(0x0);
+    uint8_t m_nEngineStatus = offset(0x4);
+    uint8_t m_anWheelsStatus[4] = offset(0x5);
+    uint8_t m_nRightRearWheelsStatus = offset(0x5);
+    uint8_t m_nRightFrontWheelsStatus = offset(0x6);
+    uint8_t m_nLeftRearWheelsStatus = offset(0x7);
+    uint8_t m_nLeftFrontWheelsStatus = offset(0x8);
+    uint8_t m_anDoorsStatus[6] = offset(0x9);
+    uint8_t m_nBonnetStatus = offset(0x9);
+    uint8_t m_nBootStatus = offset(0xa);
+    uint8_t m_nLeftFrontDoorStatus = offset(0xb);
+    uint8_t m_nRightFrontDoorStatus = offset(0xc);
+    uint8_t m_nLeftRearDoorStatus = offset(0xd);
+    uint8_t m_nRightRearDoorStatus = offset(0xe);
+    uint32_t m_nLightsStatus = offset(0x10);
+    uint32_t m_nLeftFrontLightStatus = offset(0x10) bits(0, 2, 1);
+    uint32_t m_nRightFrontLightStatus = offset(0x10) bits(2, 2, 1);
+    uint32_t m_nRightRearLightStatus = offset(0x10) bits(4, 2, 1);
+    uint32_t m_nLeftRearLightStatus = offset(0x10) bits(6, 2, 1);
+    uint32_t m_nPanelsStatus = offset(0x14);
+};
+native class CAutomobile : public CVehicle = size(bits(0x99c, 0xbc8))
+{
+    CDamageManager m_damageManager = offset(bits(0x5b4, 0x758));
+    CDoor m_doors[6] = offset(bits(0x5cc, 0x770));
+    RwFrame* m_aCarNodes[25] = offset(bits(0x65c, 0x800));
+    CBouncingPanel m_panels[3] = offset(bits(0x6c0, 0x8c8));
+    CDoor m_swingingChassis = offset(bits(0x720, 0x928));
+    CColPoint m_wheelColPoint[4] = offset(bits(0x738, 0x940));
+    float wheelsDistancesToGround1[4] = offset(bits(0x7e8, 0x9f0));
+    float wheelsDistancesToGround2[4] = offset(bits(0x7f8, 0xa00));
+    float wheelsCounts[4] = offset(bits(0x808, 0xa10));
+    float m_fBrakeCount = offset(bits(0x818, 0xa20));
+    float m_fEngineRevs = offset(bits(0x81c, 0xa24));
+    float m_fEngineForce = offset(bits(0x820, 0xa28));
+    int m_aSkidmarkType[4] = offset(bits(0x824, 0xa2c));
+    bool m_bBloodyWheel[4] = offset(bits(0x834, 0xa3c));
+    bool m_bMoreSkidmarks[4] = offset(bits(0x838, 0xa40));
+    float m_fWheelRotation[4] = offset(bits(0x83c, 0xa44));
+    float m_fSuspensionHeights[4] = offset(bits(0x84c, 0xa54));
+    float m_fWheelSpeed[4] = offset(bits(0x85c, 0xa64));
+    float m_fWheelLongtitudeSlip[4] = offset(bits(0x86c, 0xa74));
+    uint8_t taxiAvaliable = offset(bits(0x87c, 0xa84));
+    uint8_t m_nAutomobileFlags = offset(bits(0x87c, 0xa84));
+    uint8_t bTaxiLight = offset(bits(0x87c, 0xa84)) bits(0, 1, 1);
+    uint8_t bShouldNotChangeColour = offset(bits(0x87c, 0xa84)) bits(1, 1, 1);
+    uint8_t bWaterTight = offset(bits(0x87c, 0xa84)) bits(2, 1, 1);
+    uint8_t bDoesNotGetDamageUpsideDown = offset(bits(0x87c, 0xa84)) bits(3, 1, 1);
+    uint8_t bCanBeVisiblyDamaged = offset(bits(0x87c, 0xa84)) bits(4, 1, 1);
+    uint8_t bTankExplodesCars = offset(bits(0x87c, 0xa84)) bits(5, 1, 1);
+    uint8_t bIsBoggedDownInSand = offset(bits(0x87c, 0xa84)) bits(6, 1, 1);
+    uint8_t bIsMonsterTruck = offset(bits(0x87c, 0xa84)) bits(7, 1, 1);
+    int16_t m_nBrakesOn = offset(bits(0x87e, 0xa86));
+    int16_t m_wMiscComponentAngle = offset(bits(0x880, 0xa88));
+    int16_t m_wVoodooSuspension = offset(bits(0x882, 0xa8a));
+    int m_dwBusDoorTimerEnd = offset(bits(0x884, 0xa8c));
+    int m_dwBusDoorTimerStart = offset(bits(0x888, 0xa90));
+    float wheelOffsetZ[4] = offset(bits(0x88c, 0xa94));
+    int lineLength[4] = offset(bits(0x89c, 0xaa4));
+    float m_fFrontHeightAboveRoad = offset(bits(0x8ac, 0xab4));
+    float m_fRearHeightAboveRoad = offset(bits(0x8b0, 0xab8));
+    float m_fCarTraction = offset(bits(0x8b4, 0xabc));
+    float m_fNitroValue = offset(bits(0x8b8, 0xac0));
+    float m_fRotation = offset(bits(0x8bc, 0xac4));
+    float m_fRotationBalance = offset(bits(0x8c0, 0xac8));
+    float m_fMoveDirection = offset(bits(0x8c4, 0xacc));
+    CVector m_vecOldMoveSpeed = offset(bits(0x8c8, 0xad0));
+    CVector m_vecOldTurnSpeed = offset(bits(0x8d4, 0xadc));
+    float m_aDoorRotation[6] = offset(bits(0x8e0, 0xae8));
+    float m_fBurningTimer = offset(bits(0x8f8, 0xb00));
+    CEntity* m_pWheelCollisionEntity[4] = offset(bits(0x8fc, 0xb08));
+    CVector m_vWheelCollisionPos[4] = offset(bits(0x90c, 0xb28));
+    CEntity* m_pAttacker = offset(bits(0x93c, 0xb58));
+    float m_fTransformPos = offset(bits(0x940, 0xb60));
+    int16_t m_nTransformState = offset(bits(0x944, 0xb64));
+    float m_fBasePositions[4] = offset(bits(0x948, 0xb68));
+    float m_fLeftDoorDrivebyOpen = offset(bits(0x958, 0xb78));
+    float m_fRightDoorDrivebyOpen = offset(bits(0x95c, 0xb7c));
+    float m_fDoomVerticalRotation = offset(bits(0x960, 0xb80));
+    float m_fDoomHorizontalRotation = offset(bits(0x964, 0xb84));
+    float m_fForcedOrientation = offset(bits(0x968, 0xb88));
+    float m_fUpDownLightAngle[2] = offset(bits(0x96c, 0xb8c));
+    uint8_t m_nNumContactWheels = offset(bits(0x974, 0xb94));
+    uint8_t m_nWheelsOnGround = offset(bits(0x975, 0xb95));
+    uint8_t m_nWheelsOnGroundPrev = offset(bits(0x976, 0xb96));
+    float m_fGasPedalAudioRevs = offset(bits(0x978, 0xb98));
+    uint32_t m_aWheelState[4] = offset(bits(0x97c, 0xb9c));
+    void* pNitroParticle[2] = offset(bits(0x98c, 0xbb0));
+    uint8_t m_nHarvesterTimer = offset(bits(0x994, 0xbc0));
+    uint8_t m_nBlownEngineStatus = offset(bits(0x995, 0xbc1));
+    float m_fHeliDustRatio = offset(bits(0x998, 0xbc4));
+};
+native class CMonsterTruck : public CAutomobile = size(bits(0x9b0, 0xbe0))
+{
+    float m_fTyreCompression[4] = offset(bits(0x99c, 0xbc8));
+    float m_fWheelRadius = offset(bits(0x9ac, 0xbd8));
+};
+native class CTrailer : public CAutomobile = size(bits(0xa08, 0xc38))
+{
+    CColPoint m_aSupportCols[2] = offset(bits(0x99c, 0xbc8));
+    float m_fSupportRatios[2] = offset(bits(0x9f4, 0xc20));
+    float m_fSupportStartZ = offset(bits(0x9fc, 0xc28));
+    float m_fSupportExtension = offset(bits(0xa00, 0xc2c));
+    float m_fSupportMinRatio = offset(bits(0xa04, 0xc30));
+};
+native class CQuadBike : public CAutomobile = size(bits(0x9d0, 0xc00))
+{
+    void* m_pHandling = offset(bits(0x99c, 0xbc8));
+    CRideAnimData m_rideAnimData = offset(bits(0x9a0, 0xbd0));
+    float m_fLeftArmSwing = offset(bits(0x9bc, 0xbec));
+    float m_fForkYOff = offset(bits(0x9c0, 0xbf0));
+    float m_fForkZOff = offset(bits(0x9c4, 0xbf4));
+    float m_fSteerAngleTan = offset(bits(0x9c8, 0xbf8));
+    uint8_t m_nQuadFlags = offset(bits(0x9cc, 0xbfc));
+    uint8_t m_bWheelieForCamera = offset(bits(0x9cc, 0xbfc)) bits(0, 1, 1);
+};
+native class tHeliLight = size(0x4c)
+{
+    CVector m_vecOrigin = offset(0x0);
+    CVector m_vecTarget = offset(0xc);
+    float m_fTargetRadius = offset(0x18);
+    float m_fPower = offset(0x1c);
+    int m_nCoronaIndex = offset(0x20);
+    bool m_bClipIfColliding = offset(0x24);
+    bool m_bDrawShadow = offset(0x25);
+    CVector m_vecEllipseCentre = offset(0x28);
+    CVector m_vecEllipseForward = offset(0x34);
+    CVector m_vecEllipseSide = offset(0x40);
+};
+native class CHeli : public CAutomobile = size(bits(0xa2c, 0xc60))
+{
+    uint8_t m_nHeliFlags = offset(bits(0x99c, 0xbc8));
+    uint8_t m_bStopFlyingForAWhileFlag = offset(bits(0x99c, 0xbc8)) bits(0, 1, 1);
+    uint8_t m_bUseSearchLightOnTarget = offset(bits(0x99c, 0xbc8)) bits(1, 1, 1);
+    uint8_t m_bWarnTarger = offset(bits(0x99c, 0xbc8)) bits(2, 1, 1);
+    float m_fLeftRightSkid = offset(bits(0x9a0, 0xbcc));
+    float m_fSteeringUpDown = offset(bits(0x9a4, 0xbd0));
+    float m_fSteeringLeftRight = offset(bits(0x9a8, 0xbd4));
+    float m_fAccelerationBreakStatus = offset(bits(0x9ac, 0xbd8));
+    float m_fEngineSpeed = offset(bits(0x9b0, 0xbdc));
+    float m_fRotorZ = offset(bits(0x9b4, 0xbe0));
+    float m_fSecondRotorZ = offset(bits(0x9b8, 0xbe4));
+    float m_fMaxAltitude = offset(bits(0x9bc, 0xbe8));
+    float m_fDesiredHeight = offset(bits(0x9c0, 0xbec));
+    float m_fMinAltitude = offset(bits(0x9c4, 0xbf0));
+    float m_fFlightDirection = offset(bits(0x9c8, 0xbf4));
+    bool m_bStopFlyingForAWhile = offset(bits(0x9cc, 0xbf8));
+    uint8_t m_nNumSwatOccupants = offset(bits(0x9cd, 0xbf9));
+    uint8_t m_anSwatIDs[4] = offset(bits(0x9ce, 0xbfa));
+    float m_afOldSearchLightX[6] = offset(bits(0x9d4, 0xc00));
+    float m_afOldSearchLightY[6] = offset(bits(0x9ec, 0xc18));
+    uint32_t m_nLastSearchLightSample = offset(bits(0xa04, 0xc30));
+    CVector m_vecSearchLightTarget = offset(bits(0xa08, 0xc34));
+    float m_fSearchLightIntensity = offset(bits(0xa14, 0xc40));
+    uint32_t m_nLastTimeSearchLightWasTooFarAwayToShoot = offset(bits(0xa18, 0xc44));
+    uint32_t m_nNextTalkTimer = offset(bits(0xa1c, 0xc48));
+    FxSystem_c** m_ppGunflashFx = offset(bits(0xa20, 0xc50));
+    uint8_t m_nFiringMultiplier = offset(bits(0xa24, 0xc58));
+    bool m_bSearchLightEnabled = offset(bits(0xa25, 0xc59));
+    float m_fCrashAndBurnTurnSpeed = offset(bits(0xa28, 0xc5c));
+};
+native class CPlane : public CAutomobile = size(bits(0xa18, 0xc68))
+{
+    float m_fYawControl = offset(bits(0x99c, 0xbc8));
+    float m_fPitchControl = offset(bits(0x9a0, 0xbcc));
+    float m_fRollControl = offset(bits(0x9a4, 0xbd0));
+    float m_fThrottleControl = offset(bits(0x9a8, 0xbd4));
+    float m_fScriptThrottleControl = offset(bits(0x9ac, 0xbd8));
+    float m_fPreviousRoll = offset(bits(0x9b0, 0xbdc));
+    uint32_t m_nStallCounter = offset(bits(0x9b4, 0xbe0));
+    float m_fTakeOffDirection = offset(bits(0x9b8, 0xbe4));
+    float m_fLowestFlightHeight = offset(bits(0x9bc, 0xbe8));
+    float m_fDesiredHeight = offset(bits(0x9c0, 0xbec));
+    float m_fMinHeightAboveTerrain = offset(bits(0x9c4, 0xbf0));
+    float m_fFlightDirection = offset(bits(0x9c8, 0xbf4));
+    float m_fFlightDirectionAvoidingTerrain = offset(bits(0x9cc, 0xbf8));
+    float m_fOldTilt = offset(bits(0x9d0, 0xbfc));
+    uint32_t m_nStartedFlyingTime = offset(bits(0x9d4, 0xc00));
+    float m_fEngineSpeed = offset(bits(0x9d8, 0xc04));
+    float m_fPropellerAngle = offset(bits(0x9dc, 0xc08));
+    float m_fLandingGearStatus = offset(bits(0x9e0, 0xc0c));
+    uint32_t m_nDamageControlWaveCounter = offset(bits(0x9e4, 0xc10));
+    FxSystem_c** m_pGunParticles = offset(bits(0x9e8, 0xc18));
+    uint8_t m_nFiringMultiplier = offset(bits(0x9ec, 0xc20));
+    uint32_t m_FireMissilePressedTime = offset(bits(0x9f0, 0xc24));
+    CEntity* m_pLastMissileTarget = offset(bits(0x9f4, 0xc28));
+    uint32_t m_nLastHSMissileLOSTime = offset(bits(0x9f8, 0xc30)) bits(0, 31, 4);
+    uint32_t m_bLastHSMissileLOS = offset(bits(0x9fb, 0xc33)) bits(7, 1, 1);
+    FxSystem_c* m_apJettrusParticles[4] = offset(bits(0x9fc, 0xc38));
+    FxSystem_c* m_pSmokeParticle = offset(bits(0xa0c, 0xc58));
+    int m_nSmokeTimer = offset(bits(0xa10, 0xc60));
+    bool m_bSmokeEjectorEnabled = offset(bits(0xa14, 0xc64));
+};
+#endif

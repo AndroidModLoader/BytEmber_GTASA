@@ -1,0 +1,85 @@
+#ifndef PSDK_game_sa_other_Widgets_h
+#define PSDK_game_sa_other_Widgets_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/engine/Sprite2d.esh"
+#include "../../gta_base/Vector.esh"
+#include "../../gta_base/RGBA.esh"
+#include "../../game_sa/enum/HID.esh"
+native class WidgetPosition = size(0x10)
+{
+    float m_fOriginX = offset(0x0);
+    float m_fOriginY = offset(0x4);
+    float m_fScaleX = offset(0x8);
+    float m_fScaleY = offset(0xc);
+};
+native class CHoldEffect = size(bits(0x24, 0x30))
+{
+    CHoldEffect* m_pPrev = offset(0x0);
+    CHoldEffect* m_pNext = offset(bits(0x4, 0x8));
+    CSprite2d m_Sprite = offset(bits(0x8, 0x10));
+    CRect m_RectScreen = offset(bits(0xc, 0x18));
+    float m_fProgress = offset(bits(0x1c, 0x28));
+    bool m_bSquare = offset(bits(0x20, 0x2c));
+};
+native class CWidget : public SimpleVTable = size(bits(0x90, 0xa8))
+{
+    int m_HIDMapping = offset(bits(0x4, 0x8));
+    CSprite2d m_Sprite = offset(bits(0x8, 0x10));
+    WidgetPosition m_Position = offset(bits(0xc, 0x18));
+    float m_fOriginX = offset(bits(0xc, 0x18));
+    float m_fOriginY = offset(bits(0x10, 0x1c));
+    float m_fScaleX = offset(bits(0x14, 0x20));
+    float m_fScaleY = offset(bits(0x18, 0x24));
+    float m_fFadeRate = offset(bits(0x1c, 0x28));
+    CRect m_RectScreen = offset(bits(0x20, 0x2c));
+    float m_fExtraPaddingScale = offset(bits(0x30, 0x3c));
+    CRect m_RectPaddedScreen = offset(bits(0x34, 0x40));
+    float m_fTapHoldTime = offset(bits(0x44, 0x50));
+    bool m_bTaphold = offset(bits(0x48, 0x54));
+    CRGBA m_Color = offset(bits(0x49, 0x55));
+    bool m_bEnabled = offset(bits(0x4d, 0x59));
+    bool m_bCachedEnabled = offset(bits(0x4e, 0x5a));
+    float m_fTapHistory[10] = offset(bits(0x50, 0x5c));
+    int m_nTouchIndex = offset(bits(0x78, 0x84));
+    int m_nFrameCount = offset(bits(0x7c, 0x88));
+    uint32_t m_nFlags = offset(bits(0x80, 0x8c));
+    uint32_t m_bUseRadiusForRangeCheck = offset(bits(0x80, 0x8c)) bits(0, 1, 1);
+    uint32_t m_bUseXForScaling = offset(bits(0x80, 0x8c)) bits(1, 1, 1);
+    uint32_t m_bFlag4 = offset(bits(0x80, 0x8c)) bits(2, 1, 1);
+    uint32_t m_bFlag8 = offset(bits(0x80, 0x8c)) bits(3, 1, 1);
+    uint32_t m_bFlag10 = offset(bits(0x80, 0x8c)) bits(4, 1, 1);
+    uint32_t m_bFlag20 = offset(bits(0x80, 0x8c)) bits(5, 1, 1);
+    uint32_t m_bPointerClickable = offset(bits(0x80, 0x8c)) bits(6, 1, 1);
+    uint32_t m_bFlag80 = offset(bits(0x80, 0x8c)) bits(7, 1, 1);
+    uint32_t m_bFlag100 = offset(bits(0x81, 0x8d)) bits(0, 1, 1);
+    uint32_t m_bFlag200 = offset(bits(0x81, 0x8d)) bits(1, 1, 1);
+    uint32_t m_bFlag400 = offset(bits(0x81, 0x8d)) bits(2, 1, 1);
+    uint32_t m_bFlag800 = offset(bits(0x81, 0x8d)) bits(3, 1, 1);
+    uint32_t m_bCorrectAspect = offset(bits(0x81, 0x8d)) bits(4, 1, 1);
+    uint32_t m_bHasHIDAttached = offset(bits(0x81, 0x8d)) bits(5, 1, 1);
+    uint32_t m_bFlag4000 = offset(bits(0x81, 0x8d)) bits(6, 1, 1);
+    uint32_t m_bFlag8000 = offset(bits(0x81, 0x8d)) bits(7, 1, 1);
+    uint32_t m_bFlag10000 = offset(bits(0x82, 0x8e)) bits(0, 1, 1);
+    uint32_t m_bFlag20000 = offset(bits(0x82, 0x8e)) bits(1, 1, 1);
+    uint32_t m_bFlag40000 = offset(bits(0x82, 0x8e)) bits(2, 1, 1);
+    uint32_t m_bFlag80000 = offset(bits(0x82, 0x8e)) bits(3, 1, 1);
+    uint32_t m_bFlag100000 = offset(bits(0x82, 0x8e)) bits(4, 1, 1);
+    uint32_t m_bFlag200000 = offset(bits(0x82, 0x8e)) bits(5, 1, 1);
+    uint32_t m_bFlag400000 = offset(bits(0x82, 0x8e)) bits(6, 1, 1);
+    uint32_t m_bFlag800000 = offset(bits(0x82, 0x8e)) bits(7, 1, 1);
+    uint32_t m_bFlag1000000 = offset(bits(0x83, 0x8f)) bits(0, 1, 1);
+    uint32_t m_bFlag2000000 = offset(bits(0x83, 0x8f)) bits(1, 1, 1);
+    uint32_t m_bFlag4000000 = offset(bits(0x83, 0x8f)) bits(2, 1, 1);
+    uint32_t m_bFlag8000000 = offset(bits(0x83, 0x8f)) bits(3, 1, 1);
+    uint32_t m_bFlag10000000 = offset(bits(0x83, 0x8f)) bits(4, 1, 1);
+    uint32_t m_bFlag20000000 = offset(bits(0x83, 0x8f)) bits(5, 1, 1);
+    uint32_t m_bFlag40000000 = offset(bits(0x83, 0x8f)) bits(6, 1, 1);
+    uint32_t m_bFlag80000000 = offset(bits(0x83, 0x8f)) bits(7, 1, 1);
+    float m_fUserData = offset(bits(0x84, 0x90));
+    CHoldEffect* m_pHoldEffect = offset(bits(0x88, 0x98));
+    float m_fHoldEffectPeriod = offset(bits(0x8c, 0xa0));
+    static void SetScissor(CRect* rectScissor) = symbol("libGTASA.so", "_ZN7CWidget10SetScissorER5CRect");
+};
+#endif

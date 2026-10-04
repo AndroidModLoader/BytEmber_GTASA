@@ -1,0 +1,22 @@
+#ifndef PSDK_game_sa_base_Quaternion_h
+#define PSDK_game_sa_base_Quaternion_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../gta_base/Vector.esh"
+#include "../../renderware/RwMatrix.esh"
+native class CQuaternion = size(0x10)
+{
+    CVector imag = offset(0x0);
+    float real = offset(0xc);
+    void Set(RwMatrix* mat) = symbol("libGTASA.so", "_ZN11CQuaternion3SetERK11RwMatrixTag");
+    void Set1(float ax, float ay, float az) = symbol("libGTASA.so", "_ZN11CQuaternion3SetEfff");
+    void Set2(RwV3d* pVec, float fRotation) = symbol("libGTASA.so", "_ZN11CQuaternion3SetEP5RwV3df");
+    void Get(RwMatrix* pmat) = symbol("libGTASA.so", "_ZNK11CQuaternion3GetEP11RwMatrixTag");
+    void Get1(float* pax, float* pay, float* paz) = symbol("libGTASA.so", "_ZNK11CQuaternion3GetEPfS0_S0_");
+    void Get2(RwV3d* pVec, float* fRotation) = symbol("libGTASA.so", "_ZNK11CQuaternion3GetEP5RwV3dPf");
+    void Multiply(CQuaternion* quat1, CQuaternion* quat2) = symbol("libGTASA.so", "_ZN11CQuaternion8MultiplyERKS_S1_");
+    void Slerp(CQuaternion* quatStart, CQuaternion* quatEnd, float fTheta, float fOOSinTheta, float fInterpValue) = symbol("libGTASA.so", "_ZN11CQuaternion5SlerpERKS_S1_fff");
+    void Slerp1(CQuaternion* quatStart, CQuaternion* quatEnd, float fInterpValue) = symbol("libGTASA.so", "_ZN11CQuaternion5SlerpERKS_S1_f");
+};
+#endif

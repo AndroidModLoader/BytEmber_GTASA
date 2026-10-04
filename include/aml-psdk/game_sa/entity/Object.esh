@@ -1,0 +1,91 @@
+#ifndef PSDK_game_sa_entity_Object_h
+#define PSDK_game_sa_entity_Object_h
+#pragma once
+#define OBJECT_UNKNOWN 0
+#define OBJECT_MISSION 2
+#define OBJECT_TEMPORARY 3
+#define OBJECT_MISSION2 6
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/entity/Physical.esh"
+native class CObject : public CPhysical = size(bits(0x184, 0x1f8))
+{
+    void* m_pControlCodeList = offset(bits(0x13c, 0x198));
+    uint8_t m_nObjectType = offset(bits(0x140, 0x1a0));
+    uint8_t m_nBonusValue = offset(bits(0x141, 0x1a1));
+    uint16_t m_wCostValue = offset(bits(0x142, 0x1a2));
+    CObject_m_nObjectFlags m_nObjectFlags = offset(bits(0x144, 0x1a4));
+    uint8_t m_nColDamageEffect = offset(bits(0x148, 0x1a8));
+    uint8_t m_nStoredColDamageEffect = offset(bits(0x149, 0x1a9));
+    uint8_t KeepieUppyCounter = offset(bits(0x14a, 0x1aa));
+    uint8_t m_nGarageDoorGarageIndex = offset(bits(0x14b, 0x1ab));
+    uint8_t m_nLastWeaponDamage = offset(bits(0x14c, 0x1ac));
+    uint8_t m_nDayBrightness = offset(bits(0x14d, 0x1ad)) bits(0, 4, 1);
+    uint8_t m_nNightBrightness = offset(bits(0x14d, 0x1ad)) bits(4, 4, 1);
+    int16_t m_nRefModelIndex = offset(bits(0x14e, 0x1ae));
+    uint8_t m_nCarColor[4] = offset(bits(0x150, 0x1b0));
+    int m_dwRemovalTime = offset(bits(0x154, 0x1b4));
+    float m_fHealth = offset(bits(0x158, 0x1b8));
+    float m_fDoorStartAngle = offset(bits(0x15c, 0x1bc));
+    float m_fScale = offset(bits(0x160, 0x1c0));
+    CObjectInfo* m_pObjectInfo = offset(bits(0x164, 0x1c4));
+    CFire* m_pFire = offset(bits(0x168, 0x1cc));
+    int16_t m_wScriptTriggerIndex = offset(bits(0x16c, 0x1d4));
+    uint8_t* m_szRemapTxdName = offset(bits(0x170, 0x1d8));
+    RwTexture* m_pRemapTexture = offset(bits(0x174, 0x1e0));
+    CDummyObject* m_pDummyObject = offset(bits(0x178, 0x1e8));
+    int m_dwBurnTime = offset(bits(0x17c, 0x1f0));
+    float m_fBurnDamage = offset(bits(0x180, 0x1f4));
+};
+native class CObject_m_nObjectFlags = size(0x4)
+{
+    uint32_t bIsPickup = offset(0x0) bits(0, 1, 1);
+    uint32_t bNoPickupEffects = offset(0x0) bits(1, 1, 1);
+    uint32_t bPickupPropertyForSale = offset(0x0) bits(2, 1, 1);
+    uint32_t bPickupInShopOutOfStock = offset(0x0) bits(3, 1, 1);
+    uint32_t bGlassBroken = offset(0x0) bits(4, 1, 1);
+    uint32_t bGlassBrokenAltogether = offset(0x0) bits(5, 1, 1);
+    uint32_t bIsExploded = offset(0x0) bits(6, 1, 1);
+    uint32_t bParentIsACar = offset(0x0) bits(7, 1, 1);
+    uint32_t bIsLampPost = offset(0x1) bits(0, 1, 1);
+    uint32_t bIsTargatable = offset(0x1) bits(1, 1, 1);
+    uint32_t bIsBroken = offset(0x1) bits(2, 1, 1);
+    uint32_t bTrainCrossEnabled = offset(0x1) bits(3, 1, 1);
+    uint32_t bIsPhotographed = offset(0x1) bits(4, 1, 1);
+    uint32_t bIsLiftable = offset(0x1) bits(5, 1, 1);
+    uint32_t bIsDoorMoving = offset(0x1) bits(6, 1, 1);
+    uint32_t bbIsDoorOpen = offset(0x1) bits(7, 1, 1);
+    uint32_t bHasNoModel = offset(0x2) bits(0, 1, 1);
+    uint32_t bIsScaled = offset(0x2) bits(1, 1, 1);
+    uint32_t bCanBeAttachedToMagnet = offset(0x2) bits(2, 1, 1);
+    uint32_t bLandedOnMovingCol = offset(0x2) bits(3, 1, 1);
+    uint32_t ScriptBrainStatus = offset(0x2) bits(4, 2, 1);
+    uint32_t bFadingIn = offset(0x2) bits(6, 1, 1);
+    uint32_t bAffectedByColBrightness = offset(0x2) bits(7, 1, 1);
+    uint32_t bEnableDisabledAttractors = offset(0x3) bits(0, 1, 1);
+    uint32_t bDoNotRender = offset(0x3) bits(1, 1, 1);
+    uint32_t bFadingIn2 = offset(0x3) bits(2, 1, 1);
+    uint32_t b28 = offset(0x3) bits(3, 1, 1);
+    uint32_t b29 = offset(0x3) bits(4, 1, 1);
+    uint32_t b30 = offset(0x3) bits(5, 1, 1);
+    uint32_t b31 = offset(0x3) bits(6, 1, 1);
+    uint32_t b32 = offset(0x3) bits(7, 1, 1);
+};
+native class CHandObject : public CObject = size(bits(0x194, 0x218))
+{
+    CPed* m_pPed = offset(bits(0x184, 0x1f8));
+    uint32_t m_nBoneIndex = offset(bits(0x188, 0x200));
+    RwTexture* m_pTexture = offset(bits(0x18c, 0x208));
+    bool m_bUpdatedMatricesArray = offset(bits(0x190, 0x210));
+};
+native class CCutsceneObject : public CObject = size(bits(0x1a4, 0x220))
+{
+    RwFrame* m_pAttachTo = offset(bits(0x184, 0x1f8));
+    uint32_t m_nAttachBone = offset(bits(0x184, 0x1f8));
+    CObject* m_pAttachmentObject = offset(bits(0x188, 0x200));
+    CVector m_vWorldPosition = offset(bits(0x18c, 0x208));
+    CVector m_vForce = offset(bits(0x198, 0x214));
+};
+native bool IsObjectPointerValid(CObject* pObject) = symbol("libGTASA.so", "_Z20IsObjectPointerValidP7CObject");
+native bool IsObjectPointerValid_NotInWorld(CObject* pObject) = symbol("libGTASA.so", "_Z31IsObjectPointerValid_NotInWorldP7CObject");
+#endif

@@ -1,0 +1,55 @@
+#ifndef PSDK_game_sa_ai_Scanner_h
+#define PSDK_game_sa_ai_Scanner_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../game_sa/ai/TaskTimer.esh"
+native class CEntityScanner = size(bits(0x50, 0x98))
+{
+    uint32_t m_nCount = offset(bits(0x4, 0x8));
+    uint32_t m_nPeriod = offset(bits(0x8, 0xc));
+    CEntity* m_apEntities[16] = offset(bits(0xc, 0x10));
+    CEntity* m_pClosestEntity = offset(bits(0x4c, 0x90));
+    void Clear() = symbol("libGTASA.so", "_ZN14CEntityScanner5ClearEv");
+};
+native class CPedScanner : public CEntityScanner = size(bits(0x50, 0x98))
+{
+};
+native class CVehicleScanner : public CEntityScanner = size(bits(0x50, 0x98))
+{
+};
+native class CCollisionEventScanner = size(0x1)
+{
+    bool m_bAlreadyHitByCar = offset(0x0);
+};
+native class CAttractorScanner = size(bits(0x90, 0xe8))
+{
+    bool m_bActivated = offset(0x0);
+    CTaskTimer m_timer = offset(0x4);
+    C2dEffect* m_pEffectInUse = offset(0x10);
+    CEntity* m_pPreviousEntity = offset(bits(0x14, 0x18));
+    CEntity* m_ppEntities[10] = offset(bits(0x18, 0x20));
+    C2dEffect* m_ppEffects[10] = offset(bits(0x40, 0x70));
+    float m_pfMinDistanceSquared[10] = offset(bits(0x68, 0xc0));
+    void Clear() = symbol("libGTASA.so", "_ZN17CAttractorScanner5ClearEv");
+};
+native class CPedAcquaintanceScanner = size(0x10)
+{
+    CTaskTimer m_timer = offset(0x0);
+    bool m_bActivatedEverywhere = offset(0xc);
+    bool m_bActivatedInVehicle = offset(0xd);
+    bool m_bActivatedDuringScriptCommands = offset(0xe);
+};
+native class CEventScanner = size(bits(0xd4, 0x130))
+{
+    int m_nStartTime = offset(0x0);
+    CTaskTimer m_vehicleCollisionTimer = offset(0x4);
+    CTaskTimer m_objectCollisionTimer = offset(0x10);
+    CAttractorScanner m_attractorScanner = offset(bits(0x1c, 0x20));
+    CPedAcquaintanceScanner m_pedAcquaScanner = offset(bits(0xac, 0x108));
+    CTaskTimer m_sexyPedTimer = offset(bits(0xbc, 0x118));
+    CTaskTimer m_fireTimer = offset(bits(0xc8, 0x124));
+    void Clear() = symbol("libGTASA.so", "_ZN13CEventScanner5ClearEv");
+};
+#endif

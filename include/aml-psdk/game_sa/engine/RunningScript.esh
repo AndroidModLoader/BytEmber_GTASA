@@ -1,0 +1,146 @@
+#ifndef PSDK_game_sa_engine_RunningScript_h
+#define PSDK_game_sa_engine_RunningScript_h
+#pragma once
+#define SCRIPTPARAM_END_OF_ARGUMENTS 0
+#define SCRIPTPARAM_STATIC_INT_32BITS 1
+#define SCRIPTPARAM_GLOBAL_NUMBER_VARIABLE 2
+#define SCRIPTPARAM_LOCAL_NUMBER_VARIABLE 3
+#define SCRIPTPARAM_STATIC_INT_8BITS 4
+#define SCRIPTPARAM_STATIC_INT_16BITS 5
+#define SCRIPTPARAM_STATIC_FLOAT 6
+#define SCRIPTPARAM_GLOBAL_NUMBER_ARRAY 7
+#define SCRIPTPARAM_LOCAL_NUMBER_ARRAY 8
+#define SCRIPTPARAM_STATIC_SHORT_STRING 9
+#define SCRIPTPARAM_GLOBAL_SHORT_STRING_VARIABLE 10
+#define SCRIPTPARAM_LOCAL_SHORT_STRING_VARIABLE 11
+#define SCRIPTPARAM_GLOBAL_SHORT_STRING_ARRAY 12
+#define SCRIPTPARAM_LOCAL_SHORT_STRING_ARRAY 13
+#define SCRIPTPARAM_STATIC_PASCAL_STRING 14
+#define SCRIPTPARAM_STATIC_LONG_STRING 15
+#define SCRIPTPARAM_GLOBAL_LONG_STRING_VARIABLE 16
+#define SCRIPTPARAM_LOCAL_LONG_STRING_VARIABLE 17
+#define SCRIPTPARAM_GLOBAL_LONG_STRING_ARRAY 18
+#define SCRIPTPARAM_LOCAL_LONG_STRING_ARRAY 19
+#define BUTTON_LEFT_STICK_X 0
+#define BUTTON_LEFT_STICK_Y 1
+#define BUTTON_RIGHT_STICK_X 2
+#define BUTTON_RIGHT_STICK_Y 3
+#define BUTTON_LEFT_SHOULDER1 4
+#define BUTTON_LEFT_SHOULDER2 5
+#define BUTTON_RIGHT_SHOULDER1 6
+#define BUTTON_RIGHT_SHOULDER2 7
+#define BUTTON_DPAD_UP 8
+#define BUTTON_DPAD_DOWN 9
+#define BUTTON_DPAD_LEFT 10
+#define BUTTON_DPAD_RIGHT 11
+#define BUTTON_START 12
+#define BUTTON_SELECT 13
+#define BUTTON_SQUARE 14
+#define BUTTON_TRIANGLE 15
+#define BUTTON_CROSS 16
+#define BUTTON_CIRCLE 17
+#define BUTTON_LEFTSHOCK 18
+#define BUTTON_RIGHTSHOCK 19
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+native class tScriptParam = size(0x4)
+{
+    uint32_t uParam = offset(0x0);
+    int iParam = offset(0x0);
+    float fParam = offset(0x0);
+};
+native class CRunningScript = size(bits(0x100, 0x130))
+{
+    CRunningScript* m_pNext = offset(0x0);
+    CRunningScript* m_pPrev = offset(bits(0x4, 0x8));
+    uint8_t m_szName[8] = offset(bits(0x8, 0x10));
+    uint8_t* m_pBaseIP = offset(bits(0x10, 0x18));
+    uint8_t* m_pCurrentIP = offset(bits(0x14, 0x20));
+    uint8_t* m_apStack[8] = offset(bits(0x18, 0x28));
+    uint16_t m_nSP = offset(bits(0x38, 0x68));
+    tScriptParam m_aLocalVars[40] = offset(bits(0x3c, 0x6c));
+    int m_anTimers[2] = offset(bits(0xdc, 0x10c));
+    bool m_bIsActive = offset(bits(0xe4, 0x114));
+    bool m_bCondResult = offset(bits(0xe5, 0x115));
+    bool m_bUseMissionCleanup = offset(bits(0xe6, 0x116));
+    bool m_bIsExternal = offset(bits(0xe7, 0x117));
+    bool m_bTextBlockOverride = offset(bits(0xe8, 0x118));
+    uint8_t m_nScriptBrainType = offset(bits(0xe9, 0x119));
+    int m_nWakeTime = offset(bits(0xec, 0x11c));
+    uint16_t m_nLogicalOp = offset(bits(0xf0, 0x120));
+    bool m_bNotFlag = offset(bits(0xf2, 0x122));
+    bool m_bWastedBustedCheck = offset(bits(0xf3, 0x123));
+    bool m_bWastedOrBusted = offset(bits(0xf4, 0x124));
+    int m_pSceneSkipIP = offset(bits(0xf8, 0x128));
+    bool m_bIsMission = offset(bits(0xfc, 0x12c));
+    bool CanAllowMissionReplay() = symbol("libGTASA.so", "_ZN14CRunningScript21CanAllowMissionReplayEv");
+    int CollectNextParameterWithoutIncreasingPC() = symbol("libGTASA.so", "_ZN14CRunningScript39CollectNextParameterWithoutIncreasingPCEv");
+    uint16_t GetIndexOfGlobalVariable() = symbol("libGTASA.so", "_ZN14CRunningScript24GetIndexOfGlobalVariableEv");
+    void Init() = symbol("libGTASA.so", "_ZN14CRunningScript4InitEv");
+    void ShutdownThisScript() = symbol("libGTASA.so", "_ZN14CRunningScript18ShutdownThisScriptEv");
+    uint8_t Process() = symbol("libGTASA.so", "_ZN14CRunningScript7ProcessEv");
+    int8_t ProcessOneCommand() = symbol("libGTASA.so", "_ZN14CRunningScript17ProcessOneCommandEv");
+    void DoDeatharrestCheck() = symbol("libGTASA.so", "_ZN14CRunningScript18DoDeatharrestCheckEv");
+    void* GetPointerToLocalVariable(uint32_t VarIndex) = symbol("libGTASA.so", "_ZN14CRunningScript25GetPointerToLocalVariableEj");
+    void* GetPointerToLocalArrayElement(uint32_t BaseAddress, uint16_t ElementNumber, uint8_t SizeOfEachElement) = symbol("libGTASA.so", "_ZN14CRunningScript29GetPointerToLocalArrayElementEjth");
+    void ReadArrayInformation(int bUpdatePC, uint16_t* pReturnArrayBaseAddress, int32_t* pReturnArrayIndex) = symbol("libGTASA.so", "_ZN14CRunningScript20ReadArrayInformationEiPtPi");
+    void ReadTextLabelFromScript(uint8_t* pStringToFill, uint8_t MaxStringLength) = symbol("libGTASA.so", "_ZN14CRunningScript23ReadTextLabelFromScriptEPch");
+    void CollectParameters(int16_t number) = symbol("libGTASA.so", "_ZN14CRunningScript17CollectParametersEs");
+    void StoreParameters(int16_t number) = symbol("libGTASA.so", "_ZN14CRunningScript15StoreParametersEs");
+    void ReadParametersForNewlyStartedScript(CRunningScript* pNewScript) = symbol("libGTASA.so", "_ZN14CRunningScript35ReadParametersForNewlyStartedScriptEPS_");
+    tScriptParam* GetPointerToScriptVariable(uint8_t variableType) = symbol("libGTASA.so", "_ZN14CRunningScript26GetPointerToScriptVariableEh");
+    void AddScriptToList(nativeptr ppList) = symbol("libGTASA.so", "_ZN14CRunningScript15AddScriptToListEPPS_");
+    void RemoveScriptFromList(nativeptr ppList) = symbol("libGTASA.so", "_ZN14CRunningScript20RemoveScriptFromListEPPS_");
+    bool IsPedDead(CPed* pPed) = symbol("libGTASA.so", "_ZN14CRunningScript9IsPedDeadEP4CPed");
+    void GivePedScriptedTask(int iPedID, CTask* pTask, int CurrCommand) = symbol("libGTASA.so", "_ZN14CRunningScript19GivePedScriptedTaskEiP5CTaski");
+    void UpdatePC(int newPC) = symbol("libGTASA.so", "_ZN14CRunningScript8UpdatePCEi");
+    void GetCorrectPedModelIndexForEmergencyServiceType(int PedType, int32_t* pPedModelIndex) = symbol("libGTASA.so", "_ZN14CRunningScript46GetCorrectPedModelIndexForEmergencyServiceTypeEiPi");
+    void SetCharCoordinates(CPed* pPed, float NewX, float NewY, float NewZ, bool bWarpGang, bool bOffset) = symbol("libGTASA.so", "_ZN14CRunningScript18SetCharCoordinatesEP4CPedfffbb");
+    void ScriptTaskPickUpObject(int CurrCommand) = symbol("libGTASA.so", "_ZN14CRunningScript22ScriptTaskPickUpObjectEi");
+    void PlayAnimScriptCommand(int CurrCommand) = symbol("libGTASA.so", "_ZN14CRunningScript21PlayAnimScriptCommandEi");
+    void UpdateCompareFlag(uint8_t result) = symbol("libGTASA.so", "_ZN14CRunningScript17UpdateCompareFlagEh");
+    void LocateCharCommand(int CurrCommand) = symbol("libGTASA.so", "_ZN14CRunningScript17LocateCharCommandEi");
+    void LocateCharCharCommand(int CurrCommand) = symbol("libGTASA.so", "_ZN14CRunningScript21LocateCharCharCommandEi");
+    void LocateCharCarCommand(int CurrCommand) = symbol("libGTASA.so", "_ZN14CRunningScript20LocateCharCarCommandEi");
+    void LocateCharObjectCommand(int CurrCommand) = symbol("libGTASA.so", "_ZN14CRunningScript23LocateCharObjectCommandEi");
+    void LocateCarCommand(int CurrCommand) = symbol("libGTASA.so", "_ZN14CRunningScript16LocateCarCommandEi");
+    void LocateObjectCommand(int CurrCommand) = symbol("libGTASA.so", "_ZN14CRunningScript19LocateObjectCommandEi");
+    void CharInAngledAreaCheckCommand(int CurrCommand) = symbol("libGTASA.so", "_ZN14CRunningScript28CharInAngledAreaCheckCommandEi");
+    void ObjectInAngledAreaCheckCommand(int CurrCommand) = symbol("libGTASA.so", "_ZN14CRunningScript30ObjectInAngledAreaCheckCommandEi");
+    void FlameInAngledAreaCheckCommand(int CurrCommand) = symbol("libGTASA.so", "_ZN14CRunningScript29FlameInAngledAreaCheckCommandEi");
+    void CharInAreaCheckCommand(int CurrCommand) = symbol("libGTASA.so", "_ZN14CRunningScript22CharInAreaCheckCommandEi");
+    void CarInAreaCheckCommand(int CurrCommand) = symbol("libGTASA.so", "_ZN14CRunningScript21CarInAreaCheckCommandEi");
+    void ObjectInAreaCheckCommand(int CurrCommand) = symbol("libGTASA.so", "_ZN14CRunningScript24ObjectInAreaCheckCommandEi");
+    int16_t GetPadState(uint16_t PadNumber, uint16_t ButtonNumber) = symbol("libGTASA.so", "_ZN14CRunningScript11GetPadStateEtt");
+    bool ThisIsAValidRandomCop(uint32_t PedModelIndex, int CopFlag, int SwatFlag, int FBIFlag, int ArmyFlag, int MiamiViceFlag) = symbol("libGTASA.so", "_ZN14CRunningScript21ThisIsAValidRandomCopEjiiiii");
+    bool ThisIsAValidRandomPed(uint32_t PedType, int CivilianFlag, int GangFlag, int CriminalFlag) = symbol("libGTASA.so", "_ZN14CRunningScript21ThisIsAValidRandomPedEjiii");
+    int8_t ProcessCommands0To99(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript20ProcessCommands0To99Ei");
+    int8_t ProcessCommands100To199(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript23ProcessCommands100To199Ei");
+    int8_t ProcessCommands200To299(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript23ProcessCommands200To299Ei");
+    int8_t ProcessCommands300To399(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript23ProcessCommands300To399Ei");
+    int8_t ProcessCommands400To499(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript23ProcessCommands400To499Ei");
+    int8_t ProcessCommands500To599(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript23ProcessCommands500To599Ei");
+    int8_t ProcessCommands600To699(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript23ProcessCommands600To699Ei");
+    int8_t ProcessCommands700To799(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript23ProcessCommands700To799Ei");
+    int8_t ProcessCommands800To899(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript23ProcessCommands800To899Ei");
+    int8_t ProcessCommands900To999(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript23ProcessCommands900To999Ei");
+    int8_t ProcessCommands1000To1099(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript25ProcessCommands1000To1099Ei");
+    int8_t ProcessCommands1100To1199(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript25ProcessCommands1100To1199Ei");
+    int8_t ProcessCommands1200To1299(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript25ProcessCommands1200To1299Ei");
+    int8_t ProcessCommands1300To1399(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript25ProcessCommands1300To1399Ei");
+    int8_t ProcessCommands1400To1499(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript25ProcessCommands1400To1499Ei");
+    int8_t ProcessCommands1500To1599(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript25ProcessCommands1500To1599Ei");
+    int8_t ProcessCommands1600To1699(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript25ProcessCommands1600To1699Ei");
+    int8_t ProcessCommands1700To1799(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript25ProcessCommands1700To1799Ei");
+    int8_t ProcessCommands1800To1899(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript25ProcessCommands1800To1899Ei");
+    int8_t ProcessCommands1900To1999(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript25ProcessCommands1900To1999Ei");
+    int8_t ProcessCommands2000To2099(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript25ProcessCommands2000To2099Ei");
+    int8_t ProcessCommands2100To2199(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript25ProcessCommands2100To2199Ei");
+    int8_t ProcessCommands2200To2299(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript25ProcessCommands2200To2299Ei");
+    int8_t ProcessCommands2300To2399(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript25ProcessCommands2300To2399Ei");
+    int8_t ProcessCommands2400To2499(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript25ProcessCommands2400To2499Ei");
+    int8_t ProcessCommands2500To2599(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript25ProcessCommands2500To2599Ei");
+    int8_t ProcessCommands2600To2699(int commandID) = symbol("libGTASA.so", "_ZN14CRunningScript25ProcessCommands2600To2699Ei");
+};
+#endif

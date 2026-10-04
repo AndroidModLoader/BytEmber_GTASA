@@ -1,0 +1,103 @@
+#ifndef PSDK_game_sa_ai_PedIntelligence_h
+#define PSDK_game_sa_ai_PedIntelligence_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../gta_base/Vector.esh"
+#include "../../game_sa/enum/DecisionMaker.esh"
+#include "../../game_sa/ai/TaskManager.esh"
+#include "../../game_sa/ai/TaskTimer.esh"
+#include "../../game_sa/ai/Event.esh"
+#include "../../game_sa/ai/Scanner.esh"
+native class CEventHandlerHistory = size(bits(0x1c, 0x30))
+{
+    CTask* m_pAbortedTask = offset(0x0);
+    CEvent* m_pCurrentEventActive = offset(bits(0x4, 0x8));
+    CEvent* m_pCurrentEventPassive = offset(bits(0x8, 0x10));
+    CEvent* m_pStoredEventActive = offset(bits(0xc, 0x18));
+    CTaskTimer m_storeTimer = offset(bits(0x10, 0x20));
+};
+native class CEventHandler = size(bits(0x34, 0x60))
+{
+    CPed* m_pPed = offset(0x0);
+    CEventHandlerHistory m_history = offset(bits(0x4, 0x8));
+    CTask* m_pTaskPhysResponse = offset(bits(0x20, 0x38));
+    CTask* m_pTaskEventResponse = offset(bits(0x24, 0x40));
+    CTaskSimple* m_pTaskSecondaryAim = offset(bits(0x28, 0x48));
+    CTaskSimple* m_pTaskSecondarySay = offset(bits(0x2c, 0x50));
+    CTaskSimple* m_pTaskSecondaryPartialAnim = offset(bits(0x30, 0x58));
+};
+native class CPedStuckChecker = size(0x10)
+{
+    CVector m_vecPreviousPos = offset(0x0);
+    uint16_t m_nStuckCounter = offset(0xc);
+    uint16_t m_nStuck = offset(0xe);
+};
+native class CMentalState = size(0x1c)
+{
+    uint8_t m_AngerAtPlayer = offset(0x0);
+    uint8_t m_LastAngerAtPlayer = offset(0x1);
+    CTaskTimer m_AngerTimer = offset(0x4);
+    uint16_t m_pedHealth = offset(0x10);
+    uint16_t m_oldPedHealth = offset(0x12);
+    uint16_t m_vehicleHealth = offset(0x14);
+    uint16_t m_oldVehicleHealth = offset(0x16);
+    uint8_t m_bInCarLastTime = offset(0x18);
+};
+native class CPedIntelligence = size(bits(0x298, 0x440))
+{
+    CPed* m_pPed = offset(0x0);
+    CTaskManager m_TaskMgr = offset(bits(0x4, 0x8));
+    CEventHandler m_eventHandler = offset(bits(0x34, 0x68));
+    CEventGroup m_eventGroup = offset(bits(0x68, 0xc8));
+    int m_nDecisionMakerType = offset(bits(0xb4, 0x160));
+    int m_nDecisionMakerTypeInGroup = offset(bits(0xb8, 0x164));
+    float m_fHearingRange = offset(bits(0xbc, 0x168));
+    float m_fSeeingRange = offset(bits(0xc0, 0x16c));
+    uint32_t m_nDmNumPedsToScan = offset(bits(0xc4, 0x170));
+    float m_fDmRadius = offset(bits(0xc8, 0x174));
+    float m_FollowNodeThresholdDistance = offset(bits(0xcc, 0x178));
+    uint8_t m_NextEventResponseSequence = offset(bits(0xd0, 0x17c));
+    uint8_t m_nEventId = offset(bits(0xd1, 0x17d));
+    uint8_t m_nEventPriority = offset(bits(0xd2, 0x17e));
+    CEntityScanner m_vehicleScanner = offset(bits(0xd4, 0x180));
+    CEntityScanner m_pedScanner = offset(bits(0x124, 0x218));
+    CMentalState m_mentalState = offset(bits(0x174, 0x2b0));
+    CEventScanner m_eventScanner = offset(bits(0x190, 0x2d0));
+    CCollisionEventScanner m_collisionScanner = offset(bits(0x264, 0x400));
+    CPedStuckChecker m_pedStuckChecker = offset(bits(0x268, 0x404));
+    int m_AnotherStaticCounter = offset(bits(0x278, 0x414));
+    int m_StaticCounter = offset(bits(0x27c, 0x418));
+    CVector m_vecLastPedPosDuringDamageEntity = offset(bits(0x280, 0x41c));
+    CEntity* m_apInterestingEntities[3] = offset(bits(0x28c, 0x428));
+    void Save() = symbol("libGTASA.so", "_ZN16CPedIntelligence4SaveEv");
+    void Load() = symbol("libGTASA.so", "_ZN16CPedIntelligence4LoadEv");
+    CTaskSimpleSwim* GetTaskSwim() = symbol("libGTASA.so", "_ZNK16CPedIntelligence11GetTaskSwimEv");
+    CTaskSimpleJetPack* GetTaskJetPack() = symbol("libGTASA.so", "_ZNK16CPedIntelligence14GetTaskJetPackEv");
+    CTaskSimpleClimb* GetTaskClimb() = symbol("libGTASA.so", "_ZNK16CPedIntelligence12GetTaskClimbEv");
+    int GetMoveStateFromGoToTask() = symbol("libGTASA.so", "_ZNK16CPedIntelligence24GetMoveStateFromGoToTaskEv");
+    bool FindRespectedFriendInInformRange() = symbol("libGTASA.so", "_ZN16CPedIntelligence32FindRespectedFriendInInformRangeEv");
+    void RestorePedDecisionMakerType() = symbol("libGTASA.so", "_ZN16CPedIntelligence27RestorePedDecisionMakerTypeEv");
+    CTaskSimpleFight* GetTaskFighting() = symbol("libGTASA.so", "_ZNK16CPedIntelligence15GetTaskFightingEv");
+    CTaskSimpleUseGun* GetTaskUseGun() = symbol("libGTASA.so", "_ZNK16CPedIntelligence13GetTaskUseGunEv");
+    CTaskSimpleThrowProjectile* GetTaskThrow() = symbol("libGTASA.so", "_ZNK16CPedIntelligence12GetTaskThrowEv");
+    CTaskSimpleInAir* GetTaskInAir() = symbol("libGTASA.so", "_ZNK16CPedIntelligence12GetTaskInAirEv");
+    bool GetUsingParachute() = symbol("libGTASA.so", "_ZNK16CPedIntelligence17GetUsingParachuteEv");
+    void ClearTaskDuckSecondary() = symbol("libGTASA.so", "_ZN16CPedIntelligence22ClearTaskDuckSecondaryEv");
+    C2dEffect* GetEffectInUse() = symbol("libGTASA.so", "_ZNK16CPedIntelligence14GetEffectInUseEv");
+    void ProcessFirst() = symbol("libGTASA.so", "_ZN16CPedIntelligence12ProcessFirstEv");
+    void ProcessStaticCounter() = symbol("libGTASA.so", "_ZN16CPedIntelligence20ProcessStaticCounterEv");
+    void Process() = symbol("libGTASA.so", "_ZN16CPedIntelligence7ProcessEv");
+    void LookAtInterestingEntities() = symbol("libGTASA.so", "_ZN16CPedIntelligence25LookAtInterestingEntitiesEv");
+    void ProcessAfterProcCol() = symbol("libGTASA.so", "_ZN16CPedIntelligence19ProcessAfterProcColEv");
+    void ProcessAfterPreRender() = symbol("libGTASA.so", "_ZN16CPedIntelligence21ProcessAfterPreRenderEv");
+    void ProcessEventHandler() = symbol("libGTASA.so", "_ZN16CPedIntelligence19ProcessEventHandlerEv");
+    CVehicle* IsInACarOrEnteringOne() = symbol("libGTASA.so", "_ZN16CPedIntelligence21IsInACarOrEnteringOneEv");
+    bool IsPedGoingSomewhereOnFoot() = symbol("libGTASA.so", "_ZNK16CPedIntelligence25IsPedGoingSomewhereOnFootEv");
+    void FlushIntelligence() = symbol("libGTASA.so", "_ZN16CPedIntelligence17FlushIntelligenceEv");
+    uint8_t HasInterestingEntites() = symbol("libGTASA.so", "_ZN16CPedIntelligence21HasInterestingEntitesEv");
+    void RemoveAllInterestingEntities() = symbol("libGTASA.so", "_ZN16CPedIntelligence28RemoveAllInterestingEntitiesEv");
+    bool IsPedGoingForCarDoor() = symbol("libGTASA.so", "_ZN16CPedIntelligence20IsPedGoingForCarDoorEv");
+    void SortAndStaggerAllPedsEventScannerTimers() = symbol("libGTASA.so", "_ZN16CPedIntelligence39SortAndStaggerAllPedsEventScannerTimersEv");
+};
+#endif

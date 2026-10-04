@@ -1,0 +1,139 @@
+#ifndef PSDK_game_sa_engine_2dEffect_h
+#define PSDK_game_sa_engine_2dEffect_h
+#pragma once
+#define EFFECT_LIGHT 0
+#define EFFECT_PARTICLE 1
+#define EFFECT_ATTRACTOR 3
+#define EFFECT_SUN_GLARE 4
+#define EFFECT_FURNITUR 5
+#define EFFECT_ENEX 6
+#define EFFECT_ROADSIGN 7
+#define EFFECT_SLOTMACHINE_WHEEL 8
+#define EFFECT_COVER_POINT 9
+#define EFFECT_ESCALATOR 10
+#define PED_ATTRACTOR_ATM 0
+#define PED_ATTRACTOR_SEAT 1
+#define PED_ATTRACTOR_STOP 2
+#define PED_ATTRACTOR_PIZZA 3
+#define PED_ATTRACTOR_SHELTER 4
+#define PED_ATTRACTOR_TRIGGER_SCRIPT 5
+#define PED_ATTRACTOR_LOOK_AT 6
+#define PED_ATTRACTOR_SCRIPTED 7
+#define PED_ATTRACTOR_PARK 8
+#define PED_ATTRACTOR_STEP 9
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../renderware/RwVector.esh"
+#include "../../renderware/RwRGBA.esh"
+native class tEffectLight = size(bits(0x28, 0x30))
+{
+    CRGBA m_color = offset(0x0);
+    float m_fCoronaFarClip = offset(0x4);
+    float m_fPointlightRange = offset(0x8);
+    float m_fCoronaSize = offset(0xc);
+    float m_fShadowSize = offset(0x10);
+    uint16_t m_nFlags = offset(0x14);
+    uint8_t m_nCoronaFlashType = offset(0x16);
+    bool m_bCoronaEnableReflection = offset(0x17);
+    uint8_t m_nCoronaFlareType = offset(0x18);
+    uint8_t m_nShadowColorMultiplier = offset(0x19);
+    uint8_t m_nShadowZDistance = offset(0x1a);
+    uint8_t offsetX = offset(0x1b);
+    uint8_t offsetY = offset(0x1c);
+    uint8_t offsetZ = offset(0x1d);
+    RwTexture* m_pCoronaTex = offset(0x20);
+    RwTexture* m_pShadowTex = offset(bits(0x24, 0x28));
+};
+native class tEffectParticle = size(0x18)
+{
+    uint8_t m_szName[24] = offset(0x0);
+};
+native class tEffectPedAttractor = size(0x30)
+{
+    CVector m_vecQueueDir = offset(0x0);
+    CVector m_vecUseDir = offset(0xc);
+    CVector m_vecForwardDir = offset(0x18);
+    uint8_t m_nAttractorType = offset(0x24);
+    uint8_t m_nPedExistingProbability = offset(0x25);
+    uint8_t m_nLookAt = offset(0x26);
+    uint8_t m_nFlags = offset(0x27);
+    uint8_t m_szScriptName[8] = offset(0x28);
+};
+native class tEffectEnEx = size(0x2c)
+{
+    float m_fEnterAngle = offset(0x0);
+    CVector2D m_vecSize = offset(0x4);
+    CVector m_vecExitPosn = offset(0xc);
+    float m_fExitAngle = offset(0x18);
+    int16_t m_nInteriorId = offset(0x1c);
+    uint8_t m_nFlags1 = offset(0x1e);
+    uint8_t m_nSkyColor = offset(0x1f);
+    uint8_t m_szInteriorName[8] = offset(0x20);
+    uint8_t m_nTimeOn = offset(0x28);
+    uint8_t m_nTimeOff = offset(0x29);
+    uint8_t m_nFlags2 = offset(0x2a);
+};
+native class tEffectRoadsign = size(bits(0x20, 0x28))
+{
+    CVector2D m_vecSize = offset(0x0);
+    float m_afRotation[3] = offset(0x8);
+    uint16_t m_nFlags = offset(0x14);
+    uint16_t nNumLines = offset(0x14) bits(0, 2, 1);
+    uint16_t nNumLetters = offset(0x14) bits(2, 2, 1);
+    uint16_t nPaletteID = offset(0x14) bits(4, 2, 1);
+    uint8_t* m_pText = offset(0x18);
+    RpAtomic* m_pAtomic = offset(bits(0x1c, 0x20));
+};
+native class tEffectCoverPoint = size(0xc)
+{
+    CVector2D m_vecDirection = offset(0x0);
+    uint8_t m_nType = offset(0x8);
+};
+native class tEffectEscalator = size(0x28)
+{
+    CVector m_vecBottom = offset(0x0);
+    CVector m_vecTop = offset(0xc);
+    CVector m_vecEnd = offset(0x18);
+    uint8_t m_nDirection = offset(0x24);
+};
+native class tEffectInterior = size(0x24)
+{
+    uint8_t m_nType = offset(0x0);
+    uint8_t m_nGroup = offset(0x1);
+    uint8_t m_nWidth = offset(0x2);
+    uint8_t m_nDepth = offset(0x3);
+    uint8_t m_nHeight = offset(0x4);
+    uint8_t m_nDoor = offset(0x5);
+    uint8_t m_nLeftDoor[2] = offset(0x6);
+    uint8_t m_nRightDoor[2] = offset(0x8);
+    uint8_t m_nTDoor[2] = offset(0xa);
+    uint8_t m_nLeftWindow[2] = offset(0xc);
+    uint8_t m_nRightWindow[2] = offset(0xe);
+    uint8_t m_nTWindow[2] = offset(0x10);
+    uint8_t m_noGoLeft[3] = offset(0x12);
+    uint8_t m_noGoBottom[3] = offset(0x15);
+    uint8_t m_noGoWidth[3] = offset(0x18);
+    uint8_t m_noGoDepth[3] = offset(0x1b);
+    uint8_t m_seed = offset(0x1e);
+    uint8_t m_status = offset(0x1f);
+    float m_rot = offset(0x20);
+};
+native class tEffectTrigger = size(0x4)
+{
+    int m_nIndex = offset(0x0);
+};
+native class C2dEffect = size(0x40)
+{
+    CVector m_vecPosn = offset(0x0);
+    uint32_t m_nType = offset(0xc);
+    tEffectLight light = offset(0x10);
+    tEffectParticle particle = offset(0x10);
+    tEffectPedAttractor pedAttractor = offset(0x10);
+    tEffectInterior interior = offset(0x10);
+    tEffectEnEx enEx = offset(0x10);
+    tEffectRoadsign roadsign = offset(0x10);
+    tEffectTrigger trigger = offset(0x10);
+    tEffectCoverPoint coverPoint = offset(0x10);
+    tEffectEscalator escalator = offset(0x10);
+};
+#endif

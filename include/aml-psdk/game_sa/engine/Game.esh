@@ -1,0 +1,32 @@
+#ifndef PSDK_game_sa_engine_Game_h
+#define PSDK_game_sa_engine_Game_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../renderware/RwMatrix.esh"
+native class CGame = size(0x1)
+{
+    static bool InitialiseOnceBeforeRW() = symbol("libGTASA.so", "_ZN5CGame22InitialiseOnceBeforeRWEv");
+    static void ShutdownRenderWare() = symbol("libGTASA.so", "_ZN5CGame18ShutdownRenderWareEv");
+    static void FinalShutdown() = symbol("libGTASA.so", "_ZN5CGame13FinalShutdownEv");
+    static bool Initialise(uint8_t* pDatFile) = symbol("libGTASA.so", "_ZN5CGame10InitialiseEPKc");
+    static bool Shutdown() = symbol("libGTASA.so", "_ZN5CGame8ShutdownEv");
+    static void ReInitGameObjectVariables() = symbol("libGTASA.so", "_ZN5CGame25ReInitGameObjectVariablesEv");
+    static void ReloadIPLs() = symbol("libGTASA.so", "_ZN5CGame10ReloadIPLsEv");
+    static void ShutDownForRestart() = symbol("libGTASA.so", "_ZN5CGame18ShutDownForRestartEv");
+    static void TidyUpMemory(bool bMoveTextures, bool bWait) = symbol("libGTASA.so", "_ZN5CGame12TidyUpMemoryEbb");
+    static void InitialiseWhenRestarting() = symbol("libGTASA.so", "_ZN5CGame24InitialiseWhenRestartingEv");
+    static void Process() = symbol("libGTASA.so", "_ZN5CGame7ProcessEv");
+    static void GenerateTempPedAtStartOfNetworkGame() = symbol("libGTASA.so", "_ZN5CGame35GenerateTempPedAtStartOfNetworkGameEv");
+    static void DrasticTidyUpMemory(bool bWait) = symbol("libGTASA.so", "_ZN5CGame19DrasticTidyUpMemoryEb");
+    static void ProcessTidyUpMemory() = symbol("libGTASA.so", "_ZN5CGame19ProcessTidyUpMemoryEv");
+    static bool CanSeeOutSideFromCurrArea() = symbol("libGTASA.so", "_ZN5CGame25CanSeeOutSideFromCurrAreaEv");
+    static bool CanSeeWaterFromCurrArea() = symbol("libGTASA.so", "_ZN5CGame23CanSeeWaterFromCurrAreaEv");
+    static bool InitialiseRenderWare() = symbol("libGTASA.so", "_ZN5CGame20InitialiseRenderWareEv");
+    static bool InitialiseEssentialsAfterRW() = symbol("libGTASA.so", "_ZN5CGame27InitialiseEssentialsAfterRWEv");
+    static bool InitialiseCoreDataAfterRW() = symbol("libGTASA.so", "_ZN5CGame25InitialiseCoreDataAfterRWEv");
+    static bool Init1(uint8_t* pDatFile) = symbol("libGTASA.so", "_ZN5CGame5Init1EPKc");
+    static bool Init2(uint8_t* pDatFile) = symbol("libGTASA.so", "_ZN5CGame5Init2EPKc");
+    static bool Init3(uint8_t* pDatFile) = symbol("libGTASA.so", "_ZN5CGame5Init3EPKc");
+};
+#endif

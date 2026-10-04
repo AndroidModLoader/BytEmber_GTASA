@@ -1,0 +1,19 @@
+#ifndef PSDK_game_sa_other_Clock_h
+#define PSDK_game_sa_other_Clock_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+native class CClock = size(0x1)
+{
+    static void Initialise(uint32_t msPerGameMinute) = symbol("libGTASA.so", "_ZN6CClock10InitialiseEj");
+    static void SetGameClock(uint8_t hour, uint8_t min, uint8_t day) = symbol("libGTASA.so", "_ZN6CClock12SetGameClockEhhh");
+    static void NormaliseGameClock() = symbol("libGTASA.so", "_ZN6CClock18NormaliseGameClockEv");
+    static uint32_t GetGameClockMinutesUntil(uint8_t hour, uint8_t min) = symbol("libGTASA.so", "_ZN6CClock24GetGameClockMinutesUntilEhh");
+    static bool GetIsTimeInRange(uint8_t startHour, uint8_t endHour) = symbol("libGTASA.so", "_ZN6CClock16GetIsTimeInRangeEhh");
+    static void Update() = symbol("libGTASA.so", "_ZN6CClock6UpdateEv");
+    static void StoreClock() = symbol("libGTASA.so", "_ZN6CClock10StoreClockEv");
+    static void RestoreClock() = symbol("libGTASA.so", "_ZN6CClock12RestoreClockEv");
+    static void OffsetClockByADay(uint32_t forward) = symbol("libGTASA.so", "_ZN6CClock17OffsetClockByADayEj");
+};
+#endif

@@ -1,0 +1,17 @@
+#ifndef PSDK_renderware_RwResource_h
+#define PSDK_renderware_RwResource_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../sdk_forward.esh"
+#include "../sdk_base.esh"
+#include "../renderware/RwBase.esh"
+#include "../renderware/RwLinks.esh"
+native class RwResEntry = size(bits(0x18, 0x30))
+{
+    RwLLLink link = offset(0x0);
+    int size = offset(bits(0x8, 0x10));
+    void* owner = offset(bits(0xc, 0x18));
+    RwResEntry** ownerRef = offset(bits(0x10, 0x20));
+    nativeptr destroyNotify = offset(bits(0x14, 0x28));
+};
+#endif

@@ -1,0 +1,34 @@
+#ifndef PSDK_renderware_RwFrame_h
+#define PSDK_renderware_RwFrame_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../sdk_forward.esh"
+#include "../renderware/RwObject.esh"
+#include "../renderware/RwLinks.esh"
+#include "../renderware/RwMatrix.esh"
+native class RwFrame = size(bits(0xa4, 0xc8))
+{
+    RwObject object = offset(0x0);
+    RwLLLink inDirtyListLink = offset(bits(0x8, 0x10));
+    RwMatrix modelling = offset(bits(0x10, 0x20));
+    RwMatrix ltm = offset(bits(0x50, 0x60));
+    RwLinkList objectList = offset(bits(0x90, 0xa0));
+    RwFrame* child = offset(bits(0x98, 0xb0));
+    RwFrame* next = offset(bits(0x9c, 0xb8));
+    RwFrame* root = offset(bits(0xa0, 0xc0));
+};
+native RwFrame* _rwFrameCloneAndLinkClones(RwFrame* root) = symbol("libGTASA.so", "_Z26_rwFrameCloneAndLinkClonesP7RwFrame");
+native RwFrame* RwFrameUpdateObjects(RwFrame* frame) = symbol("libGTASA.so", "_Z20RwFrameUpdateObjectsP7RwFrame");
+native RwFrame* _rwFramePurgeClone(RwFrame* root) = symbol("libGTASA.so", "_Z18_rwFramePurgeCloneP7RwFrame");
+native RwFrame* RwFrameCloneHierarchy(RwFrame* root) = symbol("libGTASA.so", "_Z21RwFrameCloneHierarchyP7RwFrame");
+native void _rwFrameInit(RwFrame* frame) = symbol("libGTASA.so", "_Z12_rwFrameInitP7RwFrame");
+native void _rwFrameDeInit(RwFrame* frame) = symbol("libGTASA.so", "_Z14_rwFrameDeInitP7RwFrame");
+native RwFrame* RwFrameRemoveChild(RwFrame* child) = symbol("libGTASA.so", "_Z18RwFrameRemoveChildP7RwFrame");
+native RwMatrix* RwFrameGetLTM(RwFrame* frame) = symbol("libGTASA.so", "_Z13RwFrameGetLTMP7RwFrame");
+native RwFrame* RwFrameGetRoot(RwFrame* frame) = symbol("libGTASA.so", "_Z14RwFrameGetRootPK7RwFrame");
+native RwFrame* RwFrameAddChild(RwFrame* parent, RwFrame* child) = symbol("libGTASA.so", "_Z15RwFrameAddChildP7RwFrameS0_");
+native RwFrame* RwFrameForAllChildren(RwFrame* frame, nativeptr callBack, void* data) = symbol("libGTASA.so", "_Z21RwFrameForAllChildrenP7RwFramePFS0_S0_PvES1_");
+native RwFrame* RwFrameSetIdentity(RwFrame* frame) = symbol("libGTASA.so", "_Z18RwFrameSetIdentityP7RwFrame");
+native RwFrame* RwFrameOrthoNormalize(RwFrame* frame) = symbol("libGTASA.so", "_Z21RwFrameOrthoNormalizeP7RwFrame");
+native RwFrame* RwFrameForAllObjects(RwFrame* frame, nativeptr callBack, void* data) = symbol("libGTASA.so", "_Z20RwFrameForAllObjectsP7RwFramePFP8RwObjectS2_PvES3_");
+#endif

@@ -1,0 +1,122 @@
+#ifndef PSDK_game_sa_entity_Physical_h
+#define PSDK_game_sa_entity_Physical_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/entity/Entity.esh"
+#include "../../game_sa/base/Lists.esh"
+#include "../../game_sa/base/Quaternion.esh"
+#include "../../game_sa/enum/WeaponType.esh"
+native class CPhysical : public CEntity = size(bits(0x13c, 0x198))
+{
+    float m_fPrevDistFromCam = offset(bits(0x3c, 0x5c));
+    uint32_t m_nLastCollisionTime = offset(bits(0x40, 0x60));
+    uint32_t bMakeMassTwiceAsBig = offset(bits(0x44, 0x64)) bits(0, 1, 1);
+    uint32_t bApplyGravity = offset(bits(0x44, 0x64)) bits(1, 1, 1);
+    uint32_t bDisableCollisionForce = offset(bits(0x44, 0x64)) bits(2, 1, 1);
+    uint32_t bCollidable = offset(bits(0x44, 0x64)) bits(3, 1, 1);
+    uint32_t bDisableTurnForce = offset(bits(0x44, 0x64)) bits(4, 1, 1);
+    uint32_t bDisableMoveForce = offset(bits(0x44, 0x64)) bits(5, 1, 1);
+    uint32_t bInfiniteMass = offset(bits(0x44, 0x64)) bits(6, 1, 1);
+    uint32_t bDisableZ = offset(bits(0x44, 0x64)) bits(7, 1, 1);
+    uint32_t bSubmergedInWater = offset(bits(0x45, 0x65)) bits(0, 1, 1);
+    uint32_t bOnSolidSurface = offset(bits(0x45, 0x65)) bits(1, 1, 1);
+    uint32_t bBroken = offset(bits(0x45, 0x65)) bits(2, 1, 1);
+    uint32_t bProcessCollisionEvenIfStationary = offset(bits(0x45, 0x65)) bits(3, 1, 1);
+    uint32_t bSkipLineCol = offset(bits(0x45, 0x65)) bits(4, 1, 1);
+    uint32_t bDontApplySpeed = offset(bits(0x45, 0x65)) bits(5, 1, 1);
+    uint32_t bDontLoadCollision = offset(bits(0x45, 0x65)) bits(6, 1, 1);
+    uint32_t bProcessingShift = offset(bits(0x45, 0x65)) bits(7, 1, 1);
+    uint32_t bForceHitReturnFalse = offset(bits(0x46, 0x66)) bits(0, 1, 1);
+    uint32_t bDisableSimpleCollision = offset(bits(0x46, 0x66)) bits(1, 1, 1);
+    uint32_t bBulletProof = offset(bits(0x46, 0x66)) bits(2, 1, 1);
+    uint32_t bFireProof = offset(bits(0x46, 0x66)) bits(3, 1, 1);
+    uint32_t bCollisionProof = offset(bits(0x46, 0x66)) bits(4, 1, 1);
+    uint32_t bMeleeProof = offset(bits(0x46, 0x66)) bits(5, 1, 1);
+    uint32_t bInvulnerable = offset(bits(0x46, 0x66)) bits(6, 1, 1);
+    uint32_t bExplosionProof = offset(bits(0x46, 0x66)) bits(7, 1, 1);
+    uint32_t bDontCollideWithFlyers = offset(bits(0x47, 0x67)) bits(0, 1, 1);
+    uint32_t bAttachedToEntity = offset(bits(0x47, 0x67)) bits(1, 1, 1);
+    uint32_t bAddMovingCollisionSpeed = offset(bits(0x47, 0x67)) bits(2, 1, 1);
+    uint32_t bTouchingWater = offset(bits(0x47, 0x67)) bits(3, 1, 1);
+    uint32_t bCanBeCollidedWith = offset(bits(0x47, 0x67)) bits(4, 1, 1);
+    uint32_t bDestroyed = offset(bits(0x47, 0x67)) bits(5, 1, 1);
+    uint32_t bDoorHitEndStop = offset(bits(0x47, 0x67)) bits(6, 1, 1);
+    uint32_t bCarriedByRope = offset(bits(0x47, 0x67)) bits(7, 1, 1);
+    CVector m_vecMoveSpeed = offset(bits(0x48, 0x68));
+    CVector m_vecTurnSpeed = offset(bits(0x54, 0x74));
+    CVector m_vecFrictionMoveSpeed = offset(bits(0x60, 0x80));
+    CVector m_vecFrictionTurnSpeed = offset(bits(0x6c, 0x8c));
+    CVector m_vecForce = offset(bits(0x78, 0x98));
+    CVector m_vecTorque = offset(bits(0x84, 0xa4));
+    float m_fMass = offset(bits(0x90, 0xb0));
+    float m_fTurnMass = offset(bits(0x94, 0xb4));
+    float m_fVelocityFrequency = offset(bits(0x98, 0xb8));
+    float m_fAirResistance = offset(bits(0x9c, 0xbc));
+    float m_fElasticity = offset(bits(0xa0, 0xc0));
+    float m_fBuoyancyConstant = offset(bits(0xa4, 0xc4));
+    CVector m_vecCentreOfMass = offset(bits(0xa8, 0xc8));
+    void* m_pCollisionList = offset(bits(0xb4, 0xd8));
+    CEntryInfoList m_listEntryInfo = offset(bits(0xb4, 0xd8));
+    void* m_pMovingList = offset(bits(0xb8, 0xe0));
+    CPtrNodeDoubleLink* m_pMovingListNode = offset(bits(0xb8, 0xe0));
+    uint8_t m_nNumOfStaticFrames = offset(bits(0xbc, 0xe8));
+    uint8_t m_nNumEntitiesCollided = offset(bits(0xbd, 0xe9));
+    uint8_t m_nContactSurface = offset(bits(0xbe, 0xea));
+    CEntity* m_apCollidedEntities[6] = offset(bits(0xc0, 0xf0));
+    float m_fMovingSpeed = offset(bits(0xd8, 0x120));
+    float m_fDamageIntensity = offset(bits(0xdc, 0x124));
+    CEntity* m_pDamageEntity = offset(bits(0xe0, 0x128));
+    CVector m_vecLastCollisionImpactVelocity = offset(bits(0xe4, 0x130));
+    CVector m_vecLastCollisionPosn = offset(bits(0xf0, 0x13c));
+    uint16_t m_nPieceType = offset(bits(0xfc, 0x148));
+    CPhysical* m_pAttachedTo = offset(bits(0x100, 0x150));
+    CVector m_vecAttachOffset = offset(bits(0x104, 0x158));
+    CVector m_vecAttachedEntityPosn = offset(bits(0x110, 0x164));
+    CQuaternion m_qAttachedEntityRotation = offset(bits(0x11c, 0x170));
+    CEntity* m_pEntityIgnoredCollision = offset(bits(0x12c, 0x180));
+    float m_fContactSurfaceBrightness = offset(bits(0x130, 0x188));
+    float m_fDynamicLighting = offset(bits(0x134, 0x18c));
+    CRealTimeShadow* m_pShadowData = offset(bits(0x138, 0x190));
+    void RemoveAndAdd() = symbol("libGTASA.so", "_ZN9CPhysical12RemoveAndAddEv");
+    void AddToMovingList() = symbol("libGTASA.so", "_ZN9CPhysical15AddToMovingListEv");
+    void RemoveFromMovingList() = symbol("libGTASA.so", "_ZN9CPhysical20RemoveFromMovingListEv");
+    void ApplyMoveSpeed() = symbol("libGTASA.so", "_ZN9CPhysical14ApplyMoveSpeedEv");
+    void ApplyTurnSpeed() = symbol("libGTASA.so", "_ZN9CPhysical14ApplyTurnSpeedEv");
+    void ApplySpeed() = symbol("libGTASA.so", "_ZN9CPhysical10ApplySpeedEv");
+    void UnsetIsInSafePosition() = symbol("libGTASA.so", "_ZN9CPhysical21UnsetIsInSafePositionEv");
+    void ApplyGravity() = symbol("libGTASA.so", "_ZN9CPhysical12ApplyGravityEv");
+    void ApplyFriction() = symbol("libGTASA.so", "_ZN9CPhysical13ApplyFrictionEv");
+    void ApplyAirResistance() = symbol("libGTASA.so", "_ZN9CPhysical18ApplyAirResistanceEv");
+    void SkipPhysics() = symbol("libGTASA.so", "_ZN9CPhysical11SkipPhysicsEv");
+    bool CheckCollision_SimpleCar() = symbol("libGTASA.so", "_ZN9CPhysical24CheckCollision_SimpleCarEv");
+    bool CheckCollision() = symbol("libGTASA.so", "_ZN9CPhysical14CheckCollisionEv");
+    void GetHasCollidedWithAnyObject() = symbol("libGTASA.so", "_ZN9CPhysical27GetHasCollidedWithAnyObjectEv");
+    void PositionAttachedEntity() = symbol("libGTASA.so", "_ZN9CPhysical22PositionAttachedEntityEv");
+    void DettachAutoAttachedEntity() = symbol("libGTASA.so", "_ZN9CPhysical25DettachAutoAttachedEntityEv");
+    float GetLightingTotal() = symbol("libGTASA.so", "_ZNK9CPhysical16GetLightingTotalEv");
+    void SetDamagedPieceRecord(float fImpulseMagnitude, CEntity* pEntity, CColPoint* colPoint, float fReverseNormal) = symbol("libGTASA.so", "_ZN9CPhysical21SetDamagedPieceRecordEfP7CEntityR9CColPointf");
+    bool ApplyFriction1(float fAdhesiveLimit, CColPoint* colPoint) = symbol("libGTASA.so", "_ZN9CPhysical13ApplyFrictionEfR9CColPoint");
+    void ProcessCollisionSectorList(int x, int y) = symbol("libGTASA.so", "_ZN9CPhysical26ProcessCollisionSectorListEii");
+    bool ProcessCollisionSectorList_SimpleCar(CRepeatSector* pSectorList) = symbol("libGTASA.so", "_ZN9CPhysical36ProcessCollisionSectorList_SimpleCarEP13CRepeatSector");
+    void ProcessShiftSectorList(int x, int y) = symbol("libGTASA.so", "_ZN9CPhysical22ProcessShiftSectorListEii");
+    bool TestCollision(bool bApplySpeed) = symbol("libGTASA.so", "_ZN9CPhysical13TestCollisionEb");
+    void AddCollisionRecord(CEntity* pEntity) = symbol("libGTASA.so", "_ZN9CPhysical18AddCollisionRecordEP7CEntity");
+    bool GetHasCollidedWith(CEntity* pEntity) = symbol("libGTASA.so", "_ZN9CPhysical18GetHasCollidedWithEP7CEntity");
+    bool ApplyCollision(CEntity* pEntity, CColPoint* colPoint, float* fImpulseMagnitude) = symbol("libGTASA.so", "_ZN9CPhysical14ApplyCollisionEP7CEntityR9CColPointRf");
+    bool ApplyCollision1(CPhysical* pPhysical, CColPoint* colPoint, float* fImpulseMagnitudeA, float* fImpulseMagnitudeB) = symbol("libGTASA.so", "_ZN9CPhysical14ApplyCollisionEPS_R9CColPointRfS3_");
+    bool ApplyCollisionAlt(CEntity* pEntity, CColPoint* colPoint, float* fImpulseMagnitude, CVector* vecMoveInc, CVector* vecTurnInc) = symbol("libGTASA.so", "_ZN9CPhysical17ApplyCollisionAltEP7CEntityR9CColPointRfR7CVectorS6_");
+    bool ApplySoftCollision(CEntity* pEntity, CColPoint* colPoint, float* fImpulseMagnitude) = symbol("libGTASA.so", "_ZN9CPhysical18ApplySoftCollisionEP7CEntityR9CColPointRf");
+    bool ApplySoftCollision1(CPhysical* pPhysical, CColPoint* colPoint, float* fImpulseMagnitudeA, float* fImpulseMagnitudeB) = symbol("libGTASA.so", "_ZN9CPhysical18ApplySoftCollisionEPS_R9CColPointRfS3_");
+    bool ApplySpringCollision(float fSpringStrength, CVector* vecDirection, CVector* vecOffset, float fCompressionRatio, float fSuspensionBias, float* fImpulseMagnitude) = symbol("libGTASA.so", "_ZN9CPhysical20ApplySpringCollisionEfR7CVectorS1_ffRf");
+    bool ApplySpringCollisionAlt(float fSpringStrength, CVector* vecDirection, CVector* vecOffset, float fCompressionRatio, float fSuspensionBias, CVector* vecColNormal, float* fImpulseMagnitude) = symbol("libGTASA.so", "_ZN9CPhysical23ApplySpringCollisionAltEfR7CVectorS1_ffS1_Rf");
+    bool ApplySpringDampening(float fDampeningScalar, float fSpringForce, CVector* vecDirection, CVector* vecOffset, CVector* vecSpeed) = symbol("libGTASA.so", "_ZN9CPhysical20ApplySpringDampeningEffR7CVectorS1_S1_");
+    bool ApplySpringDampeningOld(float fDampeningScalar, float fSpringForce, CVector* vecDirection, CVector* vecOffset, CVector* vecSpeed) = symbol("libGTASA.so", "_ZN9CPhysical23ApplySpringDampeningOldEffR7CVectorS1_S1_");
+    bool ApplyFriction2(CPhysical* pPhysical, float fAdhesiveLimit, CColPoint* colPoint) = symbol("libGTASA.so", "_ZN9CPhysical13ApplyFrictionEPS_fR9CColPoint");
+    int RemoveRefsToEntity(CEntity* pEntity) = symbol("libGTASA.so", "_ZN9CPhysical18RemoveRefsToEntityEP7CEntity");
+    CEntity* AttachEntityToEntity1(CEntity* pEnt, CVector* pVecPos, RtQuat* pQuat) = symbol("libGTASA.so", "_ZN9CPhysical20AttachEntityToEntityEP7CEntityP7CVectorP6RtQuat");
+    void DettachEntityFromEntity(float height, float direction, float strength, bool bMakeSpin) = symbol("libGTASA.so", "_ZN9CPhysical23DettachEntityFromEntityEfffb");
+    float GetLightingFromCol(bool bLightForRender) = symbol("libGTASA.so", "_ZNK9CPhysical18GetLightingFromColEb");
+    uint8_t CanPhysicalBeDamaged(uint32_t WeaponUsed, uint8_t* pBeingShotAt) = symbol("libGTASA.so", "_ZN9CPhysical20CanPhysicalBeDamagedE11eWeaponTypePh");
+};
+#endif

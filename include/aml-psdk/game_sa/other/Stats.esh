@@ -1,0 +1,142 @@
+#ifndef PSDK_game_sa_other_Stats_h
+#define PSDK_game_sa_other_Stats_h
+#pragma once
+#define STAT_UPDATE_DECREASE 0
+#define STAT_UPDATE_INCREASE 1
+#define STATMESSAGE_LESSTHAN 0
+#define STATMESSAGE_MORETHAN 1
+#define STAT_MOD_0 0
+#define STAT_MOD_1 1
+#define STAT_MOD_2 2
+#define STAT_MOD_3 3
+#define STAT_MOD_4 4
+#define STAT_MOD_5 5
+#define STAT_MOD_6 6
+#define STAT_MOD_TIME_CAN_RUN 7
+#define STAT_MOD_AIR_IN_LUNG 8
+#define STAT_MOD_MAX_HEALTH 9
+#define STAT_MOD_10 10
+#define STAT_MOD_11 11
+#define STAT_MOD_12 12
+#define STAT_MOD_13 13
+#define STAT_MOD_14 14
+#define STAT_MOD_15 15
+#define STAT_INC_CYCLE_STAMINA 0
+#define STAT_INC_SWIM_STAMINA 1
+#define STAT_INC_SPRINT_STAMINA 2
+#define STAT_INC_RUNNING 3
+#define STAT_INC_DRIVING_SKILL 4
+#define STAT_INC_FLYING_SKILL 5
+#define STAT_INC_CYCLE_SKILL 6
+#define STAT_INC_MOTORBIKE_SKILL 7
+#define STAT_INC_BOAT_SKILL 8
+#define STAT_INC_BODY_MUSCLE 9
+#define STAT_INC_BREATH_UNDERWATER 10
+#define STAT_INC_MAX_HEALTH 11
+#define STAT_INC_PISTOL_SKILL 12
+#define STAT_INC_PISTOL_SILENCED_SKILL 13
+#define STAT_INC_DESERT_EAGLE_SKILL 14
+#define STAT_INC_SHOTGUN_SKILL 15
+#define STAT_INC_SAWNOFF_SHOTGUN_SKILL 16
+#define STAT_INC_SPAS12_SHOTGUN_SKILL 17
+#define STAT_INC_MICRO_UZI_SKILL 18
+#define STAT_INC_MP5_SKILL 19
+#define STAT_INC_AK47_SKILL 20
+#define STAT_INC_M4_SKILL 21
+#define STAT_INC_SNIPERRIFLE_SKILL 22
+#define STAT_DEC_FAT 23
+#define STAT_DEC_BODY_MUSCLE 24
+#define STAT_DEC_MAX_HEALTH 25
+#define STAT_EXERCISE_RATE_CYCLE 26
+#define STAT_EXERCISE_RATE_CYCLE_SPRINT 27
+#define STAT_EXERCISE_RATE_SWIM 28
+#define STAT_EXERCISE_RATE_SWIM_SPRINT 29
+#define STAT_EXERCISE_RATE_SPRINT 30
+#define STAT_EXERCISE_RATE_RUN 31
+#define STAT_EXERCISE_RATE_FIGHT 32
+#define STAT_TIMELIMIT_CYCLE_STAMINA 33
+#define STAT_TIMELIMIT_SWIM_STAMINA 34
+#define STAT_TIMELIMIT_SPRINT_STAMINA 35
+#define STAT_TIMELIMIT_RUNNING 36
+#define STAT_TIMELIMIT_DRIVING_SKILL 37
+#define STAT_TIMELIMIT_FLYING_SKILL 38
+#define STAT_TIMELIMIT_CYCLE_SKILL 39
+#define STAT_TIMELIMIT_MOTORBIKE_SKILL 40
+#define STAT_TIMELIMIT_BOAT_SKILL 41
+#define STAT_TIMELIMIT_FAT_ADJUST 42
+#define STAT_TIMELIMIT_FAT_ADJUST_STRENUOUS 43
+#define STAT_TIMELIMIT_BREATH_UNDERWATER 44
+#define STAT_TIMELIMIT_MAX_HEALTH 45
+#define STAT_TIMELIMIT_PISTOL_SKILL 46
+#define STAT_TIMELIMIT_PISTOL_SILENCED_SKILL 47
+#define STAT_TIMELIMIT_DESERT_EAGLE_SKILL 48
+#define STAT_TIMELIMIT_SHOTGUN_SKILL 49
+#define STAT_TIMELIMIT_SAWNOFF_SHOTGUN_SKILL 50
+#define STAT_TIMELIMIT_SPAS12_SHOTGUN_SKILL 51
+#define STAT_TIMELIMIT_MICRO_UZI_SKILL 52
+#define STAT_TIMELIMIT_MP5_SKILL 53
+#define STAT_TIMELIMIT_AK47_SKILL 54
+#define STAT_TIMELIMIT_M4_SKILL 55
+#define STAT_TIMELIMIT_SNIPERRIFLE_SKILL 56
+#define STAT_TIMELIMIT_DEATH_HEALTH 57
+#define STAT_TIMELIMIT_ADD_TO_HEALTH 58
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../gta_base/GxtChar.esh"
+native class CStats = size(0x1)
+{
+    static void Init() = symbol("libGTASA.so", "_ZN6CStats4InitEv");
+    static void CheckForStatsMessage(bool bInitialize) = symbol("libGTASA.so", "_ZN6CStats20CheckForStatsMessageEb");
+    static void SetStatValue(uint16_t index, float NewValue) = symbol("libGTASA.so", "_ZN6CStats12SetStatValueEtf");
+    static uint8_t PopulateFavoriteRadioStationList() = symbol("libGTASA.so", "_ZN6CStats32PopulateFavoriteRadioStationListEv");
+    static void LoadActionReactionStats() = symbol("libGTASA.so", "_ZN6CStats23LoadActionReactionStatsEv");
+    static void LoadStatUpdateConditions() = symbol("libGTASA.so", "_ZN6CStats24LoadStatUpdateConditionsEv");
+    static uint8_t* GetStatID(uint16_t index) = symbol("libGTASA.so", "_ZN6CStats9GetStatIDEt");
+    static uint8_t GetStatType(uint16_t index) = symbol("libGTASA.so", "_ZN6CStats11GetStatTypeEt");
+    static float GetStatValue(uint16_t index) = symbol("libGTASA.so", "_ZN6CStats12GetStatValueEt");
+    static void ModifyStat(uint16_t index, float amount) = symbol("libGTASA.so", "_ZN6CStats10ModifyStatEtf");
+    static void IncrementStat(uint16_t index, float amount) = symbol("libGTASA.so", "_ZN6CStats13IncrementStatEtf");
+    static void DecrementStat(uint16_t index, float amount) = symbol("libGTASA.so", "_ZN6CStats13DecrementStatEtf");
+    static uint8_t IsStatCapped(uint16_t arg0) = symbol("libGTASA.so", "_ZN6CStats12IsStatCappedEt");
+    static void UpdateStatsAddToHealth(uint32_t nAdd) = symbol("libGTASA.so", "_ZN6CStats22UpdateStatsAddToHealthEj");
+    static void ProcessReactionStatsOnIncrement(uint8_t index) = symbol("libGTASA.so", "_ZN6CStats31ProcessReactionStatsOnIncrementEh");
+    static void ProcessReactionStatsOnDecrement(uint8_t index) = symbol("libGTASA.so", "_ZN6CStats31ProcessReactionStatsOnDecrementEh");
+    static void SetNewRecordStat(uint16_t index, float NewLevel) = symbol("libGTASA.so", "_ZN6CStats16SetNewRecordStatEtf");
+    static uint8_t GetTimesMissionAttempted(uint8_t MissionNumber) = symbol("libGTASA.so", "_ZN6CStats24GetTimesMissionAttemptedEh");
+    static void RegisterMissionPassed(uint8_t MissionNumber) = symbol("libGTASA.so", "_ZN6CStats21RegisterMissionPassedEh");
+    static void RegisterFastestTime(int StatIndex, int NewTime) = symbol("libGTASA.so", "_ZN6CStats19RegisterFastestTimeEii");
+    static void RegisterBestPosition(int StatIndex, int NewPosition) = symbol("libGTASA.so", "_ZN6CStats20RegisterBestPositionEii");
+    static float GetFavoriteRadioStationList(int station) = symbol("libGTASA.so", "_ZN6CStats27GetFavoriteRadioStationListEi");
+    static int32_t* GetFullFavoriteRadioStationList() = symbol("libGTASA.so", "_ZN6CStats31GetFullFavoriteRadioStationListEv");
+    static int32_t FindMostFavoriteRadioStation() = symbol("libGTASA.so", "_ZN6CStats28FindMostFavoriteRadioStationEv");
+    static int32_t FindLeastFavoriteRadioStation() = symbol("libGTASA.so", "_ZN6CStats29FindLeastFavoriteRadioStationEv");
+    static GxtChar* FindCriminalRatingString() = symbol("libGTASA.so", "_ZN6CStats24FindCriminalRatingStringEv");
+    static int32_t FindCriminalRatingNumber() = symbol("libGTASA.so", "_ZN6CStats24FindCriminalRatingNumberEv");
+    static float GetPercentageProgress() = symbol("libGTASA.so", "_ZN6CStats21GetPercentageProgressEv");
+    static int32_t ConstructStatLine(int LineID, uint8_t CurrentCategory) = symbol("libGTASA.so", "_ZN6CStats17ConstructStatLineEih");
+    static uint8_t SafeToShowThisStat(uint8_t index) = symbol("libGTASA.so", "_ZN6CStats18SafeToShowThisStatEh");
+    static void BuildStatLine(uint8_t* TEXT, void* NumberPtr, int bNumberIsFloat, void* NumberPtr2, int Type) = symbol("libGTASA.so", "_ZN6CStats13BuildStatLineEPcPviS1_i");
+    static int32_t ConvertToMins(int TimeInSecs) = symbol("libGTASA.so", "_ZN6CStats13ConvertToMinsEi");
+    static int32_t ConvertToSecs(int TimeInSecs) = symbol("libGTASA.so", "_ZN6CStats13ConvertToSecsEi");
+    static uint8_t CheckForThreshold(float* stored_value, float new_value) = symbol("libGTASA.so", "_ZN6CStats17CheckForThresholdEPff");
+    static void DisplayScriptStatUpdateMessage(uint8_t IncOrDec, uint32_t StatIndex, float fValue) = symbol("libGTASA.so", "_ZN6CStats30DisplayScriptStatUpdateMessageEhjf");
+    static int32_t FindMaxNumberOfGroupMembers() = symbol("libGTASA.so", "_ZN6CStats27FindMaxNumberOfGroupMembersEv");
+    static void UpdateRespectStat(uint8_t reset) = symbol("libGTASA.so", "_ZN6CStats17UpdateRespectStatEh");
+    static void UpdateSexAppealStat() = symbol("libGTASA.so", "_ZN6CStats19UpdateSexAppealStatEv");
+    static void UpdateFatAndMuscleStats(uint32_t nExerciseRate) = symbol("libGTASA.so", "_ZN6CStats23UpdateFatAndMuscleStatsEj");
+    static void UpdateStatsWhenSprinting() = symbol("libGTASA.so", "_ZN6CStats24UpdateStatsWhenSprintingEv");
+    static void UpdateStatsWhenRunning() = symbol("libGTASA.so", "_ZN6CStats22UpdateStatsWhenRunningEv");
+    static void UpdateStatsWhenCycling(bool bSprinting, CBmx* pBmx) = symbol("libGTASA.so", "_ZN6CStats22UpdateStatsWhenCyclingEbP4CBmx");
+    static void UpdateStatsWhenSwimming(bool bUnderWater, bool bSprinting) = symbol("libGTASA.so", "_ZN6CStats23UpdateStatsWhenSwimmingEbb");
+    static void UpdateStatsWhenDriving(CVehicle* pVehicle) = symbol("libGTASA.so", "_ZN6CStats22UpdateStatsWhenDrivingEP8CVehicle");
+    static void UpdateStatsWhenFlying(CVehicle* pVehicle) = symbol("libGTASA.so", "_ZN6CStats21UpdateStatsWhenFlyingEP8CVehicle");
+    static void UpdateStatsWhenOnMotorBike(CBike* pBike) = symbol("libGTASA.so", "_ZN6CStats26UpdateStatsWhenOnMotorBikeEP5CBike");
+    static void UpdateStatsWhenWeaponHit(int nWeaponHit) = symbol("libGTASA.so", "_ZN6CStats24UpdateStatsWhenWeaponHitEi");
+    static void UpdateStatsWhenFighting() = symbol("libGTASA.so", "_ZN6CStats23UpdateStatsWhenFightingEv");
+    static void UpdateStatsOnRespawn() = symbol("libGTASA.so", "_ZN6CStats20UpdateStatsOnRespawnEv");
+    static float GetFatAndMuscleModifier(int nAbility) = symbol("libGTASA.so", "_ZN6CStats23GetFatAndMuscleModifierE17eStatModAbilities");
+    static bool Save() = symbol("libGTASA.so", "_ZN6CStats4SaveEv");
+    static bool Load() = symbol("libGTASA.so", "_ZN6CStats4LoadEv");
+};
+#endif

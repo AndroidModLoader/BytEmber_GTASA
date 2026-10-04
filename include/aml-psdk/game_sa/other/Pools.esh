@@ -1,0 +1,39 @@
+#ifndef PSDK_game_sa_other_Pools_h
+#define PSDK_game_sa_other_Pools_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/entity/Ped.esh"
+#include "../../game_sa/entity/Automobile.esh"
+#include "../../game_sa/entity/Object.esh"
+#include "../../game_sa/ai/tasks/Task.esh"
+#include "../../game_sa/ai/PedIntelligence.esh"
+native class tPoolObjectFlags = size(0x1)
+{
+    uint8_t nId = offset(0x0) bits(0, 7, 1);
+    bool bEmpty = offset(0x0) bits(7, 1, 1);
+    uint8_t nValue = offset(0x0);
+};
+native class CPools = size(0x1)
+{
+    static void Initialise() = symbol("libGTASA.so", "_ZN6CPools10InitialiseEv");
+    static void ShutDown() = symbol("libGTASA.so", "_ZN6CPools8ShutDownEv");
+    static int32_t GetPedRef(CPed* ped) = symbol("libGTASA.so", "_ZN6CPools9GetPedRefEP4CPed");
+    static CPed* GetPed(int ref) = symbol("libGTASA.so", "_ZN6CPools6GetPedEi");
+    static int32_t GetVehicleRef(CVehicle* vehicle) = symbol("libGTASA.so", "_ZN6CPools13GetVehicleRefEP8CVehicle");
+    static CVehicle* GetVehicle(int ref) = symbol("libGTASA.so", "_ZN6CPools10GetVehicleEi");
+    static int32_t GetObjectRef(CObject* object) = symbol("libGTASA.so", "_ZN6CPools12GetObjectRefEP7CObject");
+    static CObject* GetObject(int ref) = symbol("libGTASA.so", "_ZN6CPools9GetObjectEi");
+    static void MakeSureSlotInObjectPoolIsEmpty(int slot) = symbol("libGTASA.so", "_ZN6CPools31MakeSureSlotInObjectPoolIsEmptyEi");
+    static bool SaveVehiclePool() = symbol("libGTASA.so", "_ZN6CPools15SaveVehiclePoolEv");
+    static bool LoadVehiclePool() = symbol("libGTASA.so", "_ZN6CPools15LoadVehiclePoolEv");
+    static bool SaveObjectPool() = symbol("libGTASA.so", "_ZN6CPools14SaveObjectPoolEv");
+    static bool LoadObjectPool() = symbol("libGTASA.so", "_ZN6CPools14LoadObjectPoolEv");
+    static bool Save() = symbol("libGTASA.so", "_ZN6CPools4SaveEv");
+    static bool SavePedPool() = symbol("libGTASA.so", "_ZN6CPools11SavePedPoolEv");
+    static bool SavePedTasks() = symbol("libGTASA.so", "_ZN6CPools12SavePedTasksEv");
+    static bool Load() = symbol("libGTASA.so", "_ZN6CPools4LoadEv");
+    static bool LoadPedPool() = symbol("libGTASA.so", "_ZN6CPools11LoadPedPoolEv");
+    static bool LoadPedTasks() = symbol("libGTASA.so", "_ZN6CPools12LoadPedTasksEv");
+};
+#endif

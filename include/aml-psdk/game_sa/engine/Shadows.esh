@@ -1,0 +1,151 @@
+#ifndef PSDK_game_sa_engine_Shadows_h
+#define PSDK_game_sa_engine_Shadows_h
+#pragma once
+#define SHADOW_DEFAULT 1
+#define SHADOW_ADDITIVE 2
+#define SHADOW_INVCOLOR 3
+#define SHADOW_OIL_1 4
+#define SHADOW_OIL_2 5
+#define SHADOW_OIL_3 6
+#define SHADOW_OIL_4 7
+#define SHADOW_OIL_5 8
+#define SHADOWTEX_CAR 1
+#define SHADOWTEX_PED 2
+#define SHADOWTEX_EXPLOSION 3
+#define SHADOWTEX_HELI 4
+#define SHADOWTEX_HEADLIGHTS 5
+#define SHADOWTEX_BLOOD 6
+#define VEH_SHD_CAR 0
+#define VEH_SHD_BIKE 1
+#define VEH_SHD_HELI 2
+#define VEH_SHD_PLANE 3
+#define VEH_SHD_RC 4
+#define VEH_SHD_BIG_PLANE 5
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../gta_base/Vector.esh"
+native class CPolyBunch = size(bits(0x68, 0x70))
+{
+    CVector m_avecPosn[7] = offset(0x0);
+    CPolyBunch* m_pNext = offset(bits(0x54, 0x58));
+    uint16_t m_wNumVerts = offset(bits(0x58, 0x60));
+    uint8_t m_aU[7] = offset(bits(0x5a, 0x62));
+    uint8_t m_aV[7] = offset(bits(0x61, 0x69));
+};
+native class CRegisteredShadow = size(bits(0x34, 0x40))
+{
+    CVector m_vecPosn = offset(0x0);
+    float m_fFrontX = offset(0xc);
+    float m_fFrontY = offset(0x10);
+    float m_fSideX = offset(0x14);
+    float m_fSideY = offset(0x18);
+    float m_fZDistance = offset(0x1c);
+    float m_fScale = offset(0x20);
+    RwTexture* m_pTexture = offset(bits(0x24, 0x28));
+    CRealTimeShadow* m_pRTShadow = offset(bits(0x28, 0x30));
+    uint16_t m_nIntensity = offset(bits(0x2c, 0x38));
+    uint8_t m_nType = offset(bits(0x2e, 0x3a));
+    uint8_t m_nRed = offset(bits(0x2f, 0x3b));
+    uint8_t m_nGreen = offset(bits(0x30, 0x3c));
+    uint8_t m_nBlue = offset(bits(0x31, 0x3d));
+    CRegisteredShadow_m_nFlags m_nFlags = offset(bits(0x32, 0x3e));
+};
+native class CRegisteredShadow_m_nFlags = size(0x1)
+{
+    uint8_t bDrawOnWater = offset(0x0) bits(0, 1, 1);
+    uint8_t bIgnoreMapObjects = offset(0x0) bits(1, 1, 1);
+    uint8_t bDrawOnBuildings = offset(0x0) bits(2, 1, 1);
+};
+native class CPermanentShadow = size(bits(0x38, 0x40))
+{
+    CVector m_vecPosn = offset(0x0);
+    float m_fFrontX = offset(0xc);
+    float m_fFrontY = offset(0x10);
+    float m_fSideX = offset(0x14);
+    float m_fSideY = offset(0x18);
+    float m_fZDistance = offset(0x1c);
+    float m_fScale = offset(0x20);
+    uint32_t m_nTimeCreated = offset(0x24);
+    uint32_t m_nTimeDuration = offset(0x28);
+    RwTexture* m_pTexture = offset(bits(0x2c, 0x30));
+    uint16_t m_nIntensity = offset(bits(0x30, 0x38));
+    uint8_t m_nType = offset(bits(0x32, 0x3a));
+    uint8_t m_nRed = offset(bits(0x33, 0x3b));
+    uint8_t m_nGreen = offset(bits(0x34, 0x3c));
+    uint8_t m_nBlue = offset(bits(0x35, 0x3d));
+    CPermanentShadow_m_nFlags m_nFlags = offset(bits(0x36, 0x3e));
+};
+native class CPermanentShadow_m_nFlags = size(0x1)
+{
+    uint8_t bDrawOnWater = offset(0x0) bits(0, 1, 1);
+    uint8_t bIgnoreMapObjects = offset(0x0) bits(1, 1, 1);
+    uint8_t bDrawOnBuildings = offset(0x0) bits(2, 1, 1);
+};
+native class CStaticShadow = size(bits(0x40, 0x50))
+{
+    uint32_t m_nId = offset(0x0);
+    CPolyBunch* m_pPolyBunch = offset(bits(0x4, 0x8));
+    uint32_t m_nTimeCreated = offset(bits(0x8, 0x10));
+    CVector m_vecPosn = offset(bits(0xc, 0x14));
+    float m_fFrontX = offset(bits(0x18, 0x20));
+    float m_fFrontY = offset(bits(0x1c, 0x24));
+    float m_fSideX = offset(bits(0x20, 0x28));
+    float m_fSideY = offset(bits(0x24, 0x2c));
+    float m_fZDistance = offset(bits(0x28, 0x30));
+    float m_fScale = offset(bits(0x2c, 0x34));
+    RwTexture* m_pTexture = offset(bits(0x30, 0x38));
+    uint16_t m_nIntensity = offset(bits(0x34, 0x40));
+    uint8_t m_nType = offset(bits(0x36, 0x42));
+    uint8_t m_nRed = offset(bits(0x37, 0x43));
+    uint8_t m_nGreen = offset(bits(0x38, 0x44));
+    uint8_t m_nBlue = offset(bits(0x39, 0x45));
+    uint8_t m_bJustCreated = offset(bits(0x3a, 0x46));
+    uint8_t m_bRendered = offset(bits(0x3b, 0x47));
+    uint8_t m_bTemporaryShadow = offset(bits(0x3c, 0x48));
+    uint8_t m_nDayIntensity = offset(bits(0x3d, 0x49)) bits(0, 4, 1);
+    uint8_t m_nNightIntensity = offset(bits(0x3d, 0x49)) bits(4, 4, 1);
+    uint8_t m_nDayNightIntensity = offset(bits(0x3d, 0x49));
+    void Free() = symbol("libGTASA.so", "_ZN13CStaticShadow4FreeEv");
+};
+native class CShadows = size(0x1)
+{
+    static void Init() = symbol("libGTASA.so", "_ZN8CShadows4InitEv");
+    static void Shutdown() = symbol("libGTASA.so", "_ZN8CShadows8ShutdownEv");
+    static void AddPermanentShadow(uint8_t Type, RwTexture* pTexture, CVector* pCoors, float ForwardX, float ForwardY, float SideX, float SideY, int16_t Brightness, uint8_t Red, uint8_t Green, uint8_t Blue, float ShadowDepth, uint32_t Duration, float TextureScale) = symbol("libGTASA.so", "_ZN8CShadows18AddPermanentShadowEhP9RwTextureP7CVectorffffshhhfjf");
+#if IS_64BIT
+    static bool StoreStaticShadow(uint64_t ID, uint8_t Type, RwTexture* pTexture, CVector* pCoors, float ForwardX, float ForwardY, float SideX, float SideY, int16_t Brightness, uint8_t Red, uint8_t Green, uint8_t Blue, float ShadowDepth, float TextureScale, float MaxDist, bool bFromTree, float Margin) = symbol("libGTASA.so", "_ZN8CShadows17StoreStaticShadowEyhP9RwTextureP7CVectorffffshhhfffbf");
+#else
+    static bool StoreStaticShadow(uint32_t ID, uint8_t Type, RwTexture* pTexture, CVector* pCoors, float ForwardX, float ForwardY, float SideX, float SideY, int16_t Brightness, uint8_t Red, uint8_t Green, uint8_t Blue, float ShadowDepth, float TextureScale, float MaxDist, bool bFromTree, float Margin) = symbol("libGTASA.so", "_ZN8CShadows17StoreStaticShadowEjhP9RwTextureP7CVectorffffshhhfffbf");
+#endif
+    static void GeneratePolysForStaticShadow(int16_t ShadowNum) = symbol("libGTASA.so", "_ZN8CShadows28GeneratePolysForStaticShadowEs");
+    static void StoreShadowToBeRendered1(uint8_t Type, CVector* pCoors, float ForwardX, float ForwardY, float SideX, float SideY, int16_t Brightness, uint8_t Red, uint8_t Green, uint8_t Blue) = symbol("libGTASA.so", "_ZN8CShadows23StoreShadowToBeRenderedEhP7CVectorffffshhh");
+    static void StoreShadowToBeRendered2(uint8_t Type, RwTexture* pTexture, CVector* pCoors, float ForwardX, float ForwardY, float SideX, float SideY, int16_t Brightness, uint8_t Red, uint8_t Green, uint8_t Blue, float ShadowDepth, bool OnWater, float TextureScale, CRealTimeShadow* pRealTimeShadow, bool bIsPlayer) = symbol("libGTASA.so", "_ZN8CShadows23StoreShadowToBeRenderedEhP9RwTextureP7CVectorffffshhhfbfP15CRealTimeShadowb");
+    static void StoreShadowForVehicle(CVehicle* pVehicle, int VehicleShadowType) = symbol("libGTASA.so", "_ZN8CShadows21StoreShadowForVehicleEP8CVehicle12VEH_SHD_TYPE");
+    static void StoreCarLightShadow(CVehicle* pCar, int ID, RwTexture* pTexture, CVector* pShadowPos, float ForwardX, float ForwardY, float SideX, float SideY, uint8_t Red, uint8_t Green, uint8_t Blue, float Radius) = symbol("libGTASA.so", "_ZN8CShadows19StoreCarLightShadowEP8CVehicleiP9RwTextureP7CVectorffffhhhf");
+    static void StoreShadowForPedObject(CEntity* pPed, float ShadowDisplacementX, float ShadowDisplacementY, float ShadowFrontX, float ShadowFrontY, float ShadowSideX, float ShadowSideY) = symbol("libGTASA.so", "_ZN8CShadows23StoreShadowForPedObjectEP7CEntityffffff");
+    static bool StoreRealTimeShadow(CPhysical* pPhysical, float ShadowDisplacementX, float ShadowDisplacementY, float ShadowFrontX, float ShadowFrontY, float ShadowSideX, float ShadowSideY) = symbol("libGTASA.so", "_ZN8CShadows19StoreRealTimeShadowEP9CPhysicalffffff");
+    static void StoreShadowForTree(CEntity* arg0) = symbol("libGTASA.so", "_ZN8CShadows18StoreShadowForTreeEP7CEntity");
+    static void StoreShadowForPole(CEntity* pPole, float OffsetX, float OffsetY, float ShiftUp, float Length, float Width, uint32_t Number) = symbol("libGTASA.so", "_ZN8CShadows18StoreShadowForPoleEP7CEntityfffffj");
+    static void SetRenderModeForShadowType(uint8_t ShadowType) = symbol("libGTASA.so", "_ZN8CShadows26SetRenderModeForShadowTypeEh");
+    static void RenderStoredShadows(bool renderAdditive) = symbol("libGTASA.so", "_ZN8CShadows19RenderStoredShadowsEb");
+    static void CastRealTimeShadowSectorList(CPtrList* list, float XMin, float YMin, float XMax, float YMax, CVector* pShadowPos, float ForwardX, float ForwardY, float SideX, float SideY, int16_t Brightness, uint8_t Red, uint8_t Green, uint8_t Blue, float ShadowDepth, float TextureScale, nativeptr ppBunch, CRealTimeShadow* pRealTimeShadow, uint8_t* lightingMult) = symbol("libGTASA.so", "_ZN8CShadows28CastRealTimeShadowSectorListER8CPtrListffffP7CVectorffffshhhffPP10CPolyBunchP15CRealTimeShadowPh");
+    static void CastPlayerShadowSectorList(CPtrList* list, float XMin, float YMin, float XMax, float YMax, CVector* pShadowPos, float ForwardX, float ForwardY, float SideX, float SideY, int16_t Brightness, uint8_t Red, uint8_t Green, uint8_t Blue, float ShadowDepth, float TextureScale, nativeptr ppBunch, uint8_t* lightingMult, int ShadowType) = symbol("libGTASA.so", "_ZN8CShadows26CastPlayerShadowSectorListER8CPtrListffffP7CVectorffffshhhffPP10CPolyBunchPhi");
+    static void CastShadowSectorList(CPtrList* list, float XMin, float YMin, float XMax, float YMax, CVector* pShadowPos, float ForwardX, float ForwardY, float SideX, float SideY, int16_t Brightness, uint8_t Red, uint8_t Green, uint8_t Blue, float ShadowDepth, float TextureScale, nativeptr ppBunch, uint8_t* lightingMult, int ShadowType) = symbol("libGTASA.so", "_ZN8CShadows20CastShadowSectorListER8CPtrListffffP7CVectorffffshhhffPP10CPolyBunchPhi");
+    static void RenderStaticShadows(bool renderAdditive) = symbol("libGTASA.so", "_ZN8CShadows19RenderStaticShadowsEb");
+    static void AffectColourWithLighting(uint8_t shadowType, uint8_t lightingMult, uint8_t origR, uint8_t origG, uint8_t origB, uint8_t* r, uint8_t* g, uint8_t* b) = symbol("libGTASA.so", "_ZN8CShadows24AffectColourWithLightingEhhhhhPhS0_S0_");
+    static void CastShadowEntityXY(CEntity* pEntity, float XMin, float YMin, float XMax, float YMax, CVector* pShadowPos, float ForwardX, float ForwardY, float SideX, float SideY, int16_t Brightness, uint8_t Red, uint8_t Green, uint8_t Blue, float ShadowDepth, float TextureScale, nativeptr ppBunch, uint8_t* lightingMult, int ShadowType) = symbol("libGTASA.so", "_ZN8CShadows18CastShadowEntityXYEP7CEntityffffP7CVectorffffshhhffPP10CPolyBunchPhi");
+    static void UpdateStaticShadows() = symbol("libGTASA.so", "_ZN8CShadows19UpdateStaticShadowsEv");
+    static void UpdatePermanentShadows() = symbol("libGTASA.so", "_ZN8CShadows22UpdatePermanentShadowsEv");
+    static void RemoveOilInArea(float MinX, float MaxX, float MinY, float MaxY) = symbol("libGTASA.so", "_ZN8CShadows15RemoveOilInAreaEffff");
+    static void GunShotSetsOilOnFire(CVector* pShotStart, CVector* pShotEnd) = symbol("libGTASA.so", "_ZN8CShadows20GunShotSetsOilOnFireEPK7CVectorS2_");
+    static void PrintDebugPoly(CVector* arg0, CVector* arg1, CVector* arg2) = symbol("libGTASA.so", "_ZN8CShadows14PrintDebugPolyEP7CVectorS1_S1_");
+    static void RenderExtraPlayerShadows() = symbol("libGTASA.so", "_ZN8CShadows24RenderExtraPlayerShadowsEv");
+    static void TidyUpShadows() = symbol("libGTASA.so", "_ZN8CShadows13TidyUpShadowsEv");
+#if IS_64BIT
+    static void RenderIndicatorShadow(uint64_t ID, uint8_t Type, RwTexture* pTexture, CVector* pCoors, float ForwardX, float ForwardY, float SideX, float SideY, int16_t Brightness) = symbol("libGTASA.so", "_ZN8CShadows21RenderIndicatorShadowEyhP9RwTextureP7CVectorffffs");
+#else
+    static void RenderIndicatorShadow(uint32_t ID, uint8_t Type, RwTexture* pTexture, CVector* pCoors, float ForwardX, float ForwardY, float SideX, float SideY, int16_t Brightness) = symbol("libGTASA.so", "_ZN8CShadows21RenderIndicatorShadowEjhP9RwTextureP7CVectorffffs");
+#endif
+};
+#endif

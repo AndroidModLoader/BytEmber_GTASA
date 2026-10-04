@@ -1,0 +1,196 @@
+#ifndef PSDK_game_sa_engine_Radar_h
+#define PSDK_game_sa_engine_Radar_h
+#pragma once
+#define BLIP_FLAG_FRIEND 0
+#define BLIP_FLAG_THREAT 1
+#define BLIP_NONE 0
+#define BLIP_CAR 1
+#define BLIP_CHAR 2
+#define BLIP_OBJECT 3
+#define BLIP_COORD 4
+#define BLIP_CONTACTPOINT 5
+#define BLIP_SPOTLIGHT 6
+#define BLIP_PICKUP 7
+#define BLIP_AIRSTRIP 8
+#define BLIP_DISPLAY_NEITHER 0
+#define BLIP_DISPLAY_MARKER_ONLY 1
+#define BLIP_DISPLAY_BLIP_ONLY 2
+#define BLIP_DISPLAY_BOTH 3
+#define BLIP_COLOUR_RED 0
+#define BLIP_COLOUR_GREEN 1
+#define BLIP_COLOUR_BLUE 2
+#define BLIP_COLOUR_WHITE 3
+#define BLIP_COLOUR_YELLOW 4
+#define BLIP_COLOUR_REDCOPY 5
+#define BLIP_COLOUR_BLUECOPY 6
+#define BLIP_COLOUR_THREAT 7
+#define BLIP_COLOUR_DESTINATION 8
+#define RADAR_SPRITE_NONE 0
+#define RADAR_SPRITE_WHITE 1
+#define RADAR_SPRITE_CENTRE 2
+#define RADAR_SPRITE_MAP_HERE 3
+#define RADAR_SPRITE_NORTH 4
+#define RADAR_SPRITE_AIRYARD 5
+#define RADAR_SPRITE_AMMUGUN 6
+#define RADAR_SPRITE_BARBERS 7
+#define RADAR_SPRITE_BIGSMOKE 8
+#define RADAR_SPRITE_BOATYARD 9
+#define RADAR_SPRITE_BURGERSHOT 10
+#define RADAR_SPRITE_BULLDOZER 11
+#define RADAR_SPRITE_CATALINAPINK 12
+#define RADAR_SPRITE_CESARVIAPANDO 13
+#define RADAR_SPRITE_CHICKEN 14
+#define RADAR_SPRITE_CJ 15
+#define RADAR_SPRITE_CRASH1 16
+#define RADAR_SPRITE_DINER 17
+#define RADAR_SPRITE_EMMETGUN 18
+#define RADAR_SPRITE_ENEMYATTACK 19
+#define RADAR_SPRITE_FIRE 20
+#define RADAR_SPRITE_GIRLFRIEND 21
+#define RADAR_SPRITE_HOSTPITAL 22
+#define RADAR_SPRITE_LOGOSYNDICATE 23
+#define RADAR_SPRITE_MADDOG 24
+#define RADAR_SPRITE_MAFIACASINO 25
+#define RADAR_SPRITE_MCSTRAP 26
+#define RADAR_SPRITE_MODGARAGE 27
+#define RADAR_SPRITE_OGLOC 28
+#define RADAR_SPRITE_PIZZA 29
+#define RADAR_SPRITE_POLICE 30
+#define RADAR_SPRITE_PROPERTYG 31
+#define RADAR_SPRITE_PROPERTYR 32
+#define RADAR_SPRITE_RACE 33
+#define RADAR_SPRITE_RYDER 34
+#define RADAR_SPRITE_SAVEGAME 35
+#define RADAR_SPRITE_SCHOOL 36
+#define RADAR_SPRITE_QMARK 37
+#define RADAR_SPRITE_SWEET 38
+#define RADAR_SPRITE_TATTOO 39
+#define RADAR_SPRITE_THETRUTH 40
+#define RADAR_SPRITE_WAYPOINT 41
+#define RADAR_SPRITE_TORENORANCH 42
+#define RADAR_SPRITE_TRIADS 43
+#define RADAR_SPRITE_TRIADSCASINO 44
+#define RADAR_SPRITE_TSHIRT 45
+#define RADAR_SPRITE_WOOZIE 46
+#define RADAR_SPRITE_ZERO 47
+#define RADAR_SPRITE_DATEDISCO 48
+#define RADAR_SPRITE_DATEDRINK 49
+#define RADAR_SPRITE_DATEFOOD 50
+#define RADAR_SPRITE_TRUCK 51
+#define RADAR_SPRITE_CASH 52
+#define RADAR_SPRITE_FLAG 53
+#define RADAR_SPRITE_GYM 54
+#define RADAR_SPRITE_IMPOUND 55
+#define RADAR_SPRITE_LIGHT 56
+#define RADAR_SPRITE_RUNWAY 57
+#define RADAR_SPRITE_GANGB 58
+#define RADAR_SPRITE_GANGP 59
+#define RADAR_SPRITE_GANGY 60
+#define RADAR_SPRITE_GANGN 61
+#define RADAR_SPRITE_GANGG 62
+#define RADAR_SPRITE_SPRAY 63
+#define RADAR_SPRITE_COUNT 64
+#define RADAR_TRACE_LOW 0
+#define RADAR_TRACE_HIGH 1
+#define RADAR_TRACE_NORMAL 2
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../gta_base/RGBA.esh"
+#include "../../gta_base/Vector.esh"
+#include "../../gta_base/Rect.esh"
+native class tBlipHandle = size(0x4)
+{
+    uint16_t arrayIndex = offset(0x0);
+    uint16_t number = offset(0x2);
+};
+native class airstrip_info = size(0x10)
+{
+    float x = offset(0x0);
+    float y = offset(0x4);
+    float direction = offset(0x8);
+    float radius = offset(0xc);
+};
+native class tRadarTrace = size(bits(0x28, 0x30))
+{
+    uint32_t m_nColour = offset(0x0);
+    uint32_t m_nEntityHandle = offset(0x4);
+    CVector m_vecPos = offset(0x8);
+    uint16_t m_nCounter = offset(0x14);
+    float m_fSphereRadius = offset(0x18);
+    uint16_t m_nBlipSize = offset(0x1c);
+    CEntryExit* m_pEntryExit = offset(0x20);
+    uint8_t m_nRadarSprite = offset(bits(0x24, 0x28));
+    uint8_t m_bBright = offset(bits(0x25, 0x29)) bits(0, 1, 1);
+    uint8_t m_bInUse = offset(bits(0x25, 0x29)) bits(1, 1, 1);
+    uint8_t m_bShortRange = offset(bits(0x25, 0x29)) bits(2, 1, 1);
+    uint8_t m_bFriendly = offset(bits(0x25, 0x29)) bits(3, 1, 1);
+    uint8_t m_bBlipRemain = offset(bits(0x25, 0x29)) bits(4, 1, 1);
+    uint8_t m_bBlipFade = offset(bits(0x25, 0x29)) bits(5, 1, 1);
+    uint8_t m_nCoordBlipAppearance = offset(bits(0x25, 0x29)) bits(6, 2, 1);
+    uint8_t m_nBlipDisplay = offset(bits(0x26, 0x2a)) bits(0, 2, 1);
+    uint8_t m_nBlipType = offset(bits(0x26, 0x2a)) bits(2, 4, 1);
+};
+native class CRadar = size(0x1)
+{
+    static void Initialise() = symbol("libGTASA.so", "_ZN6CRadar10InitialiseEv");
+    static void ClearActualBlip(int idx) = symbol("libGTASA.so", "_ZN6CRadar15ClearActualBlipEi");
+    static void Shutdown() = symbol("libGTASA.so", "_ZN6CRadar8ShutdownEv");
+    static void RemoveRadarSections() = symbol("libGTASA.so", "_ZN6CRadar19RemoveRadarSectionsEv");
+    static void LoadTextures() = symbol("libGTASA.so", "_ZN6CRadar12LoadTexturesEv");
+    static int GetNewUniqueBlipIndex(int arrayIdx) = symbol("libGTASA.so", "_ZN6CRadar21GetNewUniqueBlipIndexEi");
+    static int GetActualBlipArrayIndex(int idx) = symbol("libGTASA.so", "_ZN6CRadar23GetActualBlipArrayIndexEi");
+    static void DrawMap() = symbol("libGTASA.so", "_ZN6CRadar7DrawMapEv");
+    static void CalculateCachedSinCos() = symbol("libGTASA.so", "_ZN6CRadar21CalculateCachedSinCosEv");
+    static void DrawRadarMap() = symbol("libGTASA.so", "_ZN6CRadar12DrawRadarMapEv");
+    static void InitFrontEndMap() = symbol("libGTASA.so", "_ZN6CRadar15InitFrontEndMapEv");
+    static void DrawBlips(float circleSize) = symbol("libGTASA.so", "_ZN6CRadar9DrawBlipsEf");
+    static void SetupAirstripBlips() = symbol("libGTASA.so", "_ZN6CRadar18SetupAirstripBlipsEv");
+    static void TransformRadarPointToScreenSpace(CVector2D* screen, CVector2D* radar) = symbol("libGTASA.so", "_ZN6CRadar32TransformRadarPointToScreenSpaceER9CVector2DRKS0_");
+    static void TransformRealWorldPointToRadarSpace(CVector2D* radar, CVector* world) = symbol("libGTASA.so", "_ZN6CRadar35TransformRealWorldPointToRadarSpaceER9CVector2DRKS0_");
+    static void LimitRadarPoint(CVector2D* radar) = symbol("libGTASA.so", "_ZN6CRadar15LimitRadarPointER9CVector2D");
+    static void DrawRadarSprite(uint16_t id, float x, float y, uint8_t alpha) = symbol("libGTASA.so", "_ZN6CRadar15DrawRadarSpriteEtffh");
+    static uint8_t DisplayThisBlip(int idx, int8_t alpha) = symbol("libGTASA.so", "_ZN6CRadar15DisplayThisBlipEia");
+    static void DrawCoordBlip(int idx, uint8_t sprite, int alpha, float circleSize) = symbol("libGTASA.so", "_ZN6CRadar13DrawCoordBlipEihif");
+    static void DrawEntityBlip(int idx, uint8_t sprite, int alpha, float circleSize) = symbol("libGTASA.so", "_ZN6CRadar14DrawEntityBlipEihif");
+    static void DrawYouAreHereSprite(float x, float y) = symbol("libGTASA.so", "_ZN6CRadar20DrawYouAreHereSpriteEff");
+    static uint32_t GetRadarTraceColour(uint32_t colorIdx, uint8_t bBrightness, uint8_t bFriend) = symbol("libGTASA.so", "_ZN6CRadar19GetRadarTraceColourEjhh");
+    static uint8_t CalculateBlipAlpha(float alphaMult) = symbol("libGTASA.so", "_ZN6CRadar18CalculateBlipAlphaEf");
+    static uint8_t HasThisBlipBeenRevealed(int idx) = symbol("libGTASA.so", "_ZN6CRadar23HasThisBlipBeenRevealedEi");
+    static void ShowRadarTraceWithHeight(float x, float y, uint32_t size, uint8_t r, uint8_t g, uint8_t b, uint8_t a, uint8_t type) = symbol("libGTASA.so", "_ZN6CRadar24ShowRadarTraceWithHeightEffjhhhhh");
+    static void AddBlipToLegendList(uint8_t arrowBlip, int blipIdx) = symbol("libGTASA.so", "_ZN6CRadar19AddBlipToLegendListEhi");
+    static void DrawLegend(int x, int y, int legendListNum) = symbol("libGTASA.so", "_ZN6CRadar10DrawLegendEiii");
+    static void SetMapCentreToPlayerCoords() = symbol("libGTASA.so", "_ZN6CRadar26SetMapCentreToPlayerCoordsEv");
+    static void Draw3dMarkers() = symbol("libGTASA.so", "_ZN6CRadar13Draw3dMarkersEv");
+    static void LimitToMap(float* x, float* y) = symbol("libGTASA.so", "_ZN6CRadar10LimitToMapEPfS0_");
+    static void TransformScreenSpaceToRadarPoint(CVector2D* screen, CVector2D* radar) = symbol("libGTASA.so", "_ZN6CRadar32TransformScreenSpaceToRadarPointER9CVector2DS1_");
+    static void TransformRadarPointToRealWorldSpace(CVector2D* world, CVector2D* radar) = symbol("libGTASA.so", "_ZN6CRadar35TransformRadarPointToRealWorldSpaceER9CVector2DRKS0_");
+    static void TransformRealWorldToTexCoordSpace(CVector2D* texCoord, CVector2D* world, int x, int y) = symbol("libGTASA.so", "_ZN6CRadar33TransformRealWorldToTexCoordSpaceER9CVector2DRKS0_ii");
+    static int32_t SetEntityBlip(int type, int poolIdx, uint32_t color, int displaytype, uint8_t* unused) = symbol("libGTASA.so", "_ZN6CRadar13SetEntityBlipE9eBlipTypeij12eBlipDisplayPc");
+    static void ClearBlipForEntity(int type, int poolIdx) = symbol("libGTASA.so", "_ZN6CRadar18ClearBlipForEntityE9eBlipTypei");
+    static void ClearBlip(int idx) = symbol("libGTASA.so", "_ZN6CRadar9ClearBlipEi");
+    static void ChangeBlipColour(int idx, uint32_t color) = symbol("libGTASA.so", "_ZN6CRadar16ChangeBlipColourEij");
+    static void ChangeBlipBrightness(int idx, int onoff) = symbol("libGTASA.so", "_ZN6CRadar20ChangeBlipBrightnessEii");
+    static void ChangeBlipScale(int idx, int scale) = symbol("libGTASA.so", "_ZN6CRadar15ChangeBlipScaleEii");
+    static void ChangeBlipDisplay(int idx, int displaytype) = symbol("libGTASA.so", "_ZN6CRadar17ChangeBlipDisplayEi12eBlipDisplay");
+    static void SetBlipSprite(int idx, int sprite) = symbol("libGTASA.so", "_ZN6CRadar13SetBlipSpriteEii");
+    static void SetBlipAlwaysDisplayInZoom(int idx, uint8_t alwaysDisplay) = symbol("libGTASA.so", "_ZN6CRadar26SetBlipAlwaysDisplayInZoomEih");
+    static void SetBlipFade(int idx, uint8_t fade) = symbol("libGTASA.so", "_ZN6CRadar11SetBlipFadeEih");
+    static void SetCoordBlipAppearance(int idx, uint8_t appearance) = symbol("libGTASA.so", "_ZN6CRadar22SetCoordBlipAppearanceEih");
+    static void SetBlipFriendly(int idx, uint8_t friendly) = symbol("libGTASA.so", "_ZN6CRadar15SetBlipFriendlyEih");
+    static void SetBlipEntryExit(int idx, CEntryExit* pEntryExit) = symbol("libGTASA.so", "_ZN6CRadar16SetBlipEntryExitEiP10CEntryExit");
+    static void ShowRadarTrace(float x, float y, uint32_t size, uint8_t r, uint8_t g, uint8_t b, uint8_t a) = symbol("libGTASA.so", "_ZN6CRadar14ShowRadarTraceEffjhhhh");
+    static void SetupRadarRect(int x, int y) = symbol("libGTASA.so", "_ZN6CRadar14SetupRadarRectEii");
+    static void RequestMapSection(int x, int y) = symbol("libGTASA.so", "_ZN6CRadar17RequestMapSectionEii");
+    static void RemoveMapSection(int x, int y) = symbol("libGTASA.so", "_ZN6CRadar16RemoveMapSectionEii");
+    static void StreamRadarSections1(int x, int y) = symbol("libGTASA.so", "_ZN6CRadar19StreamRadarSectionsEii");
+    static int32_t ClipRadarPoly(CVector2D* clipVerts, CVector2D* verts) = symbol("libGTASA.so", "_ZN6CRadar13ClipRadarPolyEP9CVector2DPKS0_");
+    static void DrawRadarSections(int x, int y, int alpha) = symbol("libGTASA.so", "_ZN6CRadar16DrawRadarSectionEiii");
+    static void DrawAreaOnRadar(CRect* rect, CRGBA* rgba, bool fullMap) = symbol("libGTASA.so", "_ZN6CRadar15DrawAreaOnRadarERK5CRectRK5CRGBAb");
+    static void DrawRadarGangOverlay(bool fullMap) = symbol("libGTASA.so", "_ZN6CRadar20DrawRadarGangOverlayEb");
+    static void DrawRadarMask() = symbol("libGTASA.so", "_ZN6CRadar13DrawRadarMaskEv");
+    static void StreamRadarSections2(CVector* pos) = symbol("libGTASA.so", "_ZN6CRadar19StreamRadarSectionsERK7CVector");
+    static bool Save() = symbol("libGTASA.so", "_ZN6CRadar4SaveEv");
+    static bool Load() = symbol("libGTASA.so", "_ZN6CRadar4LoadEv");
+};
+#endif

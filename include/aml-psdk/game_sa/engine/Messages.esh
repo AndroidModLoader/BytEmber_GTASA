@@ -1,0 +1,67 @@
+#ifndef PSDK_game_sa_engine_Messages_h
+#define PSDK_game_sa_engine_Messages_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../gta_base/GxtChar.esh"
+native class CQueuedMessage = size(bits(0x38, 0x48))
+{
+    uint8_t TextLabel[8] = offset(0x0);
+    GxtChar* pMessage = offset(0x8);
+    uint16_t Colour = offset(bits(0xc, 0x10));
+    uint32_t Duration = offset(bits(0x10, 0x14));
+    uint32_t WhenStarted = offset(bits(0x14, 0x18));
+    int NumberToInsert = offset(bits(0x18, 0x1c));
+    int NumberToInsert2 = offset(bits(0x1c, 0x20));
+    int NumberToInsert3 = offset(bits(0x20, 0x24));
+    int NumberToInsert4 = offset(bits(0x24, 0x28));
+    int NumberToInsert5 = offset(bits(0x28, 0x2c));
+    int NumberToInsert6 = offset(bits(0x2c, 0x30));
+    GxtChar* pShortMessage = offset(bits(0x30, 0x38));
+    uint8_t bAddToPreviousBriefs = offset(bits(0x34, 0x40));
+};
+native class CPreviousMessage = size(bits(0x28, 0x30))
+{
+    uint8_t TextLabel[8] = offset(0x0);
+    GxtChar* pMessage = offset(0x8);
+    int NumberToInsert = offset(bits(0xc, 0x10));
+    int NumberToInsert2 = offset(bits(0x10, 0x14));
+    int NumberToInsert3 = offset(bits(0x14, 0x18));
+    int NumberToInsert4 = offset(bits(0x18, 0x1c));
+    int NumberToInsert5 = offset(bits(0x1c, 0x20));
+    int NumberToInsert6 = offset(bits(0x20, 0x24));
+    GxtChar* pShortMessage = offset(bits(0x24, 0x28));
+};
+native class CMessages = size(0x1)
+{
+    static void Init() = symbol("libGTASA.so", "_ZN9CMessages4InitEv");
+    static void ClearPreviousBriefArray() = symbol("libGTASA.so", "_ZN9CMessages23ClearPreviousBriefArrayEv");
+    static uint16_t GetGxtStringLength(GxtChar* pGxtString) = symbol("libGTASA.so", "_ZN9CMessages18GetGxtStringLengthEPt");
+    static void GxtStringCopy(GxtChar* pDest, GxtChar* pSource, uint16_t MaxLength) = symbol("libGTASA.so", "_ZN9CMessages13GxtStringCopyEPtS0_t");
+    static uint8_t GxtStringCompare(GxtChar* pGxtString1, GxtChar* pGxtString2, uint16_t NumOfCharsToCompare) = symbol("libGTASA.so", "_ZN9CMessages16GxtStringCompareEPtS0_t");
+    static void Process() = symbol("libGTASA.so", "_ZN9CMessages7ProcessEv");
+    static void AddToPreviousBriefArray(uint8_t* Label, GxtChar* pText, int NumToInsert, int NumToInsert2, int NumToInsert3, int NumToInsert4, int NumToInsert5, int NumToInsert6, GxtChar* pShortText) = symbol("libGTASA.so", "_ZN9CMessages23AddToPreviousBriefArrayEPKcPtiiiiiiS2_");
+    static void Display(uint8_t bBeforeFade) = symbol("libGTASA.so", "_ZN9CMessages7DisplayEh");
+    static void InsertNumberInString(GxtChar* pOriginalString, int NumberToInsert, int NumberToInsert2, int NumberToInsert3, int NumberToInsert4, int NumberToInsert5, int NumberToInsert6, GxtChar* pNewString) = symbol("libGTASA.so", "_ZN9CMessages20InsertNumberInStringEPtiiiiiiS0_");
+    static void InsertStringInString(GxtChar* pBigString, GxtChar* pSmallString) = symbol("libGTASA.so", "_ZN9CMessages20InsertStringInStringEPtS0_");
+    static int16_t CutString(int16_t CharNum, uint8_t* pInString, uint8_t** ppCutStrings) = symbol("libGTASA.so", "_ZN9CMessages9CutStringEsPcPS0_");
+    static void AddMessage(uint8_t* Label, GxtChar* pText, uint32_t Duration, uint16_t Colour, bool bAddToPrevBriefs) = symbol("libGTASA.so", "_ZN9CMessages10AddMessageEPKcPtjtb");
+    static void AddMessageJumpQ(uint8_t* Label, GxtChar* pText, uint32_t Duration, uint16_t Colour, bool bAddToPrevBriefs) = symbol("libGTASA.so", "_ZN9CMessages15AddMessageJumpQEPKcPtjtb");
+    static void ClearMessages(uint8_t bIgnoreMissionTitle) = symbol("libGTASA.so", "_ZN9CMessages13ClearMessagesEh");
+    static void ClearSmallMessagesOnly() = symbol("libGTASA.so", "_ZN9CMessages22ClearSmallMessagesOnlyEv");
+    static void AddBigMessage(GxtChar* pText, uint32_t Duration, uint16_t Row) = symbol("libGTASA.so", "_ZN9CMessages13AddBigMessageEPtjt");
+    static void AddBigMessageQ(GxtChar* pText, uint32_t Duration, uint16_t Row) = symbol("libGTASA.so", "_ZN9CMessages14AddBigMessageQEPtjt");
+    static void ReloadPreviousBriefArray() = symbol("libGTASA.so", "_ZN9CMessages24ReloadPreviousBriefArrayEv");
+    static void AddMessageWithNumber(uint8_t* Label, GxtChar* pText, uint32_t Duration, uint16_t Colour, int NumToInsert, int NumToInsert2, int NumToInsert3, int NumToInsert4, int NumToInsert5, int NumToInsert6, bool bAddToPrevBriefs) = symbol("libGTASA.so", "_ZN9CMessages20AddMessageWithNumberEPKcPtjtiiiiiib");
+    static void AddMessageJumpQWithNumber(GxtChar* pText, uint32_t Duration, uint16_t Colour, int NumToInsert, int NumToInsert2, int NumToInsert3, int NumToInsert4, int NumToInsert5, int NumToInsert6, bool bAddToPrevBriefs) = symbol("libGTASA.so", "_ZN9CMessages25AddMessageJumpQWithNumberEPtjtiiiiiib");
+    static void AddBigMessageWithNumber(GxtChar* pText, uint32_t Duration, uint16_t Row, int NumToInsert, int NumToInsert2, int NumToInsert3, int NumToInsert4, int NumToInsert5, int NumToInsert6) = symbol("libGTASA.so", "_ZN9CMessages23AddBigMessageWithNumberEPtjtiiiiii");
+    static void AddBigMessageWithNumberQ(GxtChar* pText, uint32_t Duration, uint16_t Row, int NumToInsert, int NumToInsert2, int NumToInsert3, int NumToInsert4, int NumToInsert5, int NumToInsert6) = symbol("libGTASA.so", "_ZN9CMessages24AddBigMessageWithNumberQEPtjtiiiiii");
+    static void AddMessageWithString(GxtChar* pText, uint32_t Duration, uint16_t Colour, GxtChar* pShortText, bool bAddToPrevBriefs) = symbol("libGTASA.so", "_ZN9CMessages20AddMessageWithStringEPtjtS0_b");
+    static void AddMessageJumpQWithString(GxtChar* pText, uint32_t Duration, uint16_t Colour, GxtChar* pShortText, bool bAddToPrevBriefs) = symbol("libGTASA.so", "_ZN9CMessages25AddMessageJumpQWithStringEPtjtS0_b");
+    static void ClearThisPrint(GxtChar* pText) = symbol("libGTASA.so", "_ZN9CMessages14ClearThisPrintEPt");
+    static void ClearThisBigPrint(GxtChar* pText) = symbol("libGTASA.so", "_ZN9CMessages17ClearThisBigPrintEPt");
+    static void ClearThisBigPrintNow(uint32_t Row) = symbol("libGTASA.so", "_ZN9CMessages20ClearThisBigPrintNowEj");
+    static void ClearAllMessagesDisplayedByGame(uint8_t bIgnoreMissionTitle) = symbol("libGTASA.so", "_ZN9CMessages31ClearAllMessagesDisplayedByGameEh");
+};
+#endif

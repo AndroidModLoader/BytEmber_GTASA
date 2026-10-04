@@ -1,0 +1,43 @@
+#ifndef PSDK_game_sa_engine_TxdStore_h
+#define PSDK_game_sa_engine_TxdStore_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/other/Pools.esh"
+native class TxdDef = size(bits(0x38, 0x40))
+{
+    RwTexDictionary* m_pRwDictionary = offset(0x0);
+    int16_t m_wRefsCount = offset(bits(0x4, 0x8));
+    int16_t m_wParentIndex = offset(bits(0x6, 0xa));
+    uint32_t m_hash = offset(bits(0x8, 0xc));
+    uint8_t m_szName[20] = offset(bits(0xc, 0x10));
+    uint8_t m_szDBName[20] = offset(bits(0x20, 0x24));
+    bool m_bKeepCPU = offset(bits(0x34, 0x38));
+};
+native class CTxdStore = size(0x1)
+{
+    static void Initialise() = symbol("libGTASA.so", "_ZN9CTxdStore10InitialiseEv");
+    static int32_t AddTxdSlot(uint8_t* pName, uint8_t* dbName, bool keepCPU) = symbol("libGTASA.so", "_ZN9CTxdStore10AddTxdSlotEPKcS1_b");
+    static RwTexture* TxdStoreFindCB(uint8_t* pTexname) = symbol("libGTASA.so", "_ZN9CTxdStore14TxdStoreFindCBEPKc");
+    static bool PluginAttach() = symbol("libGTASA.so", "_ZN9CTxdStore12PluginAttachEv");
+    static void Shutdown() = symbol("libGTASA.so", "_ZN9CTxdStore8ShutdownEv");
+    static void GameShutdown() = symbol("libGTASA.so", "_ZN9CTxdStore12GameShutdownEv");
+    static int32_t GetNumRefs(int index) = symbol("libGTASA.so", "_ZN9CTxdStore10GetNumRefsEi");
+    static void RemoveTxdSlot(int index) = symbol("libGTASA.so", "_ZN9CTxdStore13RemoveTxdSlotEi");
+    static int32_t FindTxdSlot(uint8_t* pName) = symbol("libGTASA.so", "_ZN9CTxdStore11FindTxdSlotEPKc");
+    static int32_t FindTxdSlotFromHashKey(int hashKey) = symbol("libGTASA.so", "_ZN9CTxdStore22FindTxdSlotFromHashKeyEi");
+    static void SetupTxdParent(int index) = symbol("libGTASA.so", "_ZN9CTxdStore14SetupTxdParentEi");
+    static void SetTxdParent(RwTexDictionary* pTxd, RwTexDictionary* pParent) = symbol("libGTASA.so", "_ZN9CTxdStore12SetTxdParentEP15RwTexDictionaryS1_");
+    static void AddRef(int index) = symbol("libGTASA.so", "_ZN9CTxdStore6AddRefEi");
+    static bool StartLoadTxd(int index, RwStream* pStream) = symbol("libGTASA.so", "_ZN9CTxdStore12StartLoadTxdEiP8RwStream");
+    static void Create(int index) = symbol("libGTASA.so", "_ZN9CTxdStore6CreateEi");
+    static void RemoveTxd(int index) = symbol("libGTASA.so", "_ZN9CTxdStore9RemoveTxdEi");
+    static void RemoveRef(int index) = symbol("libGTASA.so", "_ZN9CTxdStore9RemoveRefEi");
+    static void SetCurrentTxd(int index, uint8_t* dbOverride) = symbol("libGTASA.so", "_ZN9CTxdStore13SetCurrentTxdEiPKc");
+    static void PushCurrentTxd() = symbol("libGTASA.so", "_ZN9CTxdStore14PushCurrentTxdEv");
+    static void PopCurrentTxd() = symbol("libGTASA.so", "_ZN9CTxdStore13PopCurrentTxdEv");
+    static void RemoveRefWithoutDelete(int index) = symbol("libGTASA.so", "_ZN9CTxdStore22RemoveRefWithoutDeleteEi");
+    static int32_t GetSpecialTxdSlot(int index) = symbol("libGTASA.so", "_ZN9CTxdStore17GetSpecialTxdSlotEi");
+    static RwTexDictionary* GetTxdParent(RwTexDictionary* pTxd) = symbol("libGTASA.so", "_ZN9CTxdStore12GetTxdParentEP15RwTexDictionary");
+};
+#endif

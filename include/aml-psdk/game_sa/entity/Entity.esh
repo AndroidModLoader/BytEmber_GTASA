@@ -1,0 +1,135 @@
+#ifndef PSDK_game_sa_entity_Entity_h
+#define PSDK_game_sa_entity_Entity_h
+#pragma once
+#define ENTITY_TYPE_NOTHING 0
+#define ENTITY_TYPE_BUILDING 1
+#define ENTITY_TYPE_VEHICLE 2
+#define ENTITY_TYPE_PED 3
+#define ENTITY_TYPE_OBJECT 4
+#define ENTITY_TYPE_DUMMY 5
+#define ENTITY_TYPE_NOTINPOOLS 6
+#define STATUS_PLAYER 0
+#define STATUS_PLAYER_PLAYBACKFROMBUFFER 1
+#define STATUS_SIMPLE 2
+#define STATUS_PHYSICS 3
+#define STATUS_ABANDONED 4
+#define STATUS_WRECKED 5
+#define STATUS_TRAIN_MOVING 6
+#define STATUS_TRAIN_NOT_MOVING 7
+#define STATUS_PLAYER_REMOTE 8
+#define STATUS_PLAYER_DISABLED 9
+#define STATUS_TRAILER 10
+#define STATUS_SIMPLE_TRAILER 11
+#define STATUS_GHOST 12
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/entity/Placeable.esh"
+#include "../../gta_base/Rect.esh"
+#include "../../game_sa/base/ColModel.esh"
+#include "../../game_sa/engine/2dEffect.esh"
+native class CEntity : public CPlaceable = size(bits(0x3c, 0x60))
+{
+    RwObject* m_pRwObject = offset(bits(0x18, 0x20));
+    RpClump* m_pRwClump = offset(bits(0x18, 0x20));
+    RpAtomic* m_pRwAtomic = offset(bits(0x18, 0x20));
+    uint32_t bUsesCollision = offset(bits(0x1c, 0x28)) bits(0, 1, 1);
+    uint32_t bCollisionProcessed = offset(bits(0x1c, 0x28)) bits(1, 1, 1);
+    uint32_t bIsStatic = offset(bits(0x1c, 0x28)) bits(2, 1, 1);
+    uint32_t bHasContacted = offset(bits(0x1c, 0x28)) bits(3, 1, 1);
+    uint32_t bIsStuck = offset(bits(0x1c, 0x28)) bits(4, 1, 1);
+    uint32_t bIsInSafePosition = offset(bits(0x1c, 0x28)) bits(5, 1, 1);
+    uint32_t bWasPostponed = offset(bits(0x1c, 0x28)) bits(6, 1, 1);
+    uint32_t bIsVisible = offset(bits(0x1c, 0x28)) bits(7, 1, 1);
+    uint32_t bIsBIGBuilding = offset(bits(0x1d, 0x29)) bits(0, 1, 1);
+    uint32_t bRenderDamaged = offset(bits(0x1d, 0x29)) bits(1, 1, 1);
+    uint32_t bStreamingDontDelete = offset(bits(0x1d, 0x29)) bits(2, 1, 1);
+    uint32_t bRemoveFromWorld = offset(bits(0x1d, 0x29)) bits(3, 1, 1);
+    uint32_t bHasHitWall = offset(bits(0x1d, 0x29)) bits(4, 1, 1);
+    uint32_t bImBeingRendered = offset(bits(0x1d, 0x29)) bits(5, 1, 1);
+    uint32_t bDrawLast = offset(bits(0x1d, 0x29)) bits(6, 1, 1);
+    uint32_t bDistanceFade = offset(bits(0x1d, 0x29)) bits(7, 1, 1);
+    uint32_t bDontCastShadowsOn = offset(bits(0x1e, 0x2a)) bits(0, 1, 1);
+    uint32_t bOffscreen = offset(bits(0x1e, 0x2a)) bits(1, 1, 1);
+    uint32_t bIsStaticWaitingForCollision = offset(bits(0x1e, 0x2a)) bits(2, 1, 1);
+    uint32_t bDontStream = offset(bits(0x1e, 0x2a)) bits(3, 1, 1);
+    uint32_t bUnderwater = offset(bits(0x1e, 0x2a)) bits(4, 1, 1);
+    uint32_t bHasPreRenderEffects = offset(bits(0x1e, 0x2a)) bits(5, 1, 1);
+    uint32_t bIsTempBuilding = offset(bits(0x1e, 0x2a)) bits(6, 1, 1);
+    uint32_t bDontUpdateHierarchy = offset(bits(0x1e, 0x2a)) bits(7, 1, 1);
+    uint32_t bHasRoadsignText = offset(bits(0x1f, 0x2b)) bits(0, 1, 1);
+    uint32_t bDisplayedSuperLowLOD = offset(bits(0x1f, 0x2b)) bits(1, 1, 1);
+    uint32_t bIsProcObject = offset(bits(0x1f, 0x2b)) bits(2, 1, 1);
+    uint32_t bBackfaceCulled = offset(bits(0x1f, 0x2b)) bits(3, 1, 1);
+    uint32_t bLightObject = offset(bits(0x1f, 0x2b)) bits(4, 1, 1);
+    uint32_t bUnimportantStream = offset(bits(0x1f, 0x2b)) bits(5, 1, 1);
+    uint32_t bTunnel = offset(bits(0x1f, 0x2b)) bits(6, 1, 1);
+    uint32_t bTunnelTransition = offset(bits(0x1f, 0x2b)) bits(7, 1, 1);
+    uint32_t dummy_flag_pad = offset(bits(0x20, 0x2c));
+    uint16_t m_nRandomSeed = offset(bits(0x24, 0x30));
+    uint16_t m_nModelIndex = offset(bits(0x26, 0x32));
+    CReference* m_pReferences = offset(bits(0x28, 0x38));
+    void* m_pStreamingLink = offset(bits(0x2c, 0x40));
+    int16_t m_nScanCode = offset(bits(0x30, 0x48));
+    uint8_t m_nIplIndex = offset(bits(0x32, 0x4a));
+    uint8_t m_nInterior = offset(bits(0x33, 0x4b));
+    uint8_t m_nAreaCode = offset(bits(0x33, 0x4b));
+    int m_nLodIndex = offset(bits(0x34, 0x50));
+    CEntity* m_pLod = offset(bits(0x34, 0x50));
+    uint8_t m_nNumLodChildren = offset(bits(0x38, 0x58));
+    uint8_t m_nNumLodChildrenRendered = offset(bits(0x39, 0x59));
+    int8_t m_nTypeStatus = offset(bits(0x3a, 0x5a));
+    uint8_t m_nType = offset(bits(0x3a, 0x5a)) bits(0, 3, 1);
+    uint8_t m_nStatus = offset(bits(0x3a, 0x5a)) bits(3, 5, 1);
+    bool HasPreRenderEffects() = symbol("libGTASA.so", "_ZN7CEntity19HasPreRenderEffectsEv");
+    void CreateEffects() = symbol("libGTASA.so", "_ZN7CEntity13CreateEffectsEv");
+    void DestroyEffects() = symbol("libGTASA.so", "_ZN7CEntity14DestroyEffectsEv");
+    void DetachFromRwObject() = symbol("libGTASA.so", "_ZN7CEntity18DetachFromRwObjectEv");
+    void UpdateRwFrame() = symbol("libGTASA.so", "_ZN7CEntity13UpdateRwFrameEv");
+    void UpdateRpHAnim() = symbol("libGTASA.so", "_ZN7CEntity13UpdateRpHAnimEv");
+    void UpdateAnim() = symbol("libGTASA.so", "_ZN7CEntity10UpdateAnimEv");
+    bool GetIsOnScreen() = symbol("libGTASA.so", "_ZN7CEntity13GetIsOnScreenEv");
+    bool DoesNotCollideWithFlyers() = symbol("libGTASA.so", "_ZN7CEntity24DoesNotCollideWithFlyersEv");
+    void ModifyMatrixForTreeInWind() = symbol("libGTASA.so", "_ZN7CEntity25ModifyMatrixForTreeInWindEv");
+    void ModifyMatrixForCrane() = symbol("libGTASA.so", "_ZN7CEntity20ModifyMatrixForCraneEv");
+    void PreRenderForGlassWindow() = symbol("libGTASA.so", "_ZN7CEntity23PreRenderForGlassWindowEv");
+    void BuildWindSockMatrix() = symbol("libGTASA.so", "_ZN7CEntity19BuildWindSockMatrixEv");
+    void RenderEffects() = symbol("libGTASA.so", "_ZN7CEntity13RenderEffectsEv");
+    bool IsVisible() = symbol("libGTASA.so", "_ZN7CEntity9IsVisibleEv");
+    bool GetIsBoundingBoxOnScreen() = symbol("libGTASA.so", "_ZN7CEntity24GetIsBoundingBoxOnScreenEv");
+    float GetDistanceFromCentreOfMassToBaseOfModel() = symbol("libGTASA.so", "_ZN7CEntity40GetDistanceFromCentreOfMassToBaseOfModelEv");
+    CColModel* GetColModel() = symbol("libGTASA.so", "_ZN7CEntity11GetColModelEv");
+    void SetupBigBuilding() = symbol("libGTASA.so", "_ZN7CEntity16SetupBigBuildingEv");
+    void ModifyMatrixForBannerInWind() = symbol("libGTASA.so", "_ZN7CEntity27ModifyMatrixForBannerInWindEv");
+    void PruneReferences() = symbol("libGTASA.so", "_ZN7CEntity15PruneReferencesEv");
+    void ResolveReferences() = symbol("libGTASA.so", "_ZN7CEntity17ResolveReferencesEv");
+    void ProcessLightsForEntity() = symbol("libGTASA.so", "_ZN7CEntity22ProcessLightsForEntityEv");
+    void RemoveEscalatorsForEntity() = symbol("libGTASA.so", "_ZN7CEntity25RemoveEscalatorsForEntityEv");
+    bool IsEntityOccluded() = symbol("libGTASA.so", "_ZN7CEntity16IsEntityOccludedEv");
+    void AttachToRwObject(RwObject* pObj, bool bUpdateMatrix) = symbol("libGTASA.so", "_ZN7CEntity16AttachToRwObjectEP8RwObjectb");
+    void GetBoundCentre2(CVector* centre) = symbol("libGTASA.so", "_ZNK7CEntity14GetBoundCentreER7CVector");
+    bool GetIsTouching(CEntity* pEntity) = symbol("libGTASA.so", "_ZNK7CEntity13GetIsTouchingEPS_");
+    bool GetIsTouching2(CVector* centre, float radius) = symbol("libGTASA.so", "_ZNK7CEntity13GetIsTouchingERK7CVectorf");
+    bool LivesInThisNonOverlapSector(int x, int y) = symbol("libGTASA.so", "_ZN7CEntity27LivesInThisNonOverlapSectorEii");
+    void SetRwObjectAlpha(int nAlpha) = symbol("libGTASA.so", "_ZN7CEntity16SetRwObjectAlphaEi");
+    void CalculateBBProjection(CVector* pPoint1, CVector* pPoint2, CVector* pPoint3, CVector* pPoint4) = symbol("libGTASA.so", "_ZN7CEntity21CalculateBBProjectionEP7CVectorS1_S1_S1_");
+    C2dEffect* GetRandom2dEffect(int effectType, uint8_t mustBeFree) = symbol("libGTASA.so", "_ZN7CEntity17GetRandom2dEffectEih");
+    void RegisterReference(nativeptr ppAddress) = symbol("libGTASA.so", "_ZN7CEntity17RegisterReferenceEPPS_");
+    void CleanUpOldReference(nativeptr ppAddress) = symbol("libGTASA.so", "_ZN7CEntity19CleanUpOldReferenceEPPS_");
+};
+native class CDummy : public CEntity = size(bits(0x3c, 0x60))
+{
+};
+native class CDummyObject : public CDummy = size(bits(0x3c, 0x60))
+{
+    CObject* CreateObject() = symbol("libGTASA.so", "_ZN12CDummyObject12CreateObjectEv");
+    void UpdateFromObject(CObject* pObject) = symbol("libGTASA.so", "_ZN12CDummyObject16UpdateFromObjectEP7CObject");
+};
+native class CBuilding : public CEntity = size(bits(0x3c, 0x60))
+{
+    void ReplaceWithNewModel(int index) = symbol("libGTASA.so", "_ZN9CBuilding19ReplaceWithNewModelEi");
+};
+native class CAnimatedBuilding : public CBuilding = size(bits(0x3c, 0x60))
+{
+};
+native bool IsBuildingPointerValid(CBuilding* pBuilding) = symbol("libGTASA.so", "_Z22IsBuildingPointerValidP9CBuilding");
+#endif

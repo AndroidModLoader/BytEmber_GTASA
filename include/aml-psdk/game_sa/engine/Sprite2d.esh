@@ -1,0 +1,52 @@
+#ifndef PSDK_game_sa_engine_Sprite2d_h
+#define PSDK_game_sa_engine_Sprite2d_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../gta_base/Vector.esh"
+#include "../../gta_base/Rect.esh"
+#include "../../gta_base/RGBA.esh"
+native class CSprite2d = size(bits(0x4, 0x8))
+{
+    RwTexture* m_pTexture = offset(0x0);
+    static void SetRecipNearClip() = symbol("libGTASA.so", "_ZN9CSprite2d16SetRecipNearClipEv");
+    static void InitPerFrame() = symbol("libGTASA.so", "_ZN9CSprite2d12InitPerFrameEv");
+    static void AddToBuffer(CRect* Rectangle, CRGBA* rgba, float tu1, float tv1, float tu2, float tv2, float tu3, float tv3, float tu4, float tv4) = symbol("libGTASA.so", "_ZN9CSprite2d11AddToBufferERK5CRectRK5CRGBAffffffff");
+    static void SetVertices1(RwIm2DVertex* pVerts, CRect* Rectangle, CRGBA* TopLeftrgba, CRGBA* TopRightrgba, CRGBA* BottomLeftrgba, CRGBA* BottomRightrgba, float tu1, float tv1, float tu2, float tv2, float tu3, float tv3, float tu4, float tv4) = symbol("libGTASA.so", "_ZN9CSprite2d11SetVerticesEP14RwOpenGLVertexRK5CRectRK5CRGBAS7_S7_S7_ffffffff");
+    static bool IsVertexBufferFull() = symbol("libGTASA.so", "_ZN9CSprite2d18IsVertexBufferFullEv");
+    static void RenderVertexBuffer() = symbol("libGTASA.so", "_ZN9CSprite2d18RenderVertexBufferEv");
+    static bool IsVertexBufferEmpty() = symbol("libGTASA.so", "_ZN9CSprite2d19IsVertexBufferEmptyEv");
+    static void SetVertices2(CRect* Rectangle, CRGBA* TopLeftrgba, CRGBA* TopRightrgba, CRGBA* BottomLeftrgba, CRGBA* BottomRightrgba) = symbol("libGTASA.so", "_ZN9CSprite2d11SetVerticesERK5CRectRK5CRGBAS5_S5_S5_");
+    static void SetVertices3(int number, float* pVert, float* pTc, CRGBA* rgba) = symbol("libGTASA.so", "_ZN9CSprite2d11SetVerticesEiPfS0_RK5CRGBA");
+    static void OffsetTexCoordForBilinearFiltering(float xsize, float ysize) = symbol("libGTASA.so", "_ZN9CSprite2d34OffsetTexCoordForBilinearFilteringEff");
+    static void SetVertices4(CRect* Rectangle, CRGBA* TopLeftrgba, CRGBA* TopRightrgba, CRGBA* BottomLeftrgba, CRGBA* BottomRightrgba, float tu1, float tv1, float tu2, float tv2, float tu3, float tv3, float tu4, float tv4) = symbol("libGTASA.so", "_ZN9CSprite2d11SetVerticesERK5CRectRK5CRGBAS5_S5_S5_ffffffff");
+    static void SetVertices5(CRect* arg0, CRGBA* arg1, CRGBA* arg2, CRGBA* arg3, CRGBA* arg4, float arg5, float arg6, float arg7, float arg8, float arg9, float arg10, float arg11, float arg12) = symbol("libGTASA.so", "_ZN9CSprite2d11SetVerticesERK5CRectRK5CRGBAS5_S5_S5_ffffffff");
+    static void Draw2DPolygon(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, CRGBA* rgba) = symbol("libGTASA.so", "_ZN9CSprite2d13Draw2DPolygonEffffffffRK5CRGBA");
+    static void DrawRect1(CRect* Rectangle, CRGBA* rgba) = symbol("libGTASA.so", "_ZN9CSprite2d8DrawRectERK5CRectRK5CRGBA");
+    static void SetVertices6(int number, float* pVert, CRGBA* pRGBA) = symbol("libGTASA.so", "_ZN9CSprite2d11SetVerticesEiPfP5CRGBA");
+    static void SetMaskVertices(int number, float* pVert, float z) = symbol("libGTASA.so", "_ZN9CSprite2d15SetMaskVerticesEiPff");
+    static void DrawTxRect(CRect* Rectangle, CRGBA* rgba) = symbol("libGTASA.so", "_ZN9CSprite2d10DrawTxRectERK5CRectRK5CRGBA");
+    static void DrawRect2(CRect* Rectangle, CRGBA* TopLeftrgba, CRGBA* TopRightrgba, CRGBA* BottomLeftrgba, CRGBA* BottomRightrgba) = symbol("libGTASA.so", "_ZN9CSprite2d8DrawRectERK5CRectRK5CRGBAS5_S5_S5_");
+    static void DrawRectXLU(CRect* Rectangle, CRGBA* TopLeftrgba, CRGBA* TopRightrgba, CRGBA* BottomLeftrgba, CRGBA* BottomRightrgba) = symbol("libGTASA.so", "_ZN9CSprite2d11DrawRectXLUERK5CRectRK5CRGBAS5_S5_S5_");
+    static void DrawAnyRect(float X1, float Y1, float X2, float Y2, float X3, float Y3, float X4, float Y4, CRGBA* RGBA1, CRGBA* RGBA2, CRGBA* RGBA3, CRGBA* RGBA4) = symbol("libGTASA.so", "_ZN9CSprite2d11DrawAnyRectEffffffffRK5CRGBAS2_S2_S2_");
+    static void DrawCircleAtNearClip(CVector2D* CenterOfCircle, float Radius, CRGBA* rgba, int NumOfSectionsToCircle) = symbol("libGTASA.so", "_ZN9CSprite2d20DrawCircleAtNearClipERK9CVector2DfRK5CRGBAi");
+    static void SetVerticesForSniper(CRect* Rectangle, CRGBA* TopLeftrgba, CRGBA* TopRightrgba, CRGBA* BottomLeftrgba, CRGBA* BottomRightrgba) = symbol("libGTASA.so", "_ZN9CSprite2d20SetVerticesForSniperERK5CRectRK5CRGBAS5_S5_S5_");
+    void Delete() = symbol("libGTASA.so", "_ZN9CSprite2d6DeleteEv");
+    void SetRenderState() = symbol("libGTASA.so", "_ZN9CSprite2d14SetRenderStateEv");
+    void SetTexture(uint8_t* pFilename) = symbol("libGTASA.so", "_ZN9CSprite2d10SetTextureEPc");
+    void SetTexture1(uint8_t* pFilename, uint8_t* pMaskFilename) = symbol("libGTASA.so", "_ZN9CSprite2d10SetTextureEPcS0_");
+    RwTexture* SetAddressingUV(uint32_t addressU, uint32_t addressV) = symbol("libGTASA.so", "_ZN9CSprite2d15SetAddressingUVE20RwTextureAddressModeS0_");
+    RwTexture* SetAddressing(uint32_t address) = symbol("libGTASA.so", "_ZN9CSprite2d13SetAddressingE20RwTextureAddressMode");
+    void Draw(float x, float y, float Width, float Height, CRGBA* rgba) = symbol("libGTASA.so", "_ZN9CSprite2d4DrawEffffRK5CRGBA");
+    void Draw1(CRect* Rectangle, CRGBA* rgba) = symbol("libGTASA.so", "_ZN9CSprite2d4DrawERK5CRectRK5CRGBA");
+    void DrawTriangle(float* pFloats, float* pTc, CRGBA* rgba) = symbol("libGTASA.so", "_ZN9CSprite2d12DrawTriangleEPfS0_RK5CRGBA");
+    void DrawWithBilinearOffset(CRect* Rectangle, CRGBA* rgba) = symbol("libGTASA.so", "_ZN9CSprite2d22DrawWithBilinearOffsetERK5CRectRK5CRGBA");
+    void Draw2(CRect* Rectangle, CRGBA* rgba, float tu1, float tv1, float tu2, float tv2, float tu3, float tv3, float tu4, float tv4) = symbol("libGTASA.so", "_ZN9CSprite2d4DrawERK5CRectRK5CRGBAffffffff");
+    void Draw3(CRect* Rectangle, CRGBA* TopLeftrgba, CRGBA* TopRightrgba, CRGBA* BottomLeftrgba, CRGBA* BottomRightrgba) = symbol("libGTASA.so", "_ZN9CSprite2d4DrawERK5CRectRK5CRGBAS5_S5_S5_");
+    void DrawRotated(CRect* rect, float fRadians, CRGBA* rgba) = symbol("libGTASA.so", "_ZN9CSprite2d11DrawRotatedER5CRectfRK5CRGBA");
+    void DrawRotated1(CVector2D* vecCenter, float fX1, float fY1, float fX2, float fY2, float fX3, float fY3, float fX4, float fY4, float fRadians, CRGBA* rgba) = symbol("libGTASA.so", "_ZN9CSprite2d11DrawRotatedERK9CVector2DfffffffffRK5CRGBA");
+    void Draw4(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, CRGBA* rgba) = symbol("libGTASA.so", "_ZN9CSprite2d4DrawEffffffffRK5CRGBA");
+};
+native bool CalcScreenCoors(CVector* In, CVector* pResult) = symbol("libGTASA.so", "_Z15CalcScreenCoorsRK7CVectorPS_");
+#endif

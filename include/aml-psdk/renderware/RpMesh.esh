@@ -1,0 +1,48 @@
+#ifndef PSDK_renderware_RpMesh_h
+#define PSDK_renderware_RpMesh_h
+#pragma once
+#define rpMESHHEADERTRISTRIP 1
+#define rpMESHHEADERTRIFAN 2
+#define rpMESHHEADERLINELIST 4
+#define rpMESHHEADERPOLYLINE 8
+#define rpMESHHEADERPOINTLIST 16
+#define rpMESHHEADERPRIMMASK 255
+#define rpMESHHEADERUNINDEXED 256
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../sdk_forward.esh"
+#include "../sdk_base.esh"
+#include "../renderware/RwBase.esh"
+#include "../renderware/RwObject.esh"
+#include "../renderware/RpMaterial.esh"
+native class RpMesh = size(bits(0x10, 0x20))
+{
+    uint16_t* indices = offset(0x0);
+    uint32_t numIndices = offset(bits(0x4, 0x8));
+    RpMaterial* material = offset(bits(0x8, 0x10));
+    uint32_t indexOffset = offset(bits(0xc, 0x18));
+};
+native class RpMeshHeader = size(bits(0x14, 0x18))
+{
+    uint32_t flags = offset(0x0);
+    uint16_t numMeshes = offset(0x4);
+    uint16_t serialNum = offset(0x6);
+    uint32_t totalIndicesInMesh = offset(0x8);
+    uint32_t firstMeshOffset = offset(0xc);
+    uint32_t indexBuffer = offset(0x10);
+};
+native class RpBuildMeshTriangle = size(bits(0xc, 0x10))
+{
+    uint16_t vertIndex[3] = offset(0x0);
+    RpMaterial* material = offset(0x8);
+};
+native class RpBuildMesh = size(bits(0xc, 0x10))
+{
+    uint32_t triangleBufferSize = offset(0x0);
+    uint32_t numTriangles = offset(0x4);
+    RpBuildMeshTriangle* meshTriangles = offset(0x8);
+};
+native void _rpMeshHeaderDestroy(RpMeshHeader* meshHeader) = symbol("libGTASA.so", "_Z20_rpMeshHeaderDestroyP12RpMeshHeader");
+native RpMeshHeader* _rpMeshHeaderForAllMeshes(RpMeshHeader* meshHeader, nativeptr fpCallBack, void* pData) = symbol("libGTASA.so", "_Z25_rpMeshHeaderForAllMeshesP12RpMeshHeaderPFP6RpMeshS2_S0_PvES3_");
+native RpMeshHeader* _rpMeshRead(RwStream* stream, void* object, RpMaterialList* matList) = symbol("libGTASA.so", "_Z11_rpMeshReadP8RwStreamPKvPK14RpMaterialList");
+native RwStream* _rpMeshWrite(RpMeshHeader* meshHeader, void* object, RwStream* stream, RpMaterialList* matList) = symbol("libGTASA.so", "_Z12_rpMeshWritePK12RpMeshHeaderPKvP8RwStreamPK14RpMaterialList");
+#endif

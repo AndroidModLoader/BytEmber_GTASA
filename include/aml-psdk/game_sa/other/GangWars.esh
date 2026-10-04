@@ -1,0 +1,54 @@
+#ifndef PSDK_game_sa_other_GangWars_h
+#define PSDK_game_sa_other_GangWars_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../game_sa/enum/WeaponType.esh"
+#include "../../gta_base/Vector.esh"
+native class CGangInfo = size(0x10)
+{
+    int8_t PedModelOverride = offset(0x0);
+    uint32_t FirstWeapon = offset(0x4);
+    uint32_t SecondWeapon = offset(0x8);
+    uint32_t ThirdWeapon = offset(0xc);
+};
+native class CGangWars = size(0x1)
+{
+    static void InitAtStartOfGame() = symbol("libGTASA.so", "_ZN9CGangWars17InitAtStartOfGameEv");
+    static void StartOffensiveGangWar() = symbol("libGTASA.so", "_ZN9CGangWars21StartOffensiveGangWarEv");
+    static bool CanPlayerStartAGangWarHere(CZoneInfo* pZoneToTest) = symbol("libGTASA.so", "_ZN9CGangWars26CanPlayerStartAGangWarHereEP9CZoneInfo");
+    static void ClearTheStreets() = symbol("libGTASA.so", "_ZN9CGangWars15ClearTheStreetsEv");
+    static void TellGangMembersTo(int ToDoWhat) = symbol("libGTASA.so", "_ZN9CGangWars17TellGangMembersToEi");
+    static void StartDefensiveGangWar() = symbol("libGTASA.so", "_ZN9CGangWars21StartDefensiveGangWarEv");
+    static bool PickZoneToAttack() = symbol("libGTASA.so", "_ZN9CGangWars16PickZoneToAttackEv");
+    static uint32_t CalculateTimeTillNextAttack() = symbol("libGTASA.so", "_ZN9CGangWars27CalculateTimeTillNextAttackEv");
+    static void DoStuffWhenPlayerVictorious() = symbol("libGTASA.so", "_ZN9CGangWars27DoStuffWhenPlayerVictoriousEv");
+    static int32_t ReleasePedsInAttackWave(bool bKillAllBlips, bool bMakePedsWanderAway) = symbol("libGTASA.so", "_ZN9CGangWars23ReleasePedsInAttackWaveEbb");
+    static void ReleaseCarsInAttackWave() = symbol("libGTASA.so", "_ZN9CGangWars23ReleaseCarsInAttackWaveEv");
+    static void CheerVictory() = symbol("libGTASA.so", "_ZN9CGangWars12CheerVictoryEv");
+    static void Update() = symbol("libGTASA.so", "_ZN9CGangWars6UpdateEv");
+    static void EndGangWar(bool bMakePedsWanderAway) = symbol("libGTASA.so", "_ZN9CGangWars10EndGangWarEb");
+    static void UpdateTerritoryUnderControlPercentage() = symbol("libGTASA.so", "_ZN9CGangWars37UpdateTerritoryUnderControlPercentageEv");
+    static bool CreateAttackWave(int Ferocity, int Number) = symbol("libGTASA.so", "_ZN9CGangWars16CreateAttackWaveEii");
+    static bool AttackWaveOvercome() = symbol("libGTASA.so", "_ZN9CGangWars18AttackWaveOvercomeEv");
+    static bool MakePlayerGainInfluenceInZone(float Perc) = symbol("libGTASA.so", "_ZN9CGangWars29MakePlayerGainInfluenceInZoneEf");
+    static bool CreateDefendingGroup(int Ferocity) = symbol("libGTASA.so", "_ZN9CGangWars20CreateDefendingGroupEi");
+    static void MakeEnemyGainInfluenceInZone(int Gang, int Points) = symbol("libGTASA.so", "_ZN9CGangWars28MakeEnemyGainInfluenceInZoneEii");
+    static void StrengthenPlayerInfluenceInZone(int Amount) = symbol("libGTASA.so", "_ZN9CGangWars31StrengthenPlayerInfluenceInZoneEi");
+    static void AddKillToProvocation(int PedType) = symbol("libGTASA.so", "_ZN9CGangWars20AddKillToProvocationEi");
+    static bool DontCreateCivilians() = symbol("libGTASA.so", "_ZN9CGangWars19DontCreateCiviliansEv");
+    static bool PedStreamedInForThisGang(int Gang) = symbol("libGTASA.so", "_ZN9CGangWars24PedStreamedInForThisGangEi");
+    static bool PickStreamedInPedForThisGang(int Gang, int32_t* pMI) = symbol("libGTASA.so", "_ZN9CGangWars28PickStreamedInPedForThisGangEiPi");
+    static void SetGangWarsActive(bool bActive) = symbol("libGTASA.so", "_ZN9CGangWars17SetGangWarsActiveEb");
+    static void SwitchGangWarsActive() = symbol("libGTASA.so", "_ZN9CGangWars20SwitchGangWarsActiveEv");
+    static bool GangWarGoingOn() = symbol("libGTASA.so", "_ZN9CGangWars14GangWarGoingOnEv");
+    static bool GangWarFightingGoingOn() = symbol("libGTASA.so", "_ZN9CGangWars22GangWarFightingGoingOnEv");
+    static bool DoesPlayerControlThisZone(CZoneInfo* pZoneInfo) = symbol("libGTASA.so", "_ZN9CGangWars25DoesPlayerControlThisZoneEP9CZoneInfo");
+    static void TellStreamingWhichGangsAreNeeded(int32_t* pRequiredGangs) = symbol("libGTASA.so", "_ZN9CGangWars32TellStreamingWhichGangsAreNeededEPi");
+    static void ClearSpecificZonesToTriggerGangWar() = symbol("libGTASA.so", "_ZN9CGangWars34ClearSpecificZonesToTriggerGangWarEv");
+    static void SetSpecificZoneToTriggerGangWar(int Zone) = symbol("libGTASA.so", "_ZN9CGangWars31SetSpecificZoneToTriggerGangWarEi");
+    static bool Save() = symbol("libGTASA.so", "_ZN9CGangWars4SaveEv");
+    static bool Load() = symbol("libGTASA.so", "_ZN9CGangWars4LoadEv");
+};
+#endif

@@ -1,0 +1,43 @@
+#ifndef PSDK_game_sa_other_CutsceneMgr_h
+#define PSDK_game_sa_other_CutsceneMgr_h
+#pragma once
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../gta_base/Vector.esh"
+#include "../../game_sa/anim/AnimBlendAssocGroup.esh"
+native class CCutsceneMgr = size(0x1)
+{
+    static void Initialise() = symbol("libGTASA.so", "_ZN12CCutsceneMgr10InitialiseEv");
+    static void Shutdown() = symbol("libGTASA.so", "_ZN12CCutsceneMgr8ShutdownEv");
+    static void LoadAnimationUncompressed(uint8_t* pAnimName) = symbol("libGTASA.so", "_ZN12CCutsceneMgr25LoadAnimationUncompressedEPKc");
+    static void LoadCutsceneData(uint8_t* pName) = symbol("libGTASA.so", "_ZN12CCutsceneMgr16LoadCutsceneDataEPKc");
+    static void BuildCutscenePlayer() = symbol("libGTASA.so", "_ZN12CCutsceneMgr19BuildCutscenePlayerEv");
+    static void DeleteCutsceneData() = symbol("libGTASA.so", "_ZN12CCutsceneMgr18DeleteCutsceneDataEv");
+    static void RemoveCutscenePlayer() = symbol("libGTASA.so", "_ZN12CCutsceneMgr20RemoveCutscenePlayerEv");
+    static void LoadEverythingBecauseCutsceneDeletedAllOfIt() = symbol("libGTASA.so", "_ZN12CCutsceneMgr43LoadEverythingBecauseCutsceneDeletedAllOfItEv");
+    static void RemoveEverythingBecauseCutsceneDoesntFitInMemory() = symbol("libGTASA.so", "_ZN12CCutsceneMgr48RemoveEverythingBecauseCutsceneDoesntFitInMemoryEv");
+    static void Update() = symbol("libGTASA.so", "_ZN12CCutsceneMgr6UpdateEv");
+    static bool IsCutsceneSkipButtonBeingPressed() = symbol("libGTASA.so", "_ZN12CCutsceneMgr32IsCutsceneSkipButtonBeingPressedEv");
+    static void AppendToNextCutscene(uint8_t* pModelName, uint8_t* pAnimName) = symbol("libGTASA.so", "_ZN12CCutsceneMgr20AppendToNextCutsceneEPKcS1_");
+    static void LoadCutsceneData_preload() = symbol("libGTASA.so", "_ZN12CCutsceneMgr24LoadCutsceneData_preloadEv");
+    static void LoadCutsceneData_postload() = symbol("libGTASA.so", "_ZN12CCutsceneMgr25LoadCutsceneData_postloadEv");
+    static void HideRequestedObjects() = symbol("libGTASA.so", "_ZN12CCutsceneMgr20HideRequestedObjectsEv");
+    static void LoadCutsceneData_loading() = symbol("libGTASA.so", "_ZN12CCutsceneMgr24LoadCutsceneData_loadingEv");
+    static CObject* CreateCutsceneObject(int id) = symbol("libGTASA.so", "_ZN12CCutsceneMgr20CreateCutsceneObjectEi");
+    static void SetCutsceneAnim(uint8_t* pName, CObject* pObject) = symbol("libGTASA.so", "_ZN12CCutsceneMgr15SetCutsceneAnimEPKcP7CObject");
+    static void AttachObjectToBone(CObject* pObject, CObject* pParent, int boneId) = symbol("libGTASA.so", "_ZN12CCutsceneMgr18AttachObjectToBoneEP7CObjectS1_i");
+    static void LoadCutsceneData_overlay(uint8_t* pName) = symbol("libGTASA.so", "_ZN12CCutsceneMgr24LoadCutsceneData_overlayEPKc");
+    static void DeleteCutsceneData_overlay() = symbol("libGTASA.so", "_ZN12CCutsceneMgr26DeleteCutsceneData_overlayEv");
+    static void SetCutsceneAnimToLoop(uint8_t* pName) = symbol("libGTASA.so", "_ZN12CCutsceneMgr21SetCutsceneAnimToLoopEPKc");
+    static void AttachObjectToFrame(CObject* pObject, CEntity* pParent, uint8_t* pName) = symbol("libGTASA.so", "_ZN12CCutsceneMgr19AttachObjectToFrameEP7CObjectP7CEntityPKc");
+    static void AttachObjectToParent(CObject* pObject, CEntity* pParent) = symbol("libGTASA.so", "_ZN12CCutsceneMgr20AttachObjectToParentEP7CObjectP7CEntity");
+    static void StartCutscene() = symbol("libGTASA.so", "_ZN12CCutsceneMgr13StartCutsceneEv");
+    static void SetupCutsceneToStart() = symbol("libGTASA.so", "_ZN12CCutsceneMgr20SetupCutsceneToStartEv");
+    static void Update_overlay() = symbol("libGTASA.so", "_ZN12CCutsceneMgr14Update_overlayEv");
+    static uint32_t GetCutsceneTimeInMilleseconds() = symbol("libGTASA.so", "_ZN12CCutsceneMgr29GetCutsceneTimeInMillesecondsEv");
+    static void SkipCutscene() = symbol("libGTASA.so", "_ZN12CCutsceneMgr12SkipCutsceneEv");
+    static void FinishCutscene() = symbol("libGTASA.so", "_ZN12CCutsceneMgr14FinishCutsceneEv");
+    static bool HasCutsceneFinished() = symbol("libGTASA.so", "_ZN12CCutsceneMgr19HasCutsceneFinishedEv");
+};
+#endif

@@ -1,0 +1,18 @@
+#ifndef PSDK_game_sa_ai_tasks_Task_h
+#define PSDK_game_sa_ai_tasks_Task_h
+#pragma once
+#define ABORT_PRIORITY_LEISURE 0
+#define ABORT_PRIORITY_URGENT 1
+#define ABORT_PRIORITY_IMMEDIATE 2
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../../sdk_forward.esh"
+#include "../../../game_sa/plugin.esh"
+#include "../../../game_sa/enum/TaskType.esh"
+native class CTask = size(bits(0x8, 0x10))
+{
+    CTask* m_pParentTask = offset(bits(0x4, 0x8));
+};
+native class CTaskSimple : public CTask = size(bits(0x8, 0x10))
+{
+};
+#endif

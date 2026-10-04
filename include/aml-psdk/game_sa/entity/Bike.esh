@@ -1,0 +1,98 @@
+#ifndef PSDK_game_sa_entity_Bike_h
+#define PSDK_game_sa_entity_Bike_h
+#pragma once
+#define BIKE_NODE_NONE 0
+#define BIKE_CHASSIS 1
+#define BIKE_FORKS_FRONT 2
+#define BIKE_FORKS_REAR 3
+#define BIKE_WHEEL_FRONT 4
+#define BIKE_WHEEL_REAR 5
+#define BIKE_MUDGUARD 6
+#define BIKE_HANDLEBARS 7
+#define BIKE_MISC_A 8
+#define BIKE_MISC_B 9
+#define BIKE_NUM_NODES 10
+#define BMX_NODE_NONE 0
+#define BMX_CHASSIS 1
+#define BMX_FORKS_FRONT 2
+#define BMX_FORKS_REAR 3
+#define BMX_WHEEL_FRONT 4
+#define BMX_WHEEL_REAR 5
+#define BMX_HANDLEBARS 6
+#define BMX_CHAINSET 7
+#define BMX_PEDAL_R 8
+#define BMX_PEDAL_L 9
+#define BMX_NUM_NODES 10
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/entity/Vehicle.esh"
+native class CBike : public CVehicle = size(bits(0x828, 0xa18))
+{
+    RwFrame* m_aBikeNodes[10] = offset(bits(0x5b4, 0x758));
+    bool m_bLeanMatrixCalculated = offset(bits(0x5dc, 0x7a8));
+    CMatrix m_mLeanMatrix = offset(bits(0x5e0, 0x7b0));
+    uint8_t m_nDamageFlags = offset(bits(0x628, 0x800));
+    uint8_t bShouldNotChangeColour = offset(bits(0x628, 0x800)) bits(0, 1, 1);
+    uint8_t bPanelsAreThougher = offset(bits(0x628, 0x800)) bits(1, 1, 1);
+    uint8_t bWaterTight = offset(bits(0x628, 0x800)) bits(2, 1, 1);
+    uint8_t bGettingPickedUp = offset(bits(0x628, 0x800)) bits(3, 1, 1);
+    uint8_t bOnSideStand = offset(bits(0x628, 0x800)) bits(4, 1, 1);
+    uint8_t bPlayerBoost = offset(bits(0x628, 0x800)) bits(5, 1, 1);
+    uint8_t bEngineOnFire = offset(bits(0x628, 0x800)) bits(6, 1, 1);
+    uint8_t bWheelieForCamera = offset(bits(0x628, 0x800)) bits(7, 1, 1);
+    CVector m_vecAveGroundNormal = offset(bits(0x62c, 0x804));
+    CVector m_vecGroundRight = offset(bits(0x638, 0x810));
+    CVector m_vecOldSpeedForPlayback = offset(bits(0x644, 0x81c));
+    tBikeHandlingData* m_pBikeHandlingData = offset(bits(0x650, 0x828));
+    CRideAnimData m_rideAnimData = offset(bits(0x654, 0x830));
+    uint8_t m_anWheelDamageState[2] = offset(bits(0x670, 0x84c));
+    CColPoint m_anWheelColPoint[4] = offset(bits(0x674, 0x850));
+    float m_aWheelRatios[4] = offset(bits(0x724, 0x900));
+    float m_aRatioHistory[4] = offset(bits(0x734, 0x910));
+    float m_aWheelCounts[4] = offset(bits(0x744, 0x920));
+    float m_fBrakeCount = offset(bits(0x754, 0x930));
+    int m_anWheelSurfaceType[2] = offset(bits(0x758, 0x934));
+    uint8_t m_aBloodyWheel[2] = offset(bits(0x760, 0x93c));
+    uint8_t m_aMoreSkidmarks[2] = offset(bits(0x762, 0x93e));
+    float m_afWheelRotationX[2] = offset(bits(0x764, 0x940));
+    float m_fWheelSpeed[2] = offset(bits(0x76c, 0x948));
+    float m_fSuspensionHeights[2] = offset(bits(0x774, 0x950));
+    float m_fOriginalWheelHeights[2] = offset(bits(0x77c, 0x958));
+    float m_fSuspensionLengths[4] = offset(bits(0x784, 0x960));
+    float m_fLineLengths[4] = offset(bits(0x794, 0x970));
+    float m_fHeightAboveRoad = offset(bits(0x7a4, 0x980));
+    float m_fCarTraction = offset(bits(0x7a8, 0x984));
+    float m_fSwingArm = offset(bits(0x7ac, 0x988));
+    float m_fForkYOff = offset(bits(0x7b0, 0x98c));
+    float m_fForkZOff = offset(bits(0x7b4, 0x990));
+    float m_fSteerAngleTan = offset(bits(0x7b8, 0x994));
+    int16_t m_nBrakes = offset(bits(0x7bc, 0x998));
+    float m_fTyreTemp = offset(bits(0x7c0, 0x99c));
+    float m_fBrakingSliding = offset(bits(0x7c4, 0x9a0));
+    bool m_bPedLeftHandFixed = offset(bits(0x7c8, 0x9a4));
+    bool m_bPedRightHandFixed = offset(bits(0x7c9, 0x9a5));
+    bool m_bTestPedCol = offset(bits(0x7ca, 0x9a6));
+    float m_fPreviousSpeed = offset(bits(0x7cc, 0x9a8));
+    float m_fBurningTimer = offset(bits(0x7d0, 0x9ac));
+    CEntity* m_apWheelCollisionEntity[4] = offset(bits(0x7d4, 0x9b0));
+    CVector m_avTouchPointsLocalSpace[4] = offset(bits(0x7e4, 0x9d0));
+    CEntity* m_pDamager = offset(bits(0x814, 0xa00));
+    uint8_t m_nNumContactWheels = offset(bits(0x818, 0xa08));
+    uint8_t m_nNumWheelsOnGround = offset(bits(0x819, 0xa09));
+    uint8_t m_nPrevNumWheelsOnGround = offset(bits(0x81a, 0xa0a));
+    float m_fGasPedalAudioRevs = offset(bits(0x81c, 0xa0c));
+    uint32_t m_anWheelState[2] = offset(bits(0x820, 0xa10));
+};
+native class CBmx : public CBike = size(bits(0x84c, 0xa40))
+{
+    float m_fBunnyHopCharge = offset(bits(0x828, 0xa18));
+    float m_fPedallingCharge = offset(bits(0x82c, 0xa1c));
+    float m_fSprintLeanAngle = offset(bits(0x830, 0xa20));
+    float m_fCrankAngle = offset(bits(0x834, 0xa24));
+    float m_fPedalAngleL = offset(bits(0x838, 0xa28));
+    float m_fPedalAngleR = offset(bits(0x83c, 0xa2c));
+    float m_fDistanceBetweenWheels = offset(bits(0x840, 0xa30));
+    float m_fWheelsBalance = offset(bits(0x844, 0xa34));
+    bool m_bFreewheeling = offset(bits(0x848, 0xa38));
+};
+#endif

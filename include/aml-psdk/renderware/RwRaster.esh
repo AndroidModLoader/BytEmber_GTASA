@@ -1,0 +1,69 @@
+#ifndef PSDK_renderware_RwRaster_h
+#define PSDK_renderware_RwRaster_h
+#pragma once
+#define rwRASTERLOCKWRITE 1
+#define rwRASTERLOCKREAD 2
+#define rwRASTERLOCKNOFETCH 4
+#define rwRASTERLOCKRAW 8
+#define rwRASTERTYPENORMAL 0
+#define rwRASTERTYPEZBUFFER 1
+#define rwRASTERTYPECAMERA 2
+#define rwRASTERTYPETEXTURE 4
+#define rwRASTERTYPECAMERATEXTURE 5
+#define rwRASTERTYPEMASK 7
+#define rwRASTERDONTALLOCATE 128
+#define rwRASTERFORMATDEFAULT 0
+#define rwRASTERFORMAT1555 256
+#define rwRASTERFORMAT565 512
+#define rwRASTERFORMAT4444 768
+#define rwRASTERFORMATLUM8 1024
+#define rwRASTERFORMAT8888 1280
+#define rwRASTERFORMAT888 1536
+#define rwRASTERFORMAT16 1792
+#define rwRASTERFORMAT24 2048
+#define rwRASTERFORMAT32 2304
+#define rwRASTERFORMAT555 2560
+#define rwRASTERFORMATAUTOMIPMAP 4096
+#define rwRASTERFORMATPAL8 8192
+#define rwRASTERFORMATPAL4 16384
+#define rwRASTERFORMATMIPMAP 32768
+#define rwRASTERFORMATPIXELFORMATMASK 3840
+#define rwRASTERFORMATMASK 65280
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../sdk_forward.esh"
+#include "../sdk_base.esh"
+#include "../renderware/RwBase.esh"
+#include "../renderware/RwLinks.esh"
+#include "../renderware/RwRGBA.esh"
+native class RwRaster = size(bits(0x34, 0x48))
+{
+    RwRaster* parent = offset(0x0);
+    uint8_t* cpPixels = offset(bits(0x4, 0x8));
+    uint8_t* palette = offset(bits(0x8, 0x10));
+    int width = offset(bits(0xc, 0x18));
+    int height = offset(bits(0x10, 0x1c));
+    int depth = offset(bits(0x14, 0x20));
+    int stride = offset(bits(0x18, 0x24));
+    int16_t nOffsetX = offset(bits(0x1c, 0x28));
+    int16_t nOffsetY = offset(bits(0x1e, 0x2a));
+    uint8_t cType = offset(bits(0x20, 0x2c));
+    uint8_t cFlags = offset(bits(0x21, 0x2d));
+    uint8_t cFormat = offset(bits(0x22, 0x2e));
+    int originalWidth = offset(bits(0x24, 0x30));
+    int originalHeight = offset(bits(0x28, 0x34));
+    TextureDatabaseEntry* dbEntry = offset(bits(0x2c, 0x38));
+    uint16_t privateFlags = offset(bits(0x30, 0x40));
+};
+native void RwRasterSetKeepCPU(bool keep) = symbol("libGTASA.so", "_Z18RwRasterSetKeepCPUb");
+native RwRaster* RwRasterSetFromImage(RwRaster* raster, RwImage* image) = symbol("libGTASA.so", "_Z20RwRasterSetFromImageP8RwRasterP7RwImage");
+native RwRaster* RwRasterRead(RwChar* filename) = symbol("libGTASA.so", "_Z12RwRasterReadPKc");
+native RwRaster* RwRasterReadMaskedRaster(RwChar* filename, RwChar* maskname) = symbol("libGTASA.so", "_Z24RwRasterReadMaskedRasterPKcS0_");
+native RwRaster* RwRasterGetCurrentContext() = symbol("libGTASA.so", "_Z25RwRasterGetCurrentContextv");
+native RwRaster* RwRasterRenderScaled(RwRaster* raster, RwRect* rect) = symbol("libGTASA.so", "_Z20RwRasterRenderScaledP8RwRasterP6RwRect");
+native RwRaster* RwRasterGetOffset(RwRaster* raster, RwInt16* xOffset, RwInt16* yOffset) = symbol("libGTASA.so", "_Z17RwRasterGetOffsetP8RwRasterPsS1_");
+native RwRaster* RwRasterUnlock(RwRaster* raster) = symbol("libGTASA.so", "_Z14RwRasterUnlockP8RwRaster");
+native RwRaster* RwRasterUnlockPalette(RwRaster* raster) = symbol("libGTASA.so", "_Z21RwRasterUnlockPaletteP8RwRaster");
+native RwRaster* RwRasterPushContext(RwRaster* raster) = symbol("libGTASA.so", "_Z19RwRasterPushContextP8RwRaster");
+native RwRaster* RwRasterPopContext() = symbol("libGTASA.so", "_Z18RwRasterPopContextv");
+native RwRaster* RwRasterSubRaster(RwRaster* subRaster, RwRaster* raster, RwRect* rect) = symbol("libGTASA.so", "_Z17RwRasterSubRasterP8RwRasterS0_P6RwRect");
+#endif

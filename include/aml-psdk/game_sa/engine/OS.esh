@@ -1,0 +1,370 @@
+#ifndef PSDK_game_sa_engine_OS_h
+#define PSDK_game_sa_engine_OS_h
+#pragma once
+#define OSFA_Application 0
+#define OSFA_DataMain 1
+#define OSFA_DataPatch 2
+#define OSFDA_Storage 0
+#define OSFDA_User 1
+#define OSFDA_MAX 2
+#define KK_ESCAPE 0
+#define KK_F1 1
+#define KK_F2 2
+#define KK_F3 3
+#define KK_F4 4
+#define KK_F5 5
+#define KK_F6 6
+#define KK_F7 7
+#define KK_F8 8
+#define KK_F9 9
+#define KK_F10 10
+#define KK_F11 11
+#define KK_F12 12
+#define KK_TILDE 13
+#define KK_0 14
+#define KK_1 15
+#define KK_2 16
+#define KK_3 17
+#define KK_4 18
+#define KK_5 19
+#define KK_6 20
+#define KK_7 21
+#define KK_8 22
+#define KK_9 23
+#define KK_MINUS 24
+#define KK_EQUALS 25
+#define KK_BACKSPACE 26
+#define KK_TAB 27
+#define KK_Q 28
+#define KK_W 29
+#define KK_E 30
+#define KK_R 31
+#define KK_T 32
+#define KK_Y 33
+#define KK_U 34
+#define KK_I 35
+#define KK_O 36
+#define KK_P 37
+#define KK_LEFTBRACKET 38
+#define KK_RIGHTBRACKET 39
+#define KK_BACKSLASH 40
+#define KK_CAPSLOCK 41
+#define KK_A 42
+#define KK_S 43
+#define KK_D 44
+#define KK_F 45
+#define KK_G 46
+#define KK_H 47
+#define KK_J 48
+#define KK_K 49
+#define KK_L 50
+#define KK_SEMICOLON 51
+#define KK_APOSTROPHE 52
+#define KK_ENTER 53
+#define KK_LEFTSHIFT 54
+#define KK_Z 55
+#define KK_X 56
+#define KK_C 57
+#define KK_V 58
+#define KK_B 59
+#define KK_N 60
+#define KK_M 61
+#define KK_COMMA 62
+#define KK_PERIOD 63
+#define KK_FORWARDSLASH 64
+#define KK_RIGHTSHIFT 65
+#define KK_LEFTCONTROL 66
+#define KK_LEFTALT 67
+#define KK_SPACE 68
+#define KK_RIGHTALT 69
+#define KK_RIGHTCONTROL 70
+#define KK_PRINTSCREEN 71
+#define KK_PAUSE 72
+#define KK_INSERT 73
+#define KK_DELETE 74
+#define KK_HOME 75
+#define KK_END 76
+#define KK_PAGEUP 77
+#define KK_PAGEDOWN 78
+#define KK_ARROWUP 79
+#define KK_ARROWDOWN 80
+#define KK_ARROWLEFT 81
+#define KK_ARROWRIGHT 82
+#define KK_NPDIVIDE 83
+#define KK_NPMULTIPLY 84
+#define KK_NPMINUS 85
+#define KK_NP7 86
+#define KK_NP8 87
+#define KK_NP9 88
+#define KK_PLUS 89
+#define KK_NP4 90
+#define KK_NP5 91
+#define KK_NP6 92
+#define KK_NP1 93
+#define KK_NP2 94
+#define KK_NP3 95
+#define KK_NP0 96
+#define KK_NPPERIOD 97
+#define KK_AT 98
+#define KK_BACKSPACE1 99
+#define KK_MAX 100
+#define OSET_RequestExit 0
+#define OSET_KeyboardDown 1
+#define OSET_KeyboardUp 2
+#define OSET_PointerMove 3
+#define OSET_PointerButton 4
+#define OSET_GamepadConnection 5
+#define OSET_GamepadButtonDown 6
+#define OSET_GamepadButtonUp 7
+#define OSET_Pause 8
+#define OSET_Resume 9
+#define OSET_KeyboardSoft 10
+#define OSET_BillingChange 11
+#define OSET_GameServiceChange 12
+#define OSET_GameServiceSignInFailed 13
+#define OSET_GameServiceAchievementsReady 14
+#define OSET_GameServiceCloudLoadReady 15
+#define OSET_GameServiceCloudSaveReady 16
+#define OSET_GameServiceSnapshotCountLoaded 17
+#define OSET_GameServiceSnapshotLoading 18
+#define OSET_GameServiceSnapshotSelected 19
+#define OSET_LowMemory 20
+#define OSET_Notification 21
+#define OSET_Crash 22
+#define OSET_PointerWheel 23
+#define OSET_DragFile 24
+#define OSET_NetworkChanged 25
+#define OSET_HandoffOccurred 26
+#define OSET_HandoffReceived 27
+#define OSET_Headphones 28
+#define OSET_SystemUIShowing 29
+#define OSET_SystemUIClosed 30
+#define OSET_MAX 31
+#define OSFE_NoError 0
+#define OSFE_FileNotFound 1
+#define OSFE_EndOfFile 2
+#define OSFE_UnknownError 3
+#define OSFE_IOPending 4
+#define OSFE_IOStillInProgress 5
+#define OSFE_MAX 6
+#define OSFAT_Read 0
+#define OSFAT_Write 1
+#define OSFAT_ReadWrite 2
+#define OSFAT_ReadAsync 3
+#define OSFAT_MAX 4
+#define OSGT_Xbox360 0
+#define OSGT_XperiaPlay 1
+#define OSGT_60beat 2
+#define OSGT_Gamestop 3
+#define OSGT_Moga 4
+#define OSGT_Generic 5
+#define OSGT_Nyko 6
+#define OSGT_MogaPro 7
+#define OSGT_PS3 8
+#define OSGT_IOSExtended 9
+#define OSGT_IOSSimple 10
+#define OSGT_IOSMicro 11
+#define OSGT_AmazonRemote 12
+#define OSGT_AmazonGamepad 13
+#define OSGT_AndroidTV 14
+#define OSLC_English_US 0
+#define OSLC_English_UK 1
+#define OSLC_English_Australia 2
+#define OSLC_English_Other 3
+#define OSLC_Spanish_LatAm 4
+#define OSLC_Spanish_Spain 5
+#define OSLC_French_Canada 6
+#define OSLC_French_France 7
+#define OSLC_German 8
+#define OSLC_Portuguese 9
+#define OSLC_Italian 10
+#define OSLC_Russian 11
+#define OSLC_Chinese 12
+#define OSLC_Arabic 13
+#define OSLC_Japanese 14
+#define OSLC_Korean 15
+#define OSLC_Polish 16
+#define OSLC_Cyrillic 17
+#define OSLC_Swedish 18
+#define OSLC_Norwegian 19
+#define OSLC_Unknown 20
+#define OSPD_Invalid -1
+#define OSPD_Mouse 1
+#define OSPD_TouchScreen 2
+#define OSDC_A3 0
+#define OSDC_A4 1
+#define OSDC_A5 2
+#define OSDC_A5X 3
+#define OSDC_A6 4
+#define OSDC_A6X 5
+#define OSDC_A7 6
+#define OSDC_A8 7
+#define OSDC_A8X 8
+#define OSDC_A9 9
+#define OSDC_A9X 10
+#define OSDC_A10 11
+#define OSDC_Tegra2 12
+#define OSDC_Tegra3 13
+#define OSDC_Tegra4 14
+#define OSDC_TegraK1 15
+#define OSDC_TegraX1 16
+#define OSDC_AmazonFire 17
+#define OSDC_UnknownApple 18
+#define OSDC_UnknownAndroid 19
+#define OSDD_iPhone3GS 0
+#define OSDD_iPhone4 1
+#define OSDD_iPhone4S 2
+#define OSDD_iPhone5 3
+#define OSDD_iPhone5S 4
+#define OSDD_iPhone6 5
+#define OSDD_iPhone6S 6
+#define OSDD_iPhone7 7
+#define OSDD_iPod4 8
+#define OSDD_iPod5 9
+#define OSDD_iPod6 10
+#define OSDD_iPadGen1 11
+#define OSDD_iPadGen2 12
+#define OSDD_iPadGen3 13
+#define OSDD_iPadGen4 14
+#define OSDD_iPadAir 15
+#define OSDD_iPadAir2 16
+#define OSDD_iPadMini2 17
+#define OSDD_iPadMini3 18
+#define OSDD_iPadMini4 19
+#define OSDD_iPadProBig 20
+#define OSDD_iPadProSmall 21
+#define OSDD_xPeriaPlay 22
+#define OSDD_KindleFire 23
+#define OSDD_FireTV 24
+#define OSDD_FirePhone 25
+#define OSDD_UndefinedIOS 26
+#define OSDD_UndefinedAndroid 27
+#define OSDF_Tablet 0
+#define OSDF_Phone 1
+#define OSDF_MAX 2
+#define OSTP_LOW 0
+#define OSTP_NORMAL 1
+#define OSTP_HIGH 2
+#define OSTP_MAX 3
+#define OSPS_ButtonInvalid -1
+#define OSPS_ButtonReleased 0
+#define OSPS_ButtonUp 1
+#define OSPS_ButtonPressed 2
+#define OSPS_ButtonDown 3
+// Layouts: GTA SA Android 2.00 ARM32 / 2.10 ARM64; upstream GPL-3.0.
+#include "../../sdk_forward.esh"
+#include "../../game_sa/plugin.esh"
+#include "../../game_sa/base/Lists.esh"
+native class ButtonStateChange = size(0x20)
+{
+    int buttonIndex = offset(0x0);
+    int state = offset(0x4);
+    int x = offset(0x8);
+    int y = offset(0xc);
+    double timeStamp = offset(0x10);
+    float force = offset(0x18);
+};
+native class DateTime = size(0x1c)
+{
+    int month = offset(0x0);
+    int day = offset(0x4);
+    int year = offset(0x8);
+    int hour = offset(0xc);
+    int minute = offset(0x10);
+    int second = offset(0x14);
+    int centisecond = offset(0x18);
+};
+native class AND_TouchPoint = size(0x1c)
+{
+    int x = offset(0x0);
+    int y = offset(0x4);
+    int state = offset(0x8);
+    int clickIndex = offset(0xc);
+    float clickTime[2] = offset(0x10);
+    int currentUpdateCount = offset(0x18);
+};
+native bool AND_DeviceIsTV() = symbol("libGTASA.so", "_Z14AND_DeviceIsTVv");
+native int AND_DeviceLocale() = symbol("libGTASA.so", "_Z16AND_DeviceLocalev");
+native int AND_DeviceType() = symbol("libGTASA.so", "_Z14AND_DeviceTypev");
+native void AND_FileCleanup() = symbol("libGTASA.so", "_Z15AND_FileCleanupv");
+native int AND_FileDelete(uint8_t* filename) = symbol("libGTASA.so", "_Z14AND_FileDeletePKc");
+native uint8_t* AND_FileGetArchiveName(int32_t type) = symbol("libGTASA.so", "_Z22AND_FileGetArchiveName13OSFileArchive");
+native void AND_FileInitialize() = symbol("libGTASA.so", "_Z18AND_FileInitializev");
+native int AND_FileRename(uint8_t* oldFilename, uint8_t* newFilename, int overWrite) = symbol("libGTASA.so", "_Z14AND_FileRenamePKcS0_i");
+native void AND_FileUpdate(double deltaTime) = symbol("libGTASA.so", "_Z14AND_FileUpdated");
+native void AND_GamepadUpdateAccelerometer(float x, float y, float z) = symbol("libGTASA.so", "_Z30AND_GamepadUpdateAccelerometerfff");
+native uint8_t* AND_GetAndroidBuildinfo(int index) = symbol("libGTASA.so", "_Z23AND_GetAndroidBuildinfoi");
+native uint8_t* AND_GetAppId() = symbol("libGTASA.so", "_Z12AND_GetAppIdv");
+native uint8_t* AND_GetDeviceID() = symbol("libGTASA.so", "_Z15AND_GetDeviceIDv");
+native int AND_GetDeviceInfo(int index) = symbol("libGTASA.so", "_Z17AND_GetDeviceInfoi");
+native void* AND_GetJNI() = symbol("libGTASA.so", "_Z10AND_GetJNIv");
+native void* AND_GetJNIFunc() = symbol("libGTASA.so", "_Z14AND_GetJNIFuncv");
+native void* AND_GetObj() = symbol("libGTASA.so", "_Z10AND_GetObjv");
+native int AND_GetSpecialBuildType() = symbol("libGTASA.so", "_Z23AND_GetSpecialBuildTypev");
+native bool AND_IsAppInstalled(uint8_t* app) = symbol("libGTASA.so", "_Z18AND_IsAppInstalledPKc");
+native void AND_KeyboardEvent(bool pressed, int keyCode, int metaState, bool forceHandle) = symbol("libGTASA.so", "_Z17AND_KeyboardEventbiib");
+native uint32_t AND_KeyboardGetChar(int32_t key, int setUpper) = symbol("libGTASA.so", "_Z19AND_KeyboardGetChar13OSKeyboardKeyi");
+native void AND_KeyboardSoftClosed() = symbol("libGTASA.so", "_Z22AND_KeyboardSoftClosedv");
+native void AND_OpenLink(uint8_t* link) = symbol("libGTASA.so", "_Z12AND_OpenLinkPKc");
+native void AND_ScreenSetWakeLock(bool enabled) = symbol("libGTASA.so", "_Z21AND_ScreenSetWakeLockb");
+native void AND_TouchEvent(int actionType, int trackNum, int x, int y) = symbol("libGTASA.so", "_Z14AND_TouchEventiiii");
+native void AND_VibratePhoneEffect(int effect) = symbol("libGTASA.so", "_Z22AND_VibratePhoneEffecti");
+native void OS_ApplicationEvent(int32_t type, void* data) = symbol("libGTASA.so", "_Z19OS_ApplicationEvent11OSEventTypePv");
+native bool OS_ApplicationInitialize(int argc, uint8_t** argv) = symbol("libGTASA.so", "_Z24OS_ApplicationInitializeiPPKc");
+native void OS_ApplicationPreinit() = symbol("libGTASA.so", "_Z21OS_ApplicationPreinitv");
+native bool OS_ApplicationStartup(int width, int height, int argc, uint8_t** argv) = symbol("libGTASA.so", "_Z21OS_ApplicationStartupiiiPPKc");
+native bool OS_ApplicationTick(float delta) = symbol("libGTASA.so", "_Z18OS_ApplicationTickf");
+native int OS_ConvertUTF16toUTF8(uint16_t* utf16, uint8_t* utf8, int bufferLen) = symbol("libGTASA.so", "_Z21OS_ConvertUTF16toUTF8PtPhi");
+native void OS_DebugBreak() = symbol("libGTASA.so", "_Z13OS_DebugBreakv");
+native void OS_DebugOut(uint8_t* str) = symbol("libGTASA.so", "_Z11OS_DebugOutPKc");
+native bool OS_DeviceIsTV() = symbol("libGTASA.so", "_Z13OS_DeviceIsTVv");
+native int32_t OS_FileDelete(int32_t area, uint8_t* filename) = symbol("libGTASA.so", "_Z13OS_FileDelete14OSFileDataAreaPKc");
+native uint8_t* OS_FileGetArchiveName(int32_t type) = symbol("libGTASA.so", "_Z21OS_FileGetArchiveName13OSFileArchive");
+native int64_t OS_FileGetDate(int32_t area, uint8_t* filename) = symbol("libGTASA.so", "_Z14OS_FileGetDate14OSFileDataAreaPKc");
+native uint8_t** OS_FileListUserFiles() = symbol("libGTASA.so", "_Z20OS_FileListUserFilesv");
+native int32_t OS_FileOpen(int32_t area, OSFile* intoFile, uint8_t* filename, int32_t access) = symbol("libGTASA.so", "_Z11OS_FileOpen14OSFileDataAreaPPvPKc16OSFileAccessType");
+native int32_t OS_FileRename(int32_t area, uint8_t* oldFilename, uint8_t* newFilename, bool overWrite) = symbol("libGTASA.so", "_Z13OS_FileRename14OSFileDataAreaPKcS1_b");
+native void OS_FileSetAsyncReadMultiple(int val) = symbol("libGTASA.so", "_Z27OS_FileSetAsyncReadMultiplei");
+native void OS_GamepadAccelerometer(float* x, float* y, float* z) = symbol("libGTASA.so", "_Z23OS_GamepadAccelerometerPfS_S_");
+native float OS_GamepadAxis(uint32_t padId, uint32_t axisId) = symbol("libGTASA.so", "_Z14OS_GamepadAxisjj");
+native bool OS_GamepadButton(uint32_t padId, uint32_t buttonId) = symbol("libGTASA.so", "_Z16OS_GamepadButtonjj");
+native bool OS_GamepadIsConnected(uint32_t padId, int32_t* setType) = symbol("libGTASA.so", "_Z21OS_GamepadIsConnectedjP13OSGamepadType");
+native bool OS_GamepadTouchpad(uint32_t padId, uint32_t touchId, float* x, float* y) = symbol("libGTASA.so", "_Z18OS_GamepadTouchpadjjPfS_");
+native void OS_GetDateTime(DateTime* ret) = symbol("libGTASA.so", "_Z14OS_GetDateTimeP8DateTime");
+native int OS_GetDeviceInfo(int index) = symbol("libGTASA.so", "_Z16OS_GetDeviceInfoi");
+native uint8_t* OS_HTTPGet(uint8_t* url) = symbol("libGTASA.so", "_Z10OS_HTTPGetPKc");
+native uint32_t OS_HTTPGetData(uint8_t* url, uint8_t** intoData) = symbol("libGTASA.so", "_Z14OS_HTTPGetDataPKcPPc");
+native uint8_t* OS_HTTPPost(uint8_t* url) = symbol("libGTASA.so", "_Z11OS_HTTPPostPKc");
+native bool OS_KeyboardIsSoftVisible() = symbol("libGTASA.so", "_Z24OS_KeyboardIsSoftVisiblev");
+native void OS_KeyboardRequest(int show) = symbol("libGTASA.so", "_Z18OS_KeyboardRequesti");
+native int32_t OS_LanguageDeviceRegion() = symbol("libGTASA.so", "_Z23OS_LanguageDeviceRegionv");
+native int32_t OS_LanguageUserSelected() = symbol("libGTASA.so", "_Z23OS_LanguageUserSelectedv");
+native int OS_PointerGetNumber() = symbol("libGTASA.so", "_Z19OS_PointerGetNumberv");
+native int32_t OS_PointerGetType(int deviceIndex) = symbol("libGTASA.so", "_Z17OS_PointerGetTypei");
+native uint32_t OS_ScreenGetHeight() = symbol("libGTASA.so", "_Z18OS_ScreenGetHeightv");
+native float OS_ScreenGetInches() = symbol("libGTASA.so", "_Z18OS_ScreenGetInchesv");
+native uint32_t OS_ScreenGetWidth() = symbol("libGTASA.so", "_Z17OS_ScreenGetWidthv");
+native void OS_ScreenSetWakeLock(bool enabled) = symbol("libGTASA.so", "_Z20OS_ScreenSetWakeLockb");
+native void OS_ScreenSwapBuffers() = symbol("libGTASA.so", "_Z20OS_ScreenSwapBuffersv");
+native bool OS_ServiceAppCommand(uint8_t* cmd, uint8_t* args) = symbol("libGTASA.so", "_Z20OS_ServiceAppCommandPKcS0_");
+native int OS_ServiceAppCommandValue(uint8_t* cmd, uint8_t* args) = symbol("libGTASA.so", "_Z25OS_ServiceAppCommandValuePKcS0_");
+native bool OS_ServiceIsAppInstalled(uint8_t* appName) = symbol("libGTASA.so", "_Z24OS_ServiceIsAppInstalledPKc");
+native bool OS_ServiceIsNetworkAvailable() = symbol("libGTASA.so", "_Z28OS_ServiceIsNetworkAvailablev");
+native bool OS_ServiceIsWifiAvailable() = symbol("libGTASA.so", "_Z25OS_ServiceIsWifiAvailablev");
+native void OS_ServiceLocalNotification(int secondsToFire, uint8_t* title, uint8_t* message) = symbol("libGTASA.so", "_Z27OS_ServiceLocalNotificationiPKcS0_");
+native void OS_ServiceLocalNotificationCancel() = symbol("libGTASA.so", "_Z33OS_ServiceLocalNotificationCancelv");
+native void OS_ServiceOpenLink(uint8_t* link) = symbol("libGTASA.so", "_Z18OS_ServiceOpenLinkPKc");
+native void OS_SetFilePathOffset(uint8_t* offset) = symbol("libGTASA.so", "_Z20OS_SetFilePathOffsetPKc");
+native bool OS_SystemCheckPause(int sleepTime) = symbol("libGTASA.so", "_Z19OS_SystemCheckPausei");
+native int32_t OS_SystemChip() = symbol("libGTASA.so", "_Z13OS_SystemChipv");
+native int32_t OS_SystemDevice() = symbol("libGTASA.so", "_Z15OS_SystemDevicev");
+native int32_t OS_SystemForm() = symbol("libGTASA.so", "_Z13OS_SystemFormv");
+native void* OS_ThreadGetValue() = symbol("libGTASA.so", "_Z17OS_ThreadGetValuev");
+native void OS_ThreadMakeCurrent() = symbol("libGTASA.so", "_Z20OS_ThreadMakeCurrentv");
+native void OS_ThreadSetValue(void* withValue) = symbol("libGTASA.so", "_Z17OS_ThreadSetValuePv");
+native void OS_ThreadSleep(int uS) = symbol("libGTASA.so", "_Z14OS_ThreadSleepi");
+native void OS_ThreadUnmakeCurrent() = symbol("libGTASA.so", "_Z22OS_ThreadUnmakeCurrentv");
+native double OS_TimeAccurate() = symbol("libGTASA.so", "_Z15OS_TimeAccuratev");
+native uint32_t OS_TimeMS() = symbol("libGTASA.so", "_Z9OS_TimeMSv");
+native JavaVM* GetJavaVM() = symbol("libGTASA.so", "GetJavaVM");
+#endif
