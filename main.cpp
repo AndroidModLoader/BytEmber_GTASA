@@ -24,7 +24,7 @@ static BytEmberSA bytember;
 
 void *hGame;
 uintptr_t pGame;
-static std::unique_ptr<ScriptHost> scripts;
+static ScriptHost* scripts = nullptr; // Never freed: hooks may still run during exit().
 
 ON_MOD_PRELOAD()
 {
@@ -53,7 +53,9 @@ ON_ALL_MODS_LOAD()
 
     try
     {
-        std::string scriptPath = std::string(dataPath) + "/bytember";
+        std::string scriptPath(dataPath);
+        while(scriptPath.size() > 1 && scriptPath.back() == '/') scriptPath.pop_back();
+        scriptPath += "/bytember";
         std::string globalPath = scriptPath + "/global";
         if(!aml->IsDirectory(scriptPath.c_str()) && !aml->CreateDirRecursive(scriptPath.c_str()))
         {
@@ -70,13 +72,13 @@ ON_ALL_MODS_LOAD()
         ember::StdOptions options;
         options.output = [](const std::string& message) { logger->Info("%s", message.c_str()); };
         ember::EMBER_RegisterStd(registry, std::move(options));
-        scripts.reset(new ScriptHost(scriptPath, std::move(registry),
+        scripts = new ScriptHost(scriptPath, std::move(registry),
             [](bool error, const std::string& message)
             {
                 if(error) logger->Error("%s", message.c_str());
                 else logger->Info("%s", message.c_str());
-            }, PSDK::Calls()));
-        if(!AttachGameSA(hGame, scripts.get())) return;
+            }, PSDK::Calls());
+        if(!AttachGameSA(hGame, scripts)) return;
         logger->Info("Attached; loading bytecode from %s", scriptPath.c_str());
     }
     catch(const std::exception& error)

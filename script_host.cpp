@@ -24,6 +24,35 @@ namespace
                name.find_first_of("/\\:") == std::string::npos;
     }
 
+    uint32_t ReadU32(const std::vector<uint8_t>& bytes, size_t at)
+    {
+        return uint32_t(bytes[at]) | uint32_t(bytes[at + 1]) << 8 |
+               uint32_t(bytes[at + 2]) << 16 | uint32_t(bytes[at + 3]) << 24;
+    }
+
+    std::string DescribeBytecode(const std::vector<uint8_t>& bytes)
+    {
+        static const char* const targets[] = {"arm32", "arm64", "x86", "x64"};
+        const uint32_t leafMagic = 0x52424d45, portableMagic = 0x50424d45;
+        if(bytes.size() < 8) return "truncated header";
+        uint32_t magic = ReadU32(bytes, 0), version = ReadU32(bytes, 4);
+        if(magic == leafMagic) return "leaf bytecode v" + std::to_string(version);
+        if(magic != portableMagic) return "not BytEmber bytecode";
+        std::string text = "portable container v" + std::to_string(version);
+        if(version != 1) return text;
+        size_t at = 8;
+        for(unsigned i = 0; i < 4 && bytes.size() - at >= 4; ++i)
+        {
+            uint32_t length = ReadU32(bytes, at);
+            at += 4;
+            if(length > bytes.size() - at) break;
+            if(length >= 8 && ReadU32(bytes, at) == leafMagic)
+                text += std::string(", ") + targets[i] + " v" + std::to_string(ReadU32(bytes, at + 4));
+            at += length;
+        }
+        return text;
+    }
+
     ember::Program ReadProgram(const std::string& path)
     {
         FILE* file = fopen(path.c_str(), "rb");
@@ -46,7 +75,17 @@ namespace
         std::vector<uint8_t> bytes((size_t)info.st_size);
         if(fread(bytes.data(), 1, bytes.size(), file) != bytes.size())
             throw ember::Error("cannot read bytecode: " + path);
-        return ember::Program::load(bytes.data(), bytes.size(), MAX_SCRIPT_BYTES);
+        try
+        {
+            return ember::Program::load(bytes.data(), bytes.size(), MAX_SCRIPT_BYTES);
+        }
+        catch(const std::exception& error)
+        {
+            size_t slash = path.find_last_of("/\\");
+            std::string file = slash == std::string::npos ? path : path.substr(slash + 1);
+            throw ember::Error(std::string(error.what()) + " [" + file + ": " + DescribeBytecode(bytes) +
+                "; recompile it with the emberc that matches this mod build]");
+        }
     }
 }
 

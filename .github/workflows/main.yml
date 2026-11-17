@@ -45,8 +45,18 @@ jobs:
     - name: Build the code...
       run: ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=./Android.mk NDK_APPLICATION_MK=./Application.mk NDK_DEBUG=0 -j12
 
+    - name: Compile example bytecode with the same BytEmber...
+      run: |
+        make -C BytEmber -j4 emberc CXXFLAGS="-O2 -std=c++14"
+        for source in examples/*.es examples/global/*.es; do
+          ./BytEmber/emberc compile "$source" "${source%.es}.ebc" arm32,arm64
+        done
+
     - name: Upload the mod!
       uses: actions/upload-artifact@v5
       with:
         name: compiled-mod.zip
-        path: ./libs
+        path: |
+          ./libs
+          ./examples/*.ebc
+          ./examples/global/*.ebc
